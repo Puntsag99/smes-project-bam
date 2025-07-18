@@ -1,0 +1,212 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TransactionEnum {
+  CASH
+  BANK_TRANSFER
+  CREDIT
+  NOT_PAYMENT
+}
+
+enum OrderStatus {
+  PENDING
+  APPROVED
+  DELIVERED
+  RETURNED
+  CANCELLED
+}
+
+model User {
+  id        String @id @default(cuid())
+  clerkId   String @unique
+  email     String @unique
+  role      Role
+}
+
+enum Role {
+  SUPERADMIN
+  ADMIN
+  VENDOR
+  SHOP
+}
+
+//admin customer 
+model Customer{
+  id              String   @id @default(cuid())
+  companyName     String
+  companyLocation String
+  companyNumber   String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// 📦 Бүтээгдэхүүн (Үйлдвэрээс гарч буй үндсэн мэдээлэл)
+model Product {
+  id           String   @id @default(cuid())
+  title        String
+  description  String?
+  type         String
+  stock        Int
+  ingredient   String?
+  barcode      String @unique
+  price        Int
+  expiredAt    DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  imageURL     String?
+
+  // Харилцаа
+  productDeliveries        ProductDelivery[]
+  deliveredHistories       ProductDeliveredHistory[]
+  remainingProducts        ProductRemaining[]
+  stockRecords             ProductStock[]
+  returnHistories          ProductReturnHistory[]
+  shopOrders               ShopOrder[]
+}
+
+// 🧍‍♂️ Түгээгч
+model DeliveryPerson {
+   id           String   @id @default(cuid())
+  name          String
+  image         String?  
+  phoneNumber   String   @unique @map("phone_number") 
+  region        String?  
+
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  vehicle       String?
+
+  productDeliveries       ProductDelivery[]
+  deliveredHistories      ProductDeliveredHistory[]
+  returnHistories         ProductReturnHistory[]
+  shopOrders              ShopOrder[]
+}
+
+// 🏪 Дэлгүүр
+model Shop {
+  id         String   @id @default(cuid())
+  name       String
+  address    String
+  is_active  Boolean
+  email      String
+  phone_number String
+
+  deliveredHistories      ProductDeliveredHistory[]
+  returnHistories         ProductReturnHistory[]
+  shopOrders              ShopOrder[]
+}
+
+// 🚚 Бүтээгдэхүүн хүргэлт
+model ProductDelivery {
+  id               String   @id @default(cuid())
+  productId        String
+  product          Product @relation(fields: [productId], references: [id])
+
+  productType      String?
+
+  pieces           Int
+  unitPrice        Int
+  deliveryPersonId String
+  deliveryPerson   DeliveryPerson @relation(fields: [deliveryPersonId], references: [id])
+  deliveryDate     DateTime ?
+  note             String? 
+  status           OrderStatus @default(PENDING)
+  created_at       DateTime @default(now())
+}
+
+// 📦 Үлдэгдэл бараа
+model ProductRemaining {
+  id             String   @id @default(cuid())
+  productId      String
+  product        Product @relation(fields: [productId], references: [id])
+
+  pieces         Int
+  is_delivered   Boolean
+  created_at     DateTime @default(now())
+}
+
+// 🧾 Бүтээгдэхүүн хүргэлтийн түүх (гарын үсэг, төлбөр, дэлгүүр г.м)
+model ProductDeliveredHistory {
+  id               String   @id @default(cuid())
+  productId        String
+  product          Product @relation(fields: [productId], references: [id])
+
+  total_price      Int
+  quantity         Int
+  unitPrice        Int
+  shopId           String
+  shop             Shop @relation(fields: [shopId], references: [id])
+
+  transaction_type TransactionEnum
+  paid             Boolean
+  paid_at          DateTime?
+
+  deliveryPersonId String
+  deliveryPerson   DeliveryPerson @relation(fields: [deliveryPersonId], references: [id])
+
+  created_at       DateTime @default(now())
+  signature        String
+}
+
+// 🔁 Бараа буцаалт
+model ProductReturnHistory {
+  id               String   @id @default(cuid())
+  productId        String
+  product          Product @relation(fields: [productId], references: [id])
+
+  pieces           Int
+  unitPrice        Int
+  totalPrice       Int
+  shopId           String
+  shop             Shop @relation(fields: [shopId], references: [id])
+
+  created_at       DateTime @default(now())
+  deliveryPersonId String
+  deliveryPerson   DeliveryPerson @relation(fields: [deliveryPersonId], references: [id])
+
+  signature        String
+}
+
+// 🏭 Үйлдвэрийн барааны агуулах (орлого, гарлага)
+model ProductStock {
+  id             String   @id @default(cuid())
+  productId      String
+  product        Product @relation(fields: [productId], references: [id])
+
+  pieces         Int
+  is_delivered   Boolean
+  created_at     DateTime @default(now())
+}
+
+// 🛒 Дэлгүүрээс захиалсан бараа
+model ShopOrder {
+  id               String   @id @default(cuid())
+  shopId           String
+  shop             Shop @relation(fields: [shopId], references: [id])
+
+  productId        String
+  product          Product @relation(fields: [productId], references: [id])
+
+  pieces           Int
+  deliveredPersonId String?
+  deliveryPerson    DeliveryPerson? @relation(fields: [deliveredPersonId], references: [id])
+
+  created_at       DateTime @default(now())
+
+  status           OrderStatus @default(PENDING) 
+
+}
+
