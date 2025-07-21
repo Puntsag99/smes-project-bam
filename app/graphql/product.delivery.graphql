@@ -1,0 +1,14 @@
+mutation CreateDeliveryPerson($input: DeliveryPersonInput!) {
+  createDeliveryPerson(input: $input)
+}
+
+query DeliveryPerson {
+  deliveryPerson {
+    id
+    name
+    phoneNumber
+    image
+    createdAt
+    updatedAt
+  }
+}

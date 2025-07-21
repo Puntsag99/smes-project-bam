@@ -1,0 +1,16 @@
+mutation CreateProduct($input: ProductInput!) {
+  createProduct(input: $input)
+}
+
+query Product {
+  product {
+    id
+    title
+    type
+    stock
+    ingredient
+    barcode
+    price
+    imageURL
+  }
+}

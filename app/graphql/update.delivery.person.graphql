@@ -1,0 +1,7 @@
+mutation UpdateDeliveryPerson($input: UpdateDeliveryPersonInput!) {
+  updateDeliveryPerson(input: $input)
+}
+
+mutation DeleteDeliveryPerson($deleteDeliveryPersonId: ID!) {
+  deleteDeliveryPerson(id: $deleteDeliveryPersonId)
+}
