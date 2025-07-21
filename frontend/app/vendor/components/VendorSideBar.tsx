@@ -1,4 +1,4 @@
-import Link from "next/link";
+"use client";
 import {
   PackageCheck,
   DollarSign,
@@ -6,8 +6,10 @@ import {
   MessageCircle,
   Home,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export const VendorSideBar = () => {
+  const router = useRouter();
   const navItems = [
     {
       label: "Нүүр",
@@ -23,7 +25,7 @@ export const VendorSideBar = () => {
 
     {
       label: "Борлуулалт Бүртгэх",
-      href: "/vendor/add",
+      href: "/vendor/delivery-plan",
       icon: <DollarSign className="h-5 w-5" />,
     },
 
@@ -41,12 +43,14 @@ export const VendorSideBar = () => {
       </p>
 
       {navItems.map((item, index) => (
-        <Link href={item.href} key={index}>
-          <div className="flex items-center gap-x-2 py-2 px-3 rounded-md hover:bg-[#2d4a6a] transition-colors cursor-pointer">
-            {item.icon}
-            <span>{item.label}</span>
-          </div>
-        </Link>
+        <div
+          key={index}
+          onClick={() => router.push(item.href)}
+          className="flex items-center gap-x-2 py-2 px-3 rounded-md hover:bg-[#2d4a6a] transition-colors cursor-pointer"
+        >
+          {item.icon}
+          <span>{item.label}</span>
+        </div>
       ))}
     </div>
   );

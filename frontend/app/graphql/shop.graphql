@@ -1,0 +1,13 @@
+mutation CreateShop($input: CreateShopInput!) {
+  createShop(input: $input)
+}
+query Shop {
+  shop {
+    id
+    name
+    address
+    is_active
+    email
+    phone_number
+  }
+}

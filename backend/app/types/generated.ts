@@ -17,6 +17,14 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type CreateShopInput = {
+  address: Scalars['String']['input'];
+  email: Scalars['String']['input'];
+  is_active: Scalars['Boolean']['input'];
+  name: Scalars['String']['input'];
+  phone_number: Scalars['String']['input'];
+};
+
 export type Customer = {
   __typename?: 'Customer';
   companyLocation: Scalars['String']['output'];
@@ -55,8 +63,11 @@ export type Mutation = {
   createDeliveryPerson: Response;
   createProduct: Response;
   createProductDelivery: Response;
+  createShop: Response;
   deleteDeliveryPerson: Response;
+  deleteShop: Scalars['Boolean']['output'];
   updateDeliveryPerson: Response;
+  updateShop: Shop;
 };
 
 
@@ -80,7 +91,17 @@ export type MutationCreateProductDeliveryArgs = {
 };
 
 
+export type MutationCreateShopArgs = {
+  input: CreateShopInput;
+};
+
+
 export type MutationDeleteDeliveryPersonArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteShopArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -89,13 +110,11 @@ export type MutationUpdateDeliveryPersonArgs = {
   input: UpdateDeliveryPersonInput;
 };
 
-export enum OrderStatus {
-  Approved = 'APPROVED',
-  Cancelled = 'CANCELLED',
-  Delivered = 'DELIVERED',
-  Pending = 'PENDING',
-  Returned = 'RETURNED'
-}
+
+export type MutationUpdateShopArgs = {
+  data: UpdateShopInput;
+  id: Scalars['ID']['input'];
+};
 
 export type Product = {
   __typename?: 'Product';
@@ -116,27 +135,29 @@ export type Product = {
 export type ProductDelivery = {
   __typename?: 'ProductDelivery';
   createdAt?: Maybe<Scalars['DateTime']['output']>;
-  deliveryDate?: Maybe<Scalars['String']['output']>;
   deliveryPerson: DeliveryPerson;
   deliveryPersonId: Scalars['String']['output'];
   id: Scalars['String']['output'];
-  note?: Maybe<Scalars['String']['output']>;
-  pieces: Scalars['Int']['output'];
   product: Product;
   productId: Scalars['String']['output'];
-  productType?: Maybe<Scalars['String']['output']>;
-  status: OrderStatus;
-  unitPrice: Scalars['Int']['output'];
+  quantity: Scalars['Int']['output'];
+  shop?: Maybe<Shop>;
+  shopId: Scalars['String']['output'];
+  signature?: Maybe<Scalars['String']['output']>;
+  totalPrice?: Maybe<Scalars['Int']['output']>;
+  transactionType: TransactionEnum;
+  unitPrice?: Maybe<Scalars['Int']['output']>;
 };
 
 export type ProductDeliveryInput = {
-  deliveryDate?: InputMaybe<Scalars['String']['input']>;
   deliveryPersonId: Scalars['String']['input'];
-  note?: InputMaybe<Scalars['String']['input']>;
-  pieces: Scalars['Int']['input'];
   productId: Scalars['String']['input'];
-  productType: Scalars['String']['input'];
-  unitPrice: Scalars['Int']['input'];
+  quantity: Scalars['Int']['input'];
+  shopId: Scalars['String']['input'];
+  signature?: InputMaybe<Scalars['String']['input']>;
+  totalPrice?: InputMaybe<Scalars['Int']['input']>;
+  transactionType: TransactionEnum;
+  unitPrice?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type ProductInput = {
@@ -155,6 +176,7 @@ export type Query = {
   deliveryPerson: Array<DeliveryPerson>;
   product: Array<Product>;
   productDelivery: Array<ProductDelivery>;
+  shop: Array<Shop>;
 };
 
 export enum Response {
@@ -162,10 +184,35 @@ export enum Response {
   Success = 'Success'
 }
 
+export type Shop = {
+  __typename?: 'Shop';
+  address: Scalars['String']['output'];
+  email: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  is_active: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
+  phone_number: Scalars['String']['output'];
+};
+
+export enum TransactionEnum {
+  BankTransfer = 'BANK_TRANSFER',
+  Cash = 'CASH',
+  Credit = 'CREDIT',
+  NotPayment = 'NOT_PAYMENT'
+}
+
 export type UpdateDeliveryPersonInput = {
   id: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
   phoneNumber?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateShopInput = {
+  address?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  is_active?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  phone_number?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -236,6 +283,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  CreateShopInput: CreateShopInput;
   Customer: ResolverTypeWrapper<Customer>;
   CustomerInput: CustomerInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
@@ -244,20 +292,23 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
-  OrderStatus: OrderStatus;
   Product: ResolverTypeWrapper<Product>;
   ProductDelivery: ResolverTypeWrapper<ProductDelivery>;
   ProductDeliveryInput: ProductDeliveryInput;
   ProductInput: ProductInput;
   Query: ResolverTypeWrapper<{}>;
   Response: Response;
+  Shop: ResolverTypeWrapper<Shop>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  TransactionEnum: TransactionEnum;
   UpdateDeliveryPersonInput: UpdateDeliveryPersonInput;
+  UpdateShopInput: UpdateShopInput;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
+  CreateShopInput: CreateShopInput;
   Customer: Customer;
   CustomerInput: CustomerInput;
   DateTime: Scalars['DateTime']['output'];
@@ -271,8 +322,10 @@ export type ResolversParentTypes = {
   ProductDeliveryInput: ProductDeliveryInput;
   ProductInput: ProductInput;
   Query: {};
+  Shop: Shop;
   String: Scalars['String']['output'];
   UpdateDeliveryPersonInput: UpdateDeliveryPersonInput;
+  UpdateShopInput: UpdateShopInput;
 };
 
 export type CustomerResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Customer'] = ResolversParentTypes['Customer']> = {
@@ -304,8 +357,11 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   createDeliveryPerson?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateDeliveryPersonArgs, 'input'>>;
   createProduct?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateProductArgs, 'input'>>;
   createProductDelivery?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateProductDeliveryArgs, 'input'>>;
+  createShop?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateShopArgs, 'input'>>;
   deleteDeliveryPerson?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteDeliveryPersonArgs, 'id'>>;
+  deleteShop?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteShopArgs, 'id'>>;
   updateDeliveryPerson?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationUpdateDeliveryPersonArgs, 'input'>>;
+  updateShop?: Resolver<ResolversTypes['Shop'], ParentType, ContextType, RequireFields<MutationUpdateShopArgs, 'data' | 'id'>>;
 };
 
 export type ProductResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = {
@@ -326,17 +382,18 @@ export type ProductResolvers<ContextType = Context, ParentType extends Resolvers
 
 export type ProductDeliveryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProductDelivery'] = ResolversParentTypes['ProductDelivery']> = {
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  deliveryDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   deliveryPerson?: Resolver<ResolversTypes['DeliveryPerson'], ParentType, ContextType>;
   deliveryPersonId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  pieces?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   product?: Resolver<ResolversTypes['Product'], ParentType, ContextType>;
   productId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  productType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  status?: Resolver<ResolversTypes['OrderStatus'], ParentType, ContextType>;
-  unitPrice?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  shop?: Resolver<Maybe<ResolversTypes['Shop']>, ParentType, ContextType>;
+  shopId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  signature?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  totalPrice?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  transactionType?: Resolver<ResolversTypes['TransactionEnum'], ParentType, ContextType>;
+  unitPrice?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -345,6 +402,17 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   deliveryPerson?: Resolver<Array<ResolversTypes['DeliveryPerson']>, ParentType, ContextType>;
   product?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>;
   productDelivery?: Resolver<Array<ResolversTypes['ProductDelivery']>, ParentType, ContextType>;
+  shop?: Resolver<Array<ResolversTypes['Shop']>, ParentType, ContextType>;
+};
+
+export type ShopResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Shop'] = ResolversParentTypes['Shop']> = {
+  address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  is_active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  phone_number?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = Context> = {
@@ -355,5 +423,6 @@ export type Resolvers<ContextType = Context> = {
   Product?: ProductResolvers<ContextType>;
   ProductDelivery?: ProductDeliveryResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Shop?: ShopResolvers<ContextType>;
 };
 

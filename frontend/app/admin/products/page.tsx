@@ -95,6 +95,9 @@ const Product = () => {
 
     try {
       await CreateProduct({
+        onCompleted: () => {
+          console.log("first");
+        },
         variables: {
           input: {
             ...formData,

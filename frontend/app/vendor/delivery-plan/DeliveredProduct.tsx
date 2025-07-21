@@ -3,7 +3,10 @@ import { toast } from "sonner";
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useCreateProductDeliveryMutation } from "@/app/generated";
+import {
+  useCreateProductDeliveryMutation,
+  useShopQuery,
+} from "@/app/generated";
 import { useProductQuery, useDeliveryPersonQuery } from "@/app/generated";
 
 const initialForm = {
@@ -12,12 +15,14 @@ const initialForm = {
   deliveryPersonId: "",
   pieces: "",
   unitPrice: "",
+  shopId: "",
 };
 
 const productDeliverySchema = z.object({
   productId: z.string().min(1, "Бүтээгдэхүүний нэрээ сонгоно уу."),
   productType: z.string().min(1, "Бүтээгдэхүүний төрлөө сонгоно уу."),
   deliveryPersonId: z.string().min(1, "Хүргэлтийн хүнээ сонгоно уу."),
+  shopId: z.string().min(1, "Дэлгүүрээ сонгоно уу."),
   pieces: z
     .string()
     .min(1, "Бүтээгдэхүүний тоогоо оруулна уу.")
@@ -36,6 +41,7 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
   const [formData, setFormData] = useState(initialForm);
   const [errors, setErrors] = useState(initialForm);
   const [selectedProductId, setSelectedProductId] = useState("");
+  const [selectedShopId, setSelectedShopId] = useState("");
 
   const { data, error, loading } = useProductQuery();
   const {
@@ -43,6 +49,13 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
     error: deliveryPersonError,
     loading: deliveryPersonLoading,
   } = useDeliveryPersonQuery();
+  // console.log(deliveryPersonData, "datat");
+  const {
+    data: shopdata,
+    error: shopError,
+    loading: shopLoading,
+  } = useShopQuery();
+  // console.log(shopdata, "slak");
 
   const [CreateProductDelivery, { data: productDelivery }] =
     useCreateProductDeliveryMutation({
@@ -94,11 +107,26 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
     }));
   };
 
+  const handleChangeShop = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = event.target.value;
+    const selected = shopdata?.shop.find((p) => p.id === value);
+    setSelectedShopId(value);
+
+    setFormData((prev) => ({
+      ...prev,
+      shopId: value,
+    }));
+    setErrors((prev) => ({
+      ...prev,
+      shopId: "",
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const result = productDeliverySchema.safeParse(formData);
-
+    console.log(result, "result");
     if (!result.success) {
       const fieldErrors = { ...initialForm };
 
@@ -182,6 +210,26 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
         </select>
         {errors.deliveryPersonId && (
           <p className="text-red-500 text-sm mt-1">{errors.deliveryPersonId}</p>
+        )}
+      </div>
+
+      <div>
+        <label className="text-sm font-medium">Дэлгүүр</label>
+        <select
+          name="deliveryPersonId"
+          value={formData.shopId}
+          onChange={handleChangeShop}
+          className="w-full border rounded-md px-3 py-2 text-sm"
+        >
+          <option value="">--Сонгоно уу--</option>
+          {shopdata?.shop.map((person) => (
+            <option key={person.id} value={person.id ?? ""}>
+              {person.name}
+            </option>
+          ))}
+        </select>
+        {errors.shopId && (
+          <p className="text-red-500 text-sm mt-1">{errors.shopId}</p>
         )}
       </div>
 
