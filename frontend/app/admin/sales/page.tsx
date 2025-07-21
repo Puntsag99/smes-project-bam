@@ -2,8 +2,18 @@
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useProductDeliveryQuery } from "@/app/generated";
 
 const Sales = () => {
+  const { data, loading, error } = useProductDeliveryQuery();
+  console.log({ data }, "kjdsk");
+  const totalUnitPrice =
+    data?.productDelivery?.reduce((sum, p) => sum + (p.unitPrice || 0), 0) ?? 0;
+  const formattedTotal = totalUnitPrice.toLocaleString();
+
+  const totalAmout =
+    data?.productDelivery.reduce((sum, p) => sum + (p.pieces || 0), 0) ?? 0;
+  const formattedTotalPieces = totalAmout.toLocaleString();
   return (
     <motion.div
       initial={{ opacity: 0, x: 100 }}
@@ -27,11 +37,11 @@ const Sales = () => {
         <div className="grid grid-cols-3 gap-4">
           <div className="bg-blue-100 p-4 rounded-md">
             <p className="text-sm text-gray-600">Нийт Борлуулалт (₮)</p>
-            <h2 className="text-xl font-semibold">123,456,000₮</h2>
+            <h2 className="text-xl font-semibold">{formattedTotal}₮</h2>
           </div>
           <div className="bg-green-100 p-4 rounded-md">
             <p className="text-sm text-gray-600">Нийт ширхэг</p>
-            <h2 className="text-xl font-semibold">8,900</h2>
+            <h2 className="text-xl font-semibold">{formattedTotalPieces}</h2>
           </div>
           <div className="bg-red-100 p-4 rounded-md">
             <p className="text-sm text-gray-600">Буцаалт (₮)</p>
@@ -64,27 +74,29 @@ const Sales = () => {
                 <th className="p-2 border">Борлуулагч</th>
                 <th className="p-2 border">Төлбөр</th>
                 <th className="p-2 border">Буцаалт</th>
-                <th className="p-2 border">Үйлдэл</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="p-2 border">2025-07-10</td>
-                <td className="p-2 border">Сүү 1л</td>
-                <td className="p-2 border">Сүүн бүтээгдэхүүн</td>
-                <td className="p-2 border text-center">120</td>
-                <td className="p-2 border">600,000₮</td>
-                <td className="p-2 border">Батаа</td>
-                <td className="p-2 border text-green-600 font-medium">
-                  Төлсөн
-                </td>
-                <td className="p-2 border text-red-500">3 ширхэг</td>
-                <td className="p-2 border">
-                  <Button className="text-blue-600 hover:underline">
-                    Дэлгэрэнгүй
-                  </Button>
-                </td>
-              </tr>
+              {!data?.productDelivery ? (
+                <tr>
+                  <td colSpan={8} className="p-4 text-center text-gray-500">
+                    Loading...
+                  </td>
+                </tr>
+              ) : (
+                data.productDelivery.map((p, index) => (
+                  <tr key={index}>
+                    <td className="p-2 border">{p.createdAt?.slice(0, 10)}</td>
+                    <td className="p-2 border">{p.product.title}</td>
+                    <td className="p-2 border">{p.product.type}</td>
+                    <td className="p-2 border">{p.product.stock}</td>
+                    <td className="p-2 border">{p.unitPrice}</td>
+                    <td className="p-2 border">{p.deliveryPerson.name}</td>
+                    <td className="p-2 border">{p.status}</td>
+                    <td className="p-2 border text-red-500">3 ширхэг</td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

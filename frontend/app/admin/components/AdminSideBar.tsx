@@ -1,4 +1,4 @@
-import Link from "next/link";
+"use client";
 import {
   MessageCircle,
   Home,
@@ -10,8 +10,10 @@ import {
   DollarSign,
   ClipboardList,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export const AdminSideBar = () => {
+  const router = useRouter();
   const navItems = [
     {
       label: "Нүүр",
@@ -35,7 +37,7 @@ export const AdminSideBar = () => {
     },
     {
       label: "График Тайлан",
-      href: "/admin/reports",
+      href: "/admin/graphic",
       icon: <BarChart2 className="h-5 w-5" />,
     },
     {
@@ -64,12 +66,14 @@ export const AdminSideBar = () => {
       </p>
 
       {navItems.map((item, index) => (
-        <Link href={item.href} key={index}>
-          <div className="flex items-center gap-x-2 py-2 px-3 rounded-md hover:bg-[#2d4a6a] transition-colors cursor-pointer">
-            {item.icon}
-            <span>{item.label}</span>
-          </div>
-        </Link>
+        <div
+          key={index}
+          onClick={() => router.push(item.href)}
+          className="flex items-center gap-x-2 py-2 px-3 rounded-md hover:bg-[#2d4a6a] transition-colors cursor-pointer"
+        >
+          {item.icon}
+          <span>{item.label}</span>
+        </div>
       ))}
     </div>
   );

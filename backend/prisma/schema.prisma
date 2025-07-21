@@ -70,13 +70,32 @@ model Product {
 
   // Харилцаа
   productDeliveries        ProductDelivery[]
-  deliveredHistories       ProductDeliveredHistory[]
   remainingProducts        ProductRemaining[]
   stockRecords             ProductStock[]
   returnHistories          ProductReturnHistory[]
   shopOrders               ShopOrder[]
 }
 
+model ProductDelivery {
+  id               String   @id @default(cuid())
+  productId        String
+  product          Product @relation(fields: [productId], references: [id])
+
+  shopId           String
+  shop             Shop @relation(fields: [shopId], references: [id])
+
+  deliveryPersonId String
+  deliveryPerson   DeliveryPerson @relation(fields: [deliveryPersonId], references: [id])
+
+  total_price      Int
+  quantity         Int
+  unit_price       Int
+  
+  transaction_type TransactionEnum
+
+  created_at       DateTime @default(now())
+  signature        String?
+}
 // 🧍‍♂️ Түгээгч
 model DeliveryPerson {
    id           String   @id @default(cuid())
@@ -90,7 +109,6 @@ model DeliveryPerson {
   vehicle       String?
 
   productDeliveries       ProductDelivery[]
-  deliveredHistories      ProductDeliveredHistory[]
   returnHistories         ProductReturnHistory[]
   shopOrders              ShopOrder[]
 }
@@ -104,28 +122,12 @@ model Shop {
   email      String
   phone_number String
 
-  deliveredHistories      ProductDeliveredHistory[]
   returnHistories         ProductReturnHistory[]
   shopOrders              ShopOrder[]
+  productDelivery         ProductDelivery[]
 }
 
-// 🚚 Бүтээгдэхүүн хүргэлт
-model ProductDelivery {
-  id               String   @id @default(cuid())
-  productId        String
-  product          Product @relation(fields: [productId], references: [id])
 
-  productType      String?
-
-  pieces           Int
-  unitPrice        Int
-  deliveryPersonId String
-  deliveryPerson   DeliveryPerson @relation(fields: [deliveryPersonId], references: [id])
-  deliveryDate     DateTime ?
-  note             String? 
-  status           OrderStatus @default(PENDING)
-  created_at       DateTime @default(now())
-}
 
 // 📦 Үлдэгдэл бараа
 model ProductRemaining {
@@ -138,28 +140,6 @@ model ProductRemaining {
   created_at     DateTime @default(now())
 }
 
-// 🧾 Бүтээгдэхүүн хүргэлтийн түүх (гарын үсэг, төлбөр, дэлгүүр г.м)
-model ProductDeliveredHistory {
-  id               String   @id @default(cuid())
-  productId        String
-  product          Product @relation(fields: [productId], references: [id])
-
-  total_price      Int
-  quantity         Int
-  unitPrice        Int
-  shopId           String
-  shop             Shop @relation(fields: [shopId], references: [id])
-
-  transaction_type TransactionEnum
-  paid             Boolean
-  paid_at          DateTime?
-
-  deliveryPersonId String
-  deliveryPerson   DeliveryPerson @relation(fields: [deliveryPersonId], references: [id])
-
-  created_at       DateTime @default(now())
-  signature        String
-}
 
 // 🔁 Бараа буцаалт
 model ProductReturnHistory {
@@ -200,7 +180,7 @@ model ShopOrder {
   productId        String
   product          Product @relation(fields: [productId], references: [id])
 
-  pieces           Int
+  pieces            Int
   deliveredPersonId String?
   deliveryPerson    DeliveryPerson? @relation(fields: [deliveredPersonId], references: [id])
 

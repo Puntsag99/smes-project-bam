@@ -2,7 +2,6 @@ import { useProductDeliveryQuery } from "@/app/generated";
 
 export const DeliveredQuery = () => {
   const { data, loading, error } = useProductDeliveryQuery();
-
   if (loading)
     return <p className="text-center text-gray-600">Уншиж байна...</p>;
   if (error)
@@ -27,6 +26,7 @@ export const DeliveredQuery = () => {
               <th className="px-4 py-3 border">Нэгж үнэ</th>
               <th className="px-4 py-3 border">Нийт үнэ</th>
               <th className="px-4 py-3 border">Түгээгч</th>
+              <th className="px-4 py-3 border">Дэлгүүр</th>
               <th className="px-4 py-3 border">Огноо</th>
             </tr>
           </thead>
@@ -52,6 +52,9 @@ export const DeliveredQuery = () => {
                 </td>
                 <td className="px-4 py-2 border">
                   {item.deliveryPerson?.name ?? "—"}
+                </td>
+                <td className="px-4 py-2 border">
+                  {item.shopId ? item.shop?.name ?? "—" : "—"}
                 </td>
                 <td className="px-4 py-2 border">
                   {item.deliveryDate

@@ -18,6 +18,14 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type CreateShopInput = {
+  address: Scalars['String']['input'];
+  email: Scalars['String']['input'];
+  is_active: Scalars['Boolean']['input'];
+  name: Scalars['String']['input'];
+  phone_number: Scalars['String']['input'];
+};
+
 export type Customer = {
   __typename?: 'Customer';
   companyLocation: Scalars['String']['output'];
@@ -56,8 +64,11 @@ export type Mutation = {
   createDeliveryPerson: Response;
   createProduct: Response;
   createProductDelivery: Response;
+  createShop: Response;
   deleteDeliveryPerson: Response;
+  deleteShop: Scalars['Boolean']['output'];
   updateDeliveryPerson: Response;
+  updateShop: Shop;
 };
 
 
@@ -81,13 +92,29 @@ export type MutationCreateProductDeliveryArgs = {
 };
 
 
+export type MutationCreateShopArgs = {
+  input: CreateShopInput;
+};
+
+
 export type MutationDeleteDeliveryPersonArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteShopArgs = {
   id: Scalars['ID']['input'];
 };
 
 
 export type MutationUpdateDeliveryPersonArgs = {
   input: UpdateDeliveryPersonInput;
+};
+
+
+export type MutationUpdateShopArgs = {
+  data: UpdateShopInput;
+  id: Scalars['ID']['input'];
 };
 
 export enum OrderStatus {
@@ -126,6 +153,8 @@ export type ProductDelivery = {
   product: Product;
   productId: Scalars['String']['output'];
   productType?: Maybe<Scalars['String']['output']>;
+  shop?: Maybe<Shop>;
+  shopId?: Maybe<Scalars['String']['output']>;
   status: OrderStatus;
   unitPrice: Scalars['Int']['output'];
 };
@@ -137,6 +166,7 @@ export type ProductDeliveryInput = {
   pieces: Scalars['Int']['input'];
   productId: Scalars['String']['input'];
   productType: Scalars['String']['input'];
+  shopId: Scalars['String']['input'];
   unitPrice: Scalars['Int']['input'];
 };
 
@@ -156,6 +186,7 @@ export type Query = {
   deliveryPerson: Array<DeliveryPerson>;
   product: Array<Product>;
   productDelivery: Array<ProductDelivery>;
+  shop: Array<Shop>;
 };
 
 export enum Response {
@@ -163,10 +194,28 @@ export enum Response {
   Success = 'Success'
 }
 
+export type Shop = {
+  __typename?: 'Shop';
+  address: Scalars['String']['output'];
+  email: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  is_active: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
+  phone_number: Scalars['String']['output'];
+};
+
 export type UpdateDeliveryPersonInput = {
   id: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
   phoneNumber?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateShopInput = {
+  address?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  is_active?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  phone_number?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateCustomerMutationVariables = Exact<{
@@ -191,7 +240,7 @@ export type CreateProductDeliveryMutation = { __typename?: 'Mutation', createPro
 export type ProductDeliveryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProductDeliveryQuery = { __typename?: 'Query', productDelivery: Array<{ __typename?: 'ProductDelivery', id: string, productId: string, productType?: string | null, deliveryPersonId: string, pieces: number, unitPrice: number, status: OrderStatus, deliveryDate?: string | null, note?: string | null, createdAt?: any | null, deliveryPerson: { __typename?: 'DeliveryPerson', id?: string | null, name?: string | null, phoneNumber?: string | null, image?: string | null, createdAt?: any | null, updatedAt?: any | null }, product: { __typename?: 'Product', id: string, title: string, description?: string | null, type: string, stock: number, ingredient?: string | null, barcode?: string | null, price?: number | null, imageURL?: string | null, expiredAt?: any | null, createdAt?: any | null, updatedAt?: any | null } }> };
+export type ProductDeliveryQuery = { __typename?: 'Query', productDelivery: Array<{ __typename?: 'ProductDelivery', id: string, productId: string, shopId?: string | null, productType?: string | null, deliveryPersonId: string, pieces: number, unitPrice: number, deliveryDate?: string | null, note?: string | null, status: OrderStatus, createdAt?: any | null, product: { __typename?: 'Product', id: string, title: string, description?: string | null, type: string, stock: number, ingredient?: string | null, barcode?: string | null, price?: number | null, imageURL?: string | null, expiredAt?: any | null, createdAt?: any | null, updatedAt?: any | null }, shop?: { __typename?: 'Shop', id: string, name: string, address: string, is_active: boolean, email: string, phone_number: string } | null, deliveryPerson: { __typename?: 'DeliveryPerson', id?: string | null, name?: string | null, phoneNumber?: string | null, image?: string | null, createdAt?: any | null, updatedAt?: any | null } }> };
 
 export type CreateDeliveryPersonMutationVariables = Exact<{
   input: DeliveryPersonInput;
@@ -216,6 +265,18 @@ export type ProductQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ProductQuery = { __typename?: 'Query', product: Array<{ __typename?: 'Product', id: string, title: string, type: string, stock: number, ingredient?: string | null, barcode?: string | null, price?: number | null, imageURL?: string | null }> };
+
+export type CreateShopMutationVariables = Exact<{
+  input: CreateShopInput;
+}>;
+
+
+export type CreateShopMutation = { __typename?: 'Mutation', createShop: Response };
+
+export type ShopQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ShopQuery = { __typename?: 'Query', shop: Array<{ __typename?: 'Shop', id: string, name: string, address: string, is_active: boolean, email: string, phone_number: string }> };
 
 export type UpdateDeliveryPersonMutationVariables = Exact<{
   input: UpdateDeliveryPersonInput;
@@ -342,22 +403,6 @@ export const ProductDeliveryDocument = gql`
   productDelivery {
     id
     productId
-    productType
-    deliveryPersonId
-    pieces
-    unitPrice
-    status
-    deliveryDate
-    note
-    createdAt
-    deliveryPerson {
-      id
-      name
-      phoneNumber
-      image
-      createdAt
-      updatedAt
-    }
     product {
       id
       title
@@ -372,6 +417,31 @@ export const ProductDeliveryDocument = gql`
       createdAt
       updatedAt
     }
+    shopId
+    shop {
+      id
+      name
+      address
+      is_active
+      email
+      phone_number
+    }
+    productType
+    deliveryPersonId
+    deliveryPerson {
+      id
+      name
+      phoneNumber
+      image
+      createdAt
+      updatedAt
+    }
+    pieces
+    unitPrice
+    deliveryDate
+    note
+    status
+    createdAt
   }
 }
     `;
@@ -559,6 +629,81 @@ export type ProductQueryHookResult = ReturnType<typeof useProductQuery>;
 export type ProductLazyQueryHookResult = ReturnType<typeof useProductLazyQuery>;
 export type ProductSuspenseQueryHookResult = ReturnType<typeof useProductSuspenseQuery>;
 export type ProductQueryResult = Apollo.QueryResult<ProductQuery, ProductQueryVariables>;
+export const CreateShopDocument = gql`
+    mutation CreateShop($input: CreateShopInput!) {
+  createShop(input: $input)
+}
+    `;
+export type CreateShopMutationFn = Apollo.MutationFunction<CreateShopMutation, CreateShopMutationVariables>;
+
+/**
+ * __useCreateShopMutation__
+ *
+ * To run a mutation, you first call `useCreateShopMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateShopMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createShopMutation, { data, loading, error }] = useCreateShopMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateShopMutation(baseOptions?: Apollo.MutationHookOptions<CreateShopMutation, CreateShopMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateShopMutation, CreateShopMutationVariables>(CreateShopDocument, options);
+      }
+export type CreateShopMutationHookResult = ReturnType<typeof useCreateShopMutation>;
+export type CreateShopMutationResult = Apollo.MutationResult<CreateShopMutation>;
+export type CreateShopMutationOptions = Apollo.BaseMutationOptions<CreateShopMutation, CreateShopMutationVariables>;
+export const ShopDocument = gql`
+    query Shop {
+  shop {
+    id
+    name
+    address
+    is_active
+    email
+    phone_number
+  }
+}
+    `;
+
+/**
+ * __useShopQuery__
+ *
+ * To run a query within a React component, call `useShopQuery` and pass it any options that fit your needs.
+ * When your component renders, `useShopQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useShopQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useShopQuery(baseOptions?: Apollo.QueryHookOptions<ShopQuery, ShopQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ShopQuery, ShopQueryVariables>(ShopDocument, options);
+      }
+export function useShopLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ShopQuery, ShopQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ShopQuery, ShopQueryVariables>(ShopDocument, options);
+        }
+export function useShopSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ShopQuery, ShopQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ShopQuery, ShopQueryVariables>(ShopDocument, options);
+        }
+export type ShopQueryHookResult = ReturnType<typeof useShopQuery>;
+export type ShopLazyQueryHookResult = ReturnType<typeof useShopLazyQuery>;
+export type ShopSuspenseQueryHookResult = ReturnType<typeof useShopSuspenseQuery>;
+export type ShopQueryResult = Apollo.QueryResult<ShopQuery, ShopQueryVariables>;
 export const UpdateDeliveryPersonDocument = gql`
     mutation UpdateDeliveryPerson($input: UpdateDeliveryPersonInput!) {
   updateDeliveryPerson(input: $input)

@@ -6,23 +6,6 @@ query ProductDelivery {
   productDelivery {
     id
     productId
-    productType
-    deliveryPersonId
-    pieces
-    unitPrice
-    status
-    deliveryDate
-    note
-
-    createdAt
-    deliveryPerson {
-      id
-      name
-      phoneNumber
-      image
-      createdAt
-      updatedAt
-    }
     product {
       id
       title
@@ -37,5 +20,30 @@ query ProductDelivery {
       createdAt
       updatedAt
     }
+    shopId
+    shop {
+      id
+      name
+      address
+      is_active
+      email
+      phone_number
+    }
+    productType
+    deliveryPersonId
+    deliveryPerson {
+      id
+      name
+      phoneNumber
+      image
+      createdAt
+      updatedAt
+    }
+    pieces
+    unitPrice
+    deliveryDate
+    note
+    status
+    createdAt
   }
 }
