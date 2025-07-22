@@ -1,0 +1,17 @@
+mutation CreateProductReturn($input: ProductReturnInput!) {
+  createProductReturn(input: $input)
+}
+
+query Return {
+  Return {
+    id
+    productId
+    deliveryPersonId
+    shopId
+    pieces
+    unitPrice
+    totalPrice
+    signature
+    created_at
+  }
+}

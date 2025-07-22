@@ -1,19 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 export const SmartHome = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const router = useRouter();
-
-  const handleLoginAs = (role: string) => {
-    setIsModalOpen(false);
-    router.push(`/${role.toLowerCase()}/login`);
-  };
 
   return (
     <div>
@@ -22,8 +14,8 @@ export const SmartHome = () => {
 
         <div>
           <Button
+            onClick={() => router.push("/login")}
             className="bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => setIsModalOpen(true)}
           >
             Нэвтрэх
           </Button>
@@ -73,44 +65,6 @@ export const SmartHome = () => {
       <footer className="text-center py-4 bg-gray-100 text-gray-600 text-sm">
         © 2025 MENA — Бүх эрх хуулиар хамгаалагдсан.
       </footer>
-
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-xl space-y-4 w-[90%] max-w-md">
-            <h2 className="text-xl font-bold text-center text-gray-700">
-              Та аль хэрэглэгч вэ?
-            </h2>
-            <div className="flex justify-center gap-4">
-              <Button
-                onClick={() => handleLoginAs("admin")}
-                className="cursor-pointer hover:bg-blue-700"
-              >
-                Admin
-              </Button>
-              <Button
-                onClick={() => handleLoginAs("vendor")}
-                className="cursor-pointer hover:bg-blue-700"
-              >
-                Vendor
-              </Button>
-              <Button
-                onClick={() => handleLoginAs("shop")}
-                className="cursor-pointer hover:bg-blue-700"
-              >
-                Shop
-              </Button>
-            </div>
-            <div className="text-center">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-sm text-gray-500 underline hover:text-gray-800"
-              >
-                Болих
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

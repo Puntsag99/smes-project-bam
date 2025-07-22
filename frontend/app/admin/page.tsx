@@ -3,8 +3,8 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { CardContent } from "@/components/ui/card";
-import { BarChart } from "@/components/ui/bar-chart";
 import { Users, Package, DollarSign, ShoppingCart } from "lucide-react";
+import { Header } from "./components/Header";
 
 const summaryCards = [
   {
@@ -38,6 +38,8 @@ const Admin = () => {
       transition={{ duration: 0.4 }}
     >
       <div className="p-6 bg-[#f5f7fa] min-h-screen text-gray-800 font-sans space-y-6">
+        {/* <Header /> */}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {summaryCards.map((card, idx) => (
             <div

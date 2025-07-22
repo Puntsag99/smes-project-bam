@@ -5,13 +5,15 @@ import { deliveryPersonTypeDefs } from "./delivery.person";
 import { productDeliveryTypeDefs } from "./product.delivery.schema";
 import { updateDeliverPersonTypeDefs } from "./update.delivery.person";
 import { ShopTypedefs } from "./shop.schema";
+import { productReturnHistoryTypeDefs } from "./product.return.schema";
 
 export const typeDefs = [
-  customerTypeDefs,
   commonTypeDefs,
   productTypeDefs,
+  customerTypeDefs,
   deliveryPersonTypeDefs,
-  updateDeliverPersonTypeDefs,
   productDeliveryTypeDefs,
   ShopTypedefs,
+  updateDeliverPersonTypeDefs,
+  productReturnHistoryTypeDefs,
 ];

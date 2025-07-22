@@ -64,6 +64,7 @@ export type Mutation = {
   createDeliveryPerson: Response;
   createProduct: Response;
   createProductDelivery: Response;
+  createProductReturn: Response;
   createShop: Response;
   deleteDeliveryPerson: Response;
   deleteShop: Scalars['Boolean']['output'];
@@ -89,6 +90,11 @@ export type MutationCreateProductArgs = {
 
 export type MutationCreateProductDeliveryArgs = {
   input: ProductDeliveryInput;
+};
+
+
+export type MutationCreateProductReturnArgs = {
+  input: ProductReturnInput;
 };
 
 
@@ -141,6 +147,7 @@ export type ProductDelivery = {
   id: Scalars['String']['output'];
   product: Product;
   productId: Scalars['String']['output'];
+  productType?: Maybe<Scalars['String']['output']>;
   quantity: Scalars['Int']['output'];
   shop?: Maybe<Shop>;
   shopId: Scalars['String']['output'];
@@ -153,6 +160,7 @@ export type ProductDelivery = {
 export type ProductDeliveryInput = {
   deliveryPersonId: Scalars['String']['input'];
   productId: Scalars['String']['input'];
+  productType?: InputMaybe<Scalars['String']['input']>;
   quantity: Scalars['Int']['input'];
   shopId: Scalars['String']['input'];
   signature?: InputMaybe<Scalars['String']['input']>;
@@ -171,8 +179,32 @@ export type ProductInput = {
   type: Scalars['String']['input'];
 };
 
+export type ProductReturn = {
+  __typename?: 'ProductReturn';
+  created_at: Scalars['DateTime']['output'];
+  deliveryPersonId?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  pieces: Scalars['Int']['output'];
+  productId: Scalars['String']['output'];
+  shopId: Scalars['String']['output'];
+  signature: Scalars['String']['output'];
+  totalPrice: Scalars['Int']['output'];
+  unitPrice: Scalars['Int']['output'];
+};
+
+export type ProductReturnInput = {
+  deliveryPersonId: Scalars['String']['input'];
+  pieces: Scalars['Int']['input'];
+  productId: Scalars['String']['input'];
+  shopId: Scalars['String']['input'];
+  signature: Scalars['String']['input'];
+  totalPrice: Scalars['Int']['input'];
+  unitPrice: Scalars['Int']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  Return: Array<ProductReturn>;
   customer: Array<Customer>;
   deliveryPerson: Array<DeliveryPerson>;
   product: Array<Product>;
@@ -263,6 +295,18 @@ export type ProductQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ProductQuery = { __typename?: 'Query', product: Array<{ __typename?: 'Product', id: string, title: string, type: string, stock: number, ingredient?: string | null, barcode?: string | null, price?: number | null, imageURL?: string | null }> };
+
+export type CreateProductReturnMutationVariables = Exact<{
+  input: ProductReturnInput;
+}>;
+
+
+export type CreateProductReturnMutation = { __typename?: 'Mutation', createProductReturn: Response };
+
+export type ReturnQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ReturnQuery = { __typename?: 'Query', Return: Array<{ __typename?: 'ProductReturn', id: string, productId: string, deliveryPersonId?: string | null, shopId: string, pieces: number, unitPrice: number, totalPrice: number, signature: string, created_at: any }> };
 
 export type CreateShopMutationVariables = Exact<{
   input: CreateShopInput;
@@ -626,6 +670,84 @@ export type ProductQueryHookResult = ReturnType<typeof useProductQuery>;
 export type ProductLazyQueryHookResult = ReturnType<typeof useProductLazyQuery>;
 export type ProductSuspenseQueryHookResult = ReturnType<typeof useProductSuspenseQuery>;
 export type ProductQueryResult = Apollo.QueryResult<ProductQuery, ProductQueryVariables>;
+export const CreateProductReturnDocument = gql`
+    mutation CreateProductReturn($input: ProductReturnInput!) {
+  createProductReturn(input: $input)
+}
+    `;
+export type CreateProductReturnMutationFn = Apollo.MutationFunction<CreateProductReturnMutation, CreateProductReturnMutationVariables>;
+
+/**
+ * __useCreateProductReturnMutation__
+ *
+ * To run a mutation, you first call `useCreateProductReturnMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateProductReturnMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createProductReturnMutation, { data, loading, error }] = useCreateProductReturnMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateProductReturnMutation(baseOptions?: Apollo.MutationHookOptions<CreateProductReturnMutation, CreateProductReturnMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateProductReturnMutation, CreateProductReturnMutationVariables>(CreateProductReturnDocument, options);
+      }
+export type CreateProductReturnMutationHookResult = ReturnType<typeof useCreateProductReturnMutation>;
+export type CreateProductReturnMutationResult = Apollo.MutationResult<CreateProductReturnMutation>;
+export type CreateProductReturnMutationOptions = Apollo.BaseMutationOptions<CreateProductReturnMutation, CreateProductReturnMutationVariables>;
+export const ReturnDocument = gql`
+    query Return {
+  Return {
+    id
+    productId
+    deliveryPersonId
+    shopId
+    pieces
+    unitPrice
+    totalPrice
+    signature
+    created_at
+  }
+}
+    `;
+
+/**
+ * __useReturnQuery__
+ *
+ * To run a query within a React component, call `useReturnQuery` and pass it any options that fit your needs.
+ * When your component renders, `useReturnQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useReturnQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useReturnQuery(baseOptions?: Apollo.QueryHookOptions<ReturnQuery, ReturnQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ReturnQuery, ReturnQueryVariables>(ReturnDocument, options);
+      }
+export function useReturnLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ReturnQuery, ReturnQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ReturnQuery, ReturnQueryVariables>(ReturnDocument, options);
+        }
+export function useReturnSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ReturnQuery, ReturnQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ReturnQuery, ReturnQueryVariables>(ReturnDocument, options);
+        }
+export type ReturnQueryHookResult = ReturnType<typeof useReturnQuery>;
+export type ReturnLazyQueryHookResult = ReturnType<typeof useReturnLazyQuery>;
+export type ReturnSuspenseQueryHookResult = ReturnType<typeof useReturnSuspenseQuery>;
+export type ReturnQueryResult = Apollo.QueryResult<ReturnQuery, ReturnQueryVariables>;
 export const CreateShopDocument = gql`
     mutation CreateShop($input: CreateShopInput!) {
   createShop(input: $input)

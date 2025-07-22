@@ -63,6 +63,7 @@ export type Mutation = {
   createDeliveryPerson: Response;
   createProduct: Response;
   createProductDelivery: Response;
+  createProductReturn: Response;
   createShop: Response;
   deleteDeliveryPerson: Response;
   deleteShop: Scalars['Boolean']['output'];
@@ -88,6 +89,11 @@ export type MutationCreateProductArgs = {
 
 export type MutationCreateProductDeliveryArgs = {
   input: ProductDeliveryInput;
+};
+
+
+export type MutationCreateProductReturnArgs = {
+  input: ProductReturnInput;
 };
 
 
@@ -172,8 +178,32 @@ export type ProductInput = {
   type: Scalars['String']['input'];
 };
 
+export type ProductReturn = {
+  __typename?: 'ProductReturn';
+  created_at: Scalars['DateTime']['output'];
+  deliveryPersonId?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  pieces: Scalars['Int']['output'];
+  productId: Scalars['String']['output'];
+  shopId: Scalars['String']['output'];
+  signature: Scalars['String']['output'];
+  totalPrice: Scalars['Int']['output'];
+  unitPrice: Scalars['Int']['output'];
+};
+
+export type ProductReturnInput = {
+  deliveryPersonId: Scalars['String']['input'];
+  pieces: Scalars['Int']['input'];
+  productId: Scalars['String']['input'];
+  shopId: Scalars['String']['input'];
+  signature: Scalars['String']['input'];
+  totalPrice: Scalars['Int']['input'];
+  unitPrice: Scalars['Int']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  Return: Array<ProductReturn>;
   customer: Array<Customer>;
   deliveryPerson: Array<DeliveryPerson>;
   product: Array<Product>;
@@ -298,6 +328,8 @@ export type ResolversTypes = {
   ProductDelivery: ResolverTypeWrapper<ProductDelivery>;
   ProductDeliveryInput: ProductDeliveryInput;
   ProductInput: ProductInput;
+  ProductReturn: ResolverTypeWrapper<ProductReturn>;
+  ProductReturnInput: ProductReturnInput;
   Query: ResolverTypeWrapper<{}>;
   Response: Response;
   Shop: ResolverTypeWrapper<Shop>;
@@ -323,6 +355,8 @@ export type ResolversParentTypes = {
   ProductDelivery: ProductDelivery;
   ProductDeliveryInput: ProductDeliveryInput;
   ProductInput: ProductInput;
+  ProductReturn: ProductReturn;
+  ProductReturnInput: ProductReturnInput;
   Query: {};
   Shop: Shop;
   String: Scalars['String']['output'];
@@ -359,6 +393,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   createDeliveryPerson?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateDeliveryPersonArgs, 'input'>>;
   createProduct?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateProductArgs, 'input'>>;
   createProductDelivery?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateProductDeliveryArgs, 'input'>>;
+  createProductReturn?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateProductReturnArgs, 'input'>>;
   createShop?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateShopArgs, 'input'>>;
   deleteDeliveryPerson?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteDeliveryPersonArgs, 'id'>>;
   deleteShop?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteShopArgs, 'id'>>;
@@ -400,7 +435,21 @@ export type ProductDeliveryResolvers<ContextType = Context, ParentType extends R
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ProductReturnResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProductReturn'] = ResolversParentTypes['ProductReturn']> = {
+  created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  deliveryPersonId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  pieces?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  productId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  shopId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  signature?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  totalPrice?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  unitPrice?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  Return?: Resolver<Array<ResolversTypes['ProductReturn']>, ParentType, ContextType>;
   customer?: Resolver<Array<ResolversTypes['Customer']>, ParentType, ContextType>;
   deliveryPerson?: Resolver<Array<ResolversTypes['DeliveryPerson']>, ParentType, ContextType>;
   product?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>;
@@ -425,6 +474,7 @@ export type Resolvers<ContextType = Context> = {
   Mutation?: MutationResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
   ProductDelivery?: ProductDeliveryResolvers<ContextType>;
+  ProductReturn?: ProductReturnResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Shop?: ShopResolvers<ContextType>;
 };
