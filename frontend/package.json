@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.13.8",
+    "@clerk/clerk-sdk-node": "^5.1.6",
     "@clerk/nextjs": "^6.23.3",
     "@graphql-codegen/cli": "^5.0.7",
     "@graphql-codegen/typescript": "^4.1.6",
@@ -29,7 +30,9 @@
     "next": "15.3.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "recharts": "^3.1.0",
+    "react-signature-canvas": "^1.1.0-alpha.2",
+    "reactjs-popup": "^2.0.6",
+    "recharts": "^3.0.2",
     "sonner": "^2.0.6",
     "tailwind-merge": "^3.3.1",
     "zod": "^3.25.75"
