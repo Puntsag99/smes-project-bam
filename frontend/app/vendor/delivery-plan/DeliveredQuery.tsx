@@ -2,6 +2,7 @@ import { useProductDeliveryQuery } from "@/app/generated";
 
 export const DeliveredQuery = () => {
   const { data, loading, error } = useProductDeliveryQuery();
+  console.log({ data }, "data");
   if (loading)
     return <p className="text-center text-gray-600">Уншиж байна...</p>;
   if (error)
@@ -12,7 +13,7 @@ export const DeliveredQuery = () => {
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 mt-6 max-w-5xl mx-auto">
       <h2 className="text-2xl font-bold text-gray-900 mb-6 border-b pb-2">
-        Хүргэгдэх бүтээгдэхүүнүүд
+        Борлуулалт
       </h2>
 
       <div className="overflow-x-auto">

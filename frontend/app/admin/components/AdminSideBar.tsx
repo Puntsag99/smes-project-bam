@@ -21,8 +21,8 @@ export const AdminSideBar = () => {
       icon: <Home className="h-5 w-5" />,
     },
     {
-      label: "Харилцагч байгууллагууд",
-      href: "/admin/customers",
+      label: "Дэлгүүр",
+      href: "/admin/shop",
       icon: <Users className="h-5 w-5" />,
     },
     {
