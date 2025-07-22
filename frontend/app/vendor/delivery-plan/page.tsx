@@ -28,15 +28,13 @@ const Delivery = () => {
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button className="bg-blue-600 text-white hover:bg-blue-700 w-full">
-              + Хүргэгдэх бүтээгдэхүүн үүсгэх
+              + Борлуулалт үүсгэх
             </Button>
           </DialogTrigger>
 
           <DialogContent className="bg-white">
             <DialogHeader>
-              <DialogTitle className="text-xl">
-                ✨ Хүргэлтийн бүтээгдэхүүн нэмэх
-              </DialogTitle>
+              <DialogTitle className="text-xl">✨ Борлуулалт</DialogTitle>
             </DialogHeader>
 
             <DeliveredProduct closeDialog={() => setIsDialogOpen(false)} />

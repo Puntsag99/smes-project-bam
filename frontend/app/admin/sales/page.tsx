@@ -1,14 +1,14 @@
 "use client";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { useProductDeliveryQuery } from "@/app/generated";
 
 const Sales = () => {
   const { data, loading, error } = useProductDeliveryQuery();
   console.log({ data }, "data");
   const totalUnitPrice =
-    data?.productDelivery?.reduce((sum, p) => sum + (p.unitPrice || 0), 0) ?? 0;
+    data?.productDelivery?.reduce((sum, p) => sum + (p.totalPrice || 0), 0) ??
+    0;
   const formattedTotal = totalUnitPrice.toLocaleString();
 
   const totalAmout =
@@ -44,7 +44,7 @@ const Sales = () => {
             <h2 className="text-xl font-semibold">{formattedTotalPieces}</h2>
           </div>
           <div className="bg-red-100 p-4 rounded-md">
-            <p className="text-sm text-gray-600">Буцаалт (₮)</p>
+            <p className="text-sm text-gray-600">Буцаалт</p>
             <h2 className="text-xl font-semibold">1,200,000₮</h2>
           </div>
         </div>
@@ -89,8 +89,8 @@ const Sales = () => {
                     <td className="p-2 border">{p.createdAt?.slice(0, 10)}</td>
                     <td className="p-2 border">{p.product.title}</td>
                     <td className="p-2 border">{p.product.type}</td>
-                    <td className="p-2 border">{p.product.stock}</td>
-                    <td className="p-2 border">{p.unitPrice}</td>
+                    <td className="p-2 border">{p.quantity}</td>
+                    <td className="p-2 border">{p.totalPrice}</td>
                     <td className="p-2 border">{p.deliveryPerson.name}</td>
                     <td className="p-2 border">{p.transactionType}</td>
                     <td className="p-2 border text-red-500">3 ширхэг</td>
