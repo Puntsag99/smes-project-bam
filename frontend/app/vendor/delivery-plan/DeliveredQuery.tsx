@@ -43,12 +43,14 @@ export const DeliveredQuery = () => {
                 <td className="px-4 py-2 border">
                   {item.product?.type ?? "—"}
                 </td>
-                <td className="px-4 py-2 border">{item.pieces}</td>
+                <td className="px-4 py-2 border">{item.quantity}</td>
                 <td className="px-4 py-2 border">
-                  {item.unitPrice.toLocaleString()}₮
+                  {(item.quantity * (item.unitPrice ?? 0)).toLocaleString()}₮
                 </td>
                 <td className="px-4 py-2 border">
-                  {(item.pieces * item.unitPrice).toLocaleString()}₮
+                  {item.unitPrice != null
+                    ? (item.quantity * item.unitPrice).toLocaleString() + "₮"
+                    : "—"}
                 </td>
                 <td className="px-4 py-2 border">
                   {item.deliveryPerson?.name ?? "—"}
@@ -57,8 +59,8 @@ export const DeliveredQuery = () => {
                   {item.shopId ? item.shop?.name ?? "—" : "—"}
                 </td>
                 <td className="px-4 py-2 border">
-                  {item.deliveryDate
-                    ? new Date(item.deliveryDate).toLocaleDateString("mn-MN")
+                  {item.createdAt
+                    ? new Date(item.createdAt).toLocaleDateString("mn-MN")
                     : "—"}
                 </td>
               </tr>

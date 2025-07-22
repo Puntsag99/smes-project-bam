@@ -90,6 +90,7 @@ model ProductDelivery {
   total_price      Int
   quantity         Int
   unit_price       Int
+  productType      String
   
   transaction_type TransactionEnum
 

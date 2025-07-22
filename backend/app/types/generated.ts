@@ -140,6 +140,7 @@ export type ProductDelivery = {
   id: Scalars['String']['output'];
   product: Product;
   productId: Scalars['String']['output'];
+  productType?: Maybe<Scalars['String']['output']>;
   quantity: Scalars['Int']['output'];
   shop?: Maybe<Shop>;
   shopId: Scalars['String']['output'];
@@ -152,6 +153,7 @@ export type ProductDelivery = {
 export type ProductDeliveryInput = {
   deliveryPersonId: Scalars['String']['input'];
   productId: Scalars['String']['input'];
+  productType?: InputMaybe<Scalars['String']['input']>;
   quantity: Scalars['Int']['input'];
   shopId: Scalars['String']['input'];
   signature?: InputMaybe<Scalars['String']['input']>;
@@ -387,6 +389,7 @@ export type ProductDeliveryResolvers<ContextType = Context, ParentType extends R
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   product?: Resolver<ResolversTypes['Product'], ParentType, ContextType>;
   productId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  productType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   shop?: Resolver<Maybe<ResolversTypes['Shop']>, ParentType, ContextType>;
   shopId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

@@ -117,14 +117,6 @@ export type MutationUpdateShopArgs = {
   id: Scalars['ID']['input'];
 };
 
-export enum OrderStatus {
-  Approved = 'APPROVED',
-  Cancelled = 'CANCELLED',
-  Delivered = 'DELIVERED',
-  Pending = 'PENDING',
-  Returned = 'RETURNED'
-}
-
 export type Product = {
   __typename?: 'Product';
   barcode?: Maybe<Scalars['String']['output']>;
@@ -144,30 +136,29 @@ export type Product = {
 export type ProductDelivery = {
   __typename?: 'ProductDelivery';
   createdAt?: Maybe<Scalars['DateTime']['output']>;
-  deliveryDate?: Maybe<Scalars['String']['output']>;
   deliveryPerson: DeliveryPerson;
   deliveryPersonId: Scalars['String']['output'];
   id: Scalars['String']['output'];
-  note?: Maybe<Scalars['String']['output']>;
-  pieces: Scalars['Int']['output'];
   product: Product;
   productId: Scalars['String']['output'];
-  productType?: Maybe<Scalars['String']['output']>;
+  quantity: Scalars['Int']['output'];
   shop?: Maybe<Shop>;
-  shopId?: Maybe<Scalars['String']['output']>;
-  status: OrderStatus;
-  unitPrice: Scalars['Int']['output'];
+  shopId: Scalars['String']['output'];
+  signature?: Maybe<Scalars['String']['output']>;
+  totalPrice?: Maybe<Scalars['Int']['output']>;
+  transactionType: TransactionEnum;
+  unitPrice?: Maybe<Scalars['Int']['output']>;
 };
 
 export type ProductDeliveryInput = {
-  deliveryDate?: InputMaybe<Scalars['String']['input']>;
   deliveryPersonId: Scalars['String']['input'];
-  note?: InputMaybe<Scalars['String']['input']>;
-  pieces: Scalars['Int']['input'];
   productId: Scalars['String']['input'];
-  productType: Scalars['String']['input'];
+  quantity: Scalars['Int']['input'];
   shopId: Scalars['String']['input'];
-  unitPrice: Scalars['Int']['input'];
+  signature?: InputMaybe<Scalars['String']['input']>;
+  totalPrice?: InputMaybe<Scalars['Int']['input']>;
+  transactionType: TransactionEnum;
+  unitPrice?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type ProductInput = {
@@ -203,6 +194,13 @@ export type Shop = {
   name: Scalars['String']['output'];
   phone_number: Scalars['String']['output'];
 };
+
+export enum TransactionEnum {
+  BankTransfer = 'BANK_TRANSFER',
+  Cash = 'CASH',
+  Credit = 'CREDIT',
+  NotPayment = 'NOT_PAYMENT'
+}
 
 export type UpdateDeliveryPersonInput = {
   id: Scalars['ID']['input'];
@@ -240,7 +238,7 @@ export type CreateProductDeliveryMutation = { __typename?: 'Mutation', createPro
 export type ProductDeliveryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProductDeliveryQuery = { __typename?: 'Query', productDelivery: Array<{ __typename?: 'ProductDelivery', id: string, productId: string, shopId?: string | null, productType?: string | null, deliveryPersonId: string, pieces: number, unitPrice: number, deliveryDate?: string | null, note?: string | null, status: OrderStatus, createdAt?: any | null, product: { __typename?: 'Product', id: string, title: string, description?: string | null, type: string, stock: number, ingredient?: string | null, barcode?: string | null, price?: number | null, imageURL?: string | null, expiredAt?: any | null, createdAt?: any | null, updatedAt?: any | null }, shop?: { __typename?: 'Shop', id: string, name: string, address: string, is_active: boolean, email: string, phone_number: string } | null, deliveryPerson: { __typename?: 'DeliveryPerson', id?: string | null, name?: string | null, phoneNumber?: string | null, image?: string | null, createdAt?: any | null, updatedAt?: any | null } }> };
+export type ProductDeliveryQuery = { __typename?: 'Query', productDelivery: Array<{ __typename?: 'ProductDelivery', id: string, productId: string, shopId: string, deliveryPersonId: string, quantity: number, unitPrice?: number | null, totalPrice?: number | null, transactionType: TransactionEnum, createdAt?: any | null, signature?: string | null, product: { __typename?: 'Product', id: string, title: string, description?: string | null, type: string, stock: number, ingredient?: string | null, barcode?: string | null, price?: number | null, imageURL?: string | null, expiredAt?: any | null, createdAt?: any | null, updatedAt?: any | null }, shop?: { __typename?: 'Shop', id: string, name: string, address: string, is_active: boolean, email: string, phone_number: string } | null, deliveryPerson: { __typename?: 'DeliveryPerson', id?: string | null, name?: string | null, phoneNumber?: string | null, image?: string | null, createdAt?: any | null, updatedAt?: any | null } }> };
 
 export type CreateDeliveryPersonMutationVariables = Exact<{
   input: DeliveryPersonInput;
@@ -426,7 +424,6 @@ export const ProductDeliveryDocument = gql`
       email
       phone_number
     }
-    productType
     deliveryPersonId
     deliveryPerson {
       id
@@ -436,12 +433,12 @@ export const ProductDeliveryDocument = gql`
       createdAt
       updatedAt
     }
-    pieces
+    quantity
     unitPrice
-    deliveryDate
-    note
-    status
+    totalPrice
+    transactionType
     createdAt
+    signature
   }
 }
     `;

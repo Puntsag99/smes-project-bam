@@ -22,6 +22,7 @@ export const createProductDelivery: MutationResolvers["createProductDelivery"] =
           total_price,
           transaction_type: input.transactionType,
           signature: input.signature,
+          productType: input.productType!,
         },
       });
 

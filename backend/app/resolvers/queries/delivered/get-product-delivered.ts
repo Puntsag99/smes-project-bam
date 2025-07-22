@@ -19,7 +19,7 @@ export const productDelivery = async () => {
     deliveryPersonId: d.deliveryPersonId,
 
     quantity: d.quantity,
-    unitPrice: d.unitPrice,
+    unitPrice: d.unit_price,
     totalPrice: d.total_price, // Prisma field
     transactionType: d.transaction_type, // enum-ийг тохируулах
     createdAt: d.created_at,

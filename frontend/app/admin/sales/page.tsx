@@ -6,13 +6,13 @@ import { useProductDeliveryQuery } from "@/app/generated";
 
 const Sales = () => {
   const { data, loading, error } = useProductDeliveryQuery();
-  console.log({ data }, "kjdsk");
+  console.log({ data }, "data");
   const totalUnitPrice =
     data?.productDelivery?.reduce((sum, p) => sum + (p.unitPrice || 0), 0) ?? 0;
   const formattedTotal = totalUnitPrice.toLocaleString();
 
   const totalAmout =
-    data?.productDelivery.reduce((sum, p) => sum + (p.pieces || 0), 0) ?? 0;
+    data?.productDelivery.reduce((sum, p) => sum + (p.quantity || 0), 0) ?? 0;
   const formattedTotalPieces = totalAmout.toLocaleString();
   return (
     <motion.div
@@ -92,7 +92,7 @@ const Sales = () => {
                     <td className="p-2 border">{p.product.stock}</td>
                     <td className="p-2 border">{p.unitPrice}</td>
                     <td className="p-2 border">{p.deliveryPerson.name}</td>
-                    <td className="p-2 border">{p.status}</td>
+                    <td className="p-2 border">{p.transactionType}</td>
                     <td className="p-2 border text-red-500">3 ширхэг</td>
                   </tr>
                 ))

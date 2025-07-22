@@ -29,7 +29,6 @@ query ProductDelivery {
       email
       phone_number
     }
-    productType
     deliveryPersonId
     deliveryPerson {
       id
@@ -39,11 +38,11 @@ query ProductDelivery {
       createdAt
       updatedAt
     }
-    pieces
+    quantity
     unitPrice
-    deliveryDate
-    note
-    status
+    totalPrice
+    transactionType
     createdAt
+    signature
   }
 }

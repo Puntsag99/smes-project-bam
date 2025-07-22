@@ -19,6 +19,7 @@ export const productDeliveryTypeDefs = gql`
     deliveryPersonId: String!
     deliveryPerson: DeliveryPerson!
 
+    productType: String
     quantity: Int!
     unitPrice: Int
     totalPrice: Int
@@ -34,6 +35,7 @@ export const productDeliveryTypeDefs = gql`
     quantity: Int!
     transactionType: TransactionEnum!
     signature: String
+    productType: String
     unitPrice: Int
     totalPrice: Int
   }
