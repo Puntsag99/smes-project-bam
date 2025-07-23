@@ -5,10 +5,8 @@ import {
   Users,
   Package,
   BarChartHorizontal,
-  BarChart2,
   Truck,
   DollarSign,
-  ClipboardList,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 

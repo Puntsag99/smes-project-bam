@@ -5,14 +5,7 @@ import { useProductDeliveryQuery } from "@/app/generated";
 
 const DeliveryReport = () => {
   const { data } = useProductDeliveryQuery();
-  const totalUnitPrice =
-    data?.productDelivery?.reduce((sum, p) => sum + (p.totalPrice || 0), 0) ??
-    0;
-  const formattedTotal = totalUnitPrice.toLocaleString();
 
-  const totalAmout =
-    data?.productDelivery.reduce((sum, p) => sum + (p.quantity || 0), 0) ?? 0;
-  const formattedTotalPieces = totalAmout.toLocaleString();
   return (
     <motion.div
       initial={{ opacity: 0, x: 100 }}

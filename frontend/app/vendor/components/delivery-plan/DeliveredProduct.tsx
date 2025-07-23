@@ -52,8 +52,6 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
     Partial<Record<keyof ProductDeliveryFormType, string>>
   >({});
 
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-
   const { data, error, loading } = useProductQuery();
   const {
     data: deliveryPersonData,

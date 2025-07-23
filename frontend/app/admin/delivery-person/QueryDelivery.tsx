@@ -2,7 +2,6 @@ import { toast } from "sonner";
 import { EditModal } from "./EditModal";
 import { useDeliveryPersonQuery } from "@/app/generated";
 import { useDeleteDeliveryPersonMutation } from "@/app/generated";
-import Image from "next/image";
 
 export const QueryDelivery = () => {
   const { loading, error, data } = useDeliveryPersonQuery();

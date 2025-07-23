@@ -1,11 +1,5 @@
 "use client";
-import {
-  PackageCheck,
-  DollarSign,
-  RotateCcw,
-  MessageCircle,
-  Home,
-} from "lucide-react";
+import { PackageCheck, RotateCcw, MessageCircle, Home } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export const VendorSideBar = () => {

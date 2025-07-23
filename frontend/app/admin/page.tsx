@@ -6,29 +6,6 @@ import { CardContent } from "@/components/ui/card";
 import { Users, Package, DollarSign, ShoppingCart } from "lucide-react";
 import { useProductDeliveryQuery, useShopQuery } from "../generated";
 
-const summaryCards = [
-  {
-    icon: <ShoppingCart className="text-blue-600" />,
-    label: "Нийт борлуулалт",
-    value: "4,560,000₮",
-  },
-  {
-    icon: <Package className="text-green-600" />,
-    label: "Бүтээгдэхүүн",
-    value: "120 төрөл",
-  },
-  {
-    icon: <Users className="text-purple-600" />,
-    label: "Үйлчлүүлэгчид",
-    value: "350 харилцагч",
-  },
-  {
-    icon: <DollarSign className="text-yellow-600" />,
-    label: "Төлбөр төлөгдсөн",
-    value: "3,800,000₮",
-  },
-];
-
 const Admin = () => {
   const { data } = useShopQuery();
   const { data: productpdata } = useProductDeliveryQuery();
