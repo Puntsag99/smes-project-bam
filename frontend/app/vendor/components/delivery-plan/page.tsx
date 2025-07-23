@@ -24,13 +24,16 @@ const Delivery = () => {
       exit={{ opacity: 0, x: -100 }}
       transition={{ duration: 0.4 }}
     >
-      <div className="mx-auto max-w-2xl px-4 py-10">
+      <div className="flex flex-col">
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="bg-blue-600 text-white hover:bg-blue-700 w-full">
-              + Борлуулалт үүсгэх
-            </Button>
-          </DialogTrigger>
+          <DialogHeader className="flex justify-between">
+            <DialogTitle className="text-xl">✨ Сүүлийн борлуулалт</DialogTitle>
+            <DialogTrigger asChild>
+              <Button className="bg-blue-600 text-white hover:bg-blue-700 ">
+                + Борлуулалт үүсгэх
+              </Button>
+            </DialogTrigger>
+          </DialogHeader>
 
           <DialogContent className="bg-white">
             <DialogHeader>

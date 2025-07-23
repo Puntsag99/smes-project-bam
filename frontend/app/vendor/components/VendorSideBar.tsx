@@ -19,14 +19,8 @@ export const VendorSideBar = () => {
 
     {
       label: "Түгээсэн Бараа",
-      href: "/vendor/deliveries",
+      href: "/vendor/delivery-report",
       icon: <PackageCheck className="h-5 w-5" />,
-    },
-
-    {
-      label: "Борлуулалт Бүртгэх",
-      href: "/vendor/delivery-plan",
-      icon: <DollarSign className="h-5 w-5" />,
     },
 
     {
