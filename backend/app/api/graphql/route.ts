@@ -1,9 +1,9 @@
+export const dynamic = "force-dynamic";
+
 import { typeDefs } from "@/app/schema";
 import { resolvers } from "@/app/resolvers";
 import { ApolloServer } from "@apollo/server";
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
-
-export const dynamic = "force-dynamic";
 
 const server = new ApolloServer({
   resolvers,
