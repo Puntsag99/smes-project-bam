@@ -363,7 +363,7 @@ export type ResolversParentTypes = {
   UpdateShopInput: UpdateShopInput;
 };
 
-export type CustomerResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Customer'] = ResolversParentTypes['Customer']> = {
+export type CustomerResolvers<ContextType = any, ParentType extends ResolversParentTypes['Customer'] = ResolversParentTypes['Customer']> = {
   companyLocation?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   companyName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   companyNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -377,7 +377,7 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime';
 }
 
-export type DeliveryPersonResolvers<ContextType = Context, ParentType extends ResolversParentTypes['DeliveryPerson'] = ResolversParentTypes['DeliveryPerson']> = {
+export type DeliveryPersonResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeliveryPerson'] = ResolversParentTypes['DeliveryPerson']> = {
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -387,7 +387,7 @@ export type DeliveryPersonResolvers<ContextType = Context, ParentType extends Re
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createCustomer?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateCustomerArgs, 'input'>>;
   createDeliveryPerson?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateDeliveryPersonArgs, 'input'>>;
   createProduct?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateProductArgs, 'input'>>;
@@ -400,7 +400,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   updateShop?: Resolver<ResolversTypes['Shop'], ParentType, ContextType, RequireFields<MutationUpdateShopArgs, 'data' | 'id'>>;
 };
 
-export type ProductResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = {
+export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = {
   barcode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -416,7 +416,7 @@ export type ProductResolvers<ContextType = Context, ParentType extends Resolvers
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProductDeliveryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProductDelivery'] = ResolversParentTypes['ProductDelivery']> = {
+export type ProductDeliveryResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProductDelivery'] = ResolversParentTypes['ProductDelivery']> = {
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   deliveryPerson?: Resolver<ResolversTypes['DeliveryPerson'], ParentType, ContextType>;
   deliveryPersonId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -434,7 +434,7 @@ export type ProductDeliveryResolvers<ContextType = Context, ParentType extends R
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProductReturnResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProductReturn'] = ResolversParentTypes['ProductReturn']> = {
+export type ProductReturnResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProductReturn'] = ResolversParentTypes['ProductReturn']> = {
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   deliveryPerson?: Resolver<Maybe<ResolversTypes['DeliveryPerson']>, ParentType, ContextType>;
   deliveryPersonId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -448,7 +448,7 @@ export type ProductReturnResolvers<ContextType = Context, ParentType extends Res
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   Return?: Resolver<Array<ResolversTypes['ProductReturn']>, ParentType, ContextType>;
   customer?: Resolver<Array<ResolversTypes['Customer']>, ParentType, ContextType>;
   deliveryPerson?: Resolver<Array<ResolversTypes['DeliveryPerson']>, ParentType, ContextType>;
@@ -457,7 +457,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   shop?: Resolver<Array<ResolversTypes['Shop']>, ParentType, ContextType>;
 };
 
-export type ShopResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Shop'] = ResolversParentTypes['Shop']> = {
+export type ShopResolvers<ContextType = any, ParentType extends ResolversParentTypes['Shop'] = ResolversParentTypes['Shop']> = {
   address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -467,7 +467,7 @@ export type ShopResolvers<ContextType = Context, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type Resolvers<ContextType = Context> = {
+export type Resolvers<ContextType = any> = {
   Customer?: CustomerResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   DeliveryPerson?: DeliveryPersonResolvers<ContextType>;
