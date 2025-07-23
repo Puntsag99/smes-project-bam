@@ -15,6 +15,7 @@ export const QueryDelivery = () => {
       await deleteDeliveryPerson({ variables: { deleteDeliveryPersonId: id } });
       toast.success("Амжилттай устгалаа");
     } catch (error) {
+      console.error("Устгах үед алдаа гарлаа:", error);
       toast.error("Устгах үед алдаа гарлаа");
     }
   };
