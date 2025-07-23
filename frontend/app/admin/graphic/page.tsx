@@ -11,7 +11,7 @@ import {
   CartesianGrid,
 } from "recharts";
 
-export const Graphic = () => {
+const GraphicPage = () => {
   const { data, loading, error } = useProductDeliveryQuery();
 
   if (loading) return <p>Уншиж байна...</p>;
@@ -19,30 +19,29 @@ export const Graphic = () => {
 
   const deliveries = data?.productDelivery || [];
 
-  // Сүүлийн 7 хоногийн өгөгдлийг шүүнэ
   const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 10);
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-  // const chartData = deliveries
-  //   .reduce((acc: any[], item) => {
-  //     const dateStr = item.createdAt?.slice(0, 10);
-  //     if (!dateStr) return acc;
+  const chartData = deliveries
+    .reduce((acc: any[], item) => {
+      const dateStr = item.createdAt?.slice(0, 10);
+      if (!dateStr) return acc;
 
-  //     const date = new Date(dateStr);
-  //     if (date < sevenDaysAgo) return acc;
+      const date = new Date(dateStr);
+      if (date < sevenDaysAgo) return acc;
 
-  //     const price = (item.unitPrice || 0) * (item.pieces || 1);
-  //     const existing = acc.find((entry) => entry.date === dateStr);
+      const price = (item.unitPrice || 0) * (item.unitPrice || 1);
+      const existing = acc.find((entry) => entry.date === dateStr);
 
-  //     if (existing) {
-  //       existing.totalIncome += price;
-  //     } else {
-  //       acc.push({ date: dateStr, totalIncome: price });
-  //     }
+      if (existing) {
+        existing.totalIncome += price;
+      } else {
+        acc.push({ date: dateStr, totalIncome: price });
+      }
 
-  //     return acc;
-  //   }, [])
-  //   .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()); // Огноогоор эрэмбэлнэ
+      return acc;
+    }, [])
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   return (
     <div className="w-2/4 p-4 rounded-xl bg-white shadow-md">
@@ -51,7 +50,7 @@ export const Graphic = () => {
       </h2>
       <ResponsiveContainer width="100%" height={200}>
         <BarChart
-          data={deliveries}
+          data={chartData}
           margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
@@ -65,4 +64,4 @@ export const Graphic = () => {
   );
 };
 
-export default Graphic;
+export default GraphicPage;
