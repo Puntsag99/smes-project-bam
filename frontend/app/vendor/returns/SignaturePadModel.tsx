@@ -34,14 +34,14 @@ export const SignaturePadModal: React.FC<Props> = ({ onSave }) => {
     <Popup
       modal
       trigger={
-        <button className="bg-blue-500 text-white px-4 py-2 rounded">
+        <button className="bg-[#103651] text-white hover:bg-[#303651] w-full  px-4 py-2 rounded">
           ✍️ Энд дарж гарын үсгээ зурна уу.
         </button>
       }
       closeOnDocumentClick={false}
     >
       {(close) => (
-        <div className="p-4 space-y-4">
+        <div className="p-4 space-y-4 flex flex-col justify-between items-center">
           <SignaturePad
             ref={sigCanvas}
             canvasProps={{

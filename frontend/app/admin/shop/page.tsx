@@ -51,35 +51,25 @@ const Shop = () => {
   const [formData, setFormData] = useState(initialForm);
 
   const [createshop] = useCreateShopMutation({
-    onCompleted: () => {
-      toast.success("Хүргэлт амжилттай бүртгэгдлээ!");
-    },
-    onError: (error) => {
-      toast.error("Алдаа гарлаа: " + error.message);
-    },
+    onCompleted: () => toast.success("Хүргэлт амжилттай бүртгэгдлээ!"),
+    onError: (error) => toast.error("Алдаа гарлаа: " + error.message),
   });
 
   const { data, loading } = useShopQuery();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = event.target;
-
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
-
-    setErrors((prev) => ({
-      ...prev,
-      [name]: "",
-    }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const result = ShopSchema.safeParse(formData);
-
     if (!result.success) {
       const fieldErrors = result.error.flatten().fieldErrors;
       setErrors({
@@ -93,21 +83,10 @@ const Shop = () => {
     }
 
     setFormData(initialForm);
-    setErrors({
-      name: "",
-      address: "",
-      email: "",
-      is_active: "",
-      phone_number: "",
-    });
+    setErrors(initialErrors);
 
     try {
-      await createshop({
-        variables: {
-          input: formData,
-        },
-      });
-
+      await createshop({ variables: { input: formData } });
       setOpen(false);
       toast.success("Амжилттай үүслээ!");
     } catch (err) {
@@ -117,27 +96,26 @@ const Shop = () => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: 100 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -100 }}
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -30 }}
       transition={{ duration: 0.4 }}
+      className="p-4 md:p-8"
     >
-      <div className="w-full px-4 py-10">
+      <div className="flex justify-between items-center mb-6 flex-col sm:flex-row gap-3">
+        <h1 className="text-2xl font-bold text-gray-800">Дэлгүүрүүд</h1>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <DialogHeader>
-              <DialogTitle className="text-xl">✨ Дэлгүүрүүд</DialogTitle>
-              <Button className=" text-white bg-[#203651] hover:bg-[#213677] ml-auto ">
-                + Дэлгүүр үүсгэх
-              </Button>
-            </DialogHeader>
+            <Button className="bg-[#203651] hover:bg-[#213677] text-white px-5">
+              + Дэлгүүр үүсгэх
+            </Button>
           </DialogTrigger>
-
-          <DialogContent className="bg-white">
+          <DialogContent className="bg-white rounded-xl p-6 max-w-lg">
             <DialogHeader>
-              <DialogTitle className="text-xl">✨ Дэлгүүр нэмэх</DialogTitle>
+              <DialogTitle className="text-xl font-semibold">
+                ✨ Дэлгүүр нэмэх
+              </DialogTitle>
             </DialogHeader>
-
             <form onSubmit={handleSubmit} className="space-y-4 mt-4">
               <div>
                 <label className="text-sm font-medium">Дэлгүүрийн нэр</label>
@@ -151,7 +129,6 @@ const Shop = () => {
                   <p className="text-red-500 text-sm">{errors.name}</p>
                 )}
               </div>
-
               <div>
                 <label className="text-sm font-medium">Байршил</label>
                 <Input
@@ -164,7 +141,6 @@ const Shop = () => {
                   <p className="text-red-500 text-sm">{errors.address}</p>
                 )}
               </div>
-
               <div>
                 <label className="text-sm font-medium">Email</label>
                 <Input
@@ -177,21 +153,16 @@ const Shop = () => {
                   <p className="text-red-500 text-sm">{errors.email}</p>
                 )}
               </div>
-
-              <div>
+              <div className="flex items-center gap-2">
                 <label className="text-sm font-medium">Идэвхтэй эсэх</label>
                 <input
                   type="checkbox"
                   name="is_active"
                   checked={formData.is_active}
                   onChange={handleChange}
-                  className="ml-2"
+                  className="h-4 w-4"
                 />
-                {errors.is_active && (
-                  <p className="text-red-500 text-sm">{errors.is_active}</p>
-                )}
               </div>
-
               <div>
                 <label className="text-sm font-medium">Утасны дугаар</label>
                 <Input
@@ -199,73 +170,73 @@ const Shop = () => {
                   value={formData.phone_number}
                   onChange={handleChange}
                   maxLength={8}
-                  pattern="[0-9]{8}"
-                  // onInput={(e) => {
-                  //   e.currentTarget.value = e.currentTarget.value.replace(
-                  //     /[^0-9]/g,
-                  //     ""
-                  //   );
-                  // }}
                   placeholder="Жишээ: 88112233"
                 />
                 {errors.phone_number && (
                   <p className="text-red-500 text-sm">{errors.phone_number}</p>
                 )}
               </div>
-
               <Button
                 type="submit"
-                className=" text-white w-full bg-[#203651] hover:bg-[#213677]"
+                className="bg-[#203651] hover:bg-[#213677] text-white w-full"
               >
                 Үүсгэх
               </Button>
             </form>
           </DialogContent>
         </Dialog>
-
-        {loading ? (
-          <p className="w-full flex justify-center">Түр хүлээнэ үү.</p>
-        ) : (
-          <div className="bg-white shadow-md rounded-lg p-4 mt-4">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">
-              Дэлгүүрүүд
-            </h2>
-
-            <div className="overflow-x-auto">
-              <table className="min-w-full table-auto border border-gray-200">
-                <thead>
-                  <tr className="bg-gray-100 text-left text-sm font-semibold text-gray-700">
-                    <th className="px-4 py-2 border-b">🏢Дэлгүүр</th>
-                    <th className="px-4 py-2 border-b">📧Email</th>
-                    <th className="px-4 py-2 border-b">🗺️ Байршил</th>
-                    <th className="px-4 py-2 border-b">📞 Утасны дугаар</th>
-                    <th className="px-4 py-2 border-b">🟢 Төлөв</th>
-                  </tr>
-                </thead>
-                <tbody className="text-sm text-gray-800">
-                  {data?.shop.map((p, index) => (
-                    <tr key={index} className="hover:bg-gray-50">
-                      <td className="px-4 py-2 border-b">{p.name}</td>
-                      <td className="px-4 py-2 border-b">{p.email}</td>
-                      <td className="px-4 py-2 border-b">{p.address}</td>
-                      <td className="px-4 py-2 border-b">{p.phone_number}</td>
-                      <td className="px-4 py-2 border-b">
-                        <span
-                          className={`text-xl ${
-                            p.is_active ? "text-green-500" : "text-red-500"
-                          }`}
-                        >
-                          ●
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
       </div>
+
+      {loading ? (
+        <p className="text-center text-gray-500">Түр хүлээнэ үү...</p>
+      ) : (
+        <div className="bg-white shadow-md rounded-xl overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead className="bg-[#203651] text-white">
+                <tr>
+                  {[
+                    "🏢 Дэлгүүр",
+                    "📧 Email",
+                    "🗺️ Байршил",
+                    "📞 Утас",
+                    "🟢 Төлөв",
+                  ].map((header, idx) => (
+                    <th
+                      key={idx}
+                      className="p-3 text-left border-b border-gray-200"
+                    >
+                      {header}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {data?.shop.map((p, index) => (
+                  <tr
+                    key={index}
+                    className="hover:bg-gray-50 transition-colors text-gray-700"
+                  >
+                    <td className="p-3 border-b">{p.name}</td>
+                    <td className="p-3 border-b">{p.email}</td>
+                    <td className="p-3 border-b">{p.address}</td>
+                    <td className="p-3 border-b">{p.phone_number}</td>
+                    <td className="p-3 border-b">
+                      <span
+                        className={`text-xl ${
+                          p.is_active ? "text-green-500" : "text-red-500"
+                        }`}
+                      >
+                        ●
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 };

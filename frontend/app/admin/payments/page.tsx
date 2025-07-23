@@ -3,6 +3,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { useProductDeliveryQuery } from "@/app/generated";
+import { CreditCard } from "lucide-react";
 
 const Payments = () => {
   const { data } = useProductDeliveryQuery();
@@ -31,69 +32,80 @@ const Payments = () => {
       transition={{ duration: 0.4 }}
     >
       <div className="p-6 space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <h1 className="text-2xl font-bold text-gray-800">
-            Төлбөрийн мэдээлэл
-          </h1>
-          <div className="relative inline-block w-52">
+        {/* Header + Filter */}
+        <div className="bg-white p-4 rounded-xl shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+          {/* Title Section */}
+          <div className="flex items-center gap-4">
+            <div className="rounded-full bg-indigo-500 p-3 shadow-lg">
+              <CreditCard className="text-white size-6" />
+            </div>
+            <span className="text-lg font-semibold text-gray-800">
+              Төлбөрийн <span className="text-indigo-600">мэдээлэл</span>
+            </span>
+          </div>
+
+          {/* Filter Section */}
+          <div className="flex flex-col sm:flex-row flex-wrap gap-3 w-full md:w-auto">
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="appearance-none w-full px-4 py-2 pr-10 rounded-lg border border-gray-300 bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-400 transition"
+              className="border rounded-lg px-3 py-2 text-gray-700 focus:ring-2 focus:ring-indigo-500 outline-none w-full sm:w-auto shadow-sm hover:bg-gray-50"
             >
               <option value="all">Бүх төлбөр</option>
               <option value="CASH">Бэлэн</option>
               <option value="BANK_TRANSFER">Банк</option>
               <option value="CREDIT">Зээл</option>
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400">
-              ▼
-            </div>
+            <Input
+              type="text"
+              placeholder="Хайлт (дэлгүүр, төрөл, борлуулагч)"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="border rounded-lg px-3 py-5 shadow-sm focus:ring-2 focus:ring-indigo-500 hover:bg-gray-50 w-full sm:w-auto"
+            />
           </div>
         </div>
 
-       
-        <div className="max-w-sm">
-          <Input
-            type="text"
-            placeholder="Хайлт (дэлгүүр, төрөл, борлуулагч)"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        
-        <div className="overflow-x-auto rounded-lg border border-gray-200">
+        {/* Table */}
+        <div className="overflow-x-auto bg-white rounded-xl shadow-md border">
           <table className="min-w-full table-auto text-sm">
-            <thead className="bg-gray-100 text-gray-700">
+            <thead className="bg-gray-100 text-gray-700 text-xs md:text-sm">
               <tr>
-                <th className="p-3 border">Огноо</th>
-                <th className="p-3 border">Дэлгүүр</th>
-                <th className="p-3 border">Төрөл</th>
-                <th className="p-3 border">Ширхэг</th>
-                <th className="p-3 border">Нийт үнэ</th>
-                <th className="p-3 border">Борлуулагч</th>
-                <th className="p-3 border">Төлбөр</th>
+                <th className="p-3 border-b">Огноо</th>
+                <th className="p-3 border-b">Дэлгүүр</th>
+                <th className="p-3 border-b">Төрөл</th>
+                <th className="p-3 border-b">Ширхэг</th>
+                <th className="p-3 border-b">Нийт үнэ</th>
+                <th className="p-3 border-b">Борлуулагч</th>
+                <th className="p-3 border-b">Төлбөр</th>
               </tr>
             </thead>
             <tbody>
               {!filteredData.length ? (
                 <tr>
-                  <td colSpan={8} className="p-4 text-center text-gray-500">
+                  <td colSpan={7} className="p-6 text-center text-gray-500">
                     Мэдээлэл олдсонгүй
                   </td>
                 </tr>
               ) : (
                 filteredData.map((p, index) => (
-                  <tr key={index} className="hover:bg-gray-50">
-                    <td className="p-3 border">{p.createdAt?.slice(0, 10)}</td>
-                    <td className="p-3 border">{p.shop?.name}</td>
-                    <td className="p-3 border">{p.product.type}</td>
-                    <td className="p-3 border">{p.quantity}</td>
-                    <td className="p-3 border">{p.totalPrice?.toLocaleString()}</td>
-                    <td className="p-3 border">{p.deliveryPerson.name}</td>
-                    <td className="p-3 border capitalize">{p.transactionType}</td>
+                  <tr
+                    key={index}
+                    className="hover:bg-indigo-50 transition-colors text-gray-700"
+                  >
+                    <td className="p-3 border-b">
+                      {p.createdAt?.slice(0, 10)}
+                    </td>
+                    <td className="p-3 border-b">{p.shop?.name}</td>
+                    <td className="p-3 border-b">{p.product.type}</td>
+                    <td className="p-3 border-b">{p.quantity}</td>
+                    <td className="p-3 border-b">
+                      {p.totalPrice?.toLocaleString()}₮
+                    </td>
+                    <td className="p-3 border-b">{p.deliveryPerson.name}</td>
+                    <td className="p-3 border-b capitalize">
+                      {p.transactionType}
+                    </td>
                   </tr>
                 ))
               )}

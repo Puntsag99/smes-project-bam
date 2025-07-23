@@ -13,7 +13,7 @@ export const VendorSideBar = () => {
 
     {
       label: "Түгээсэн Бараа",
-      href: "/vendor/delivery-report",
+      href: "/vendor/delivery-history",
       icon: <PackageCheck className="h-5 w-5" />,
     },
 

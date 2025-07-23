@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Card } from "./components/Card";
 import Delivery from "./components/delivery-plan/page";
-import { PackageCheck, DollarSign, RotateCcw } from "lucide-react";
+import { PackageCheck, DollarSign, RotateCcw, UserPen } from "lucide-react";
 
 const VendorHome = () => {
   return (
@@ -14,7 +14,14 @@ const VendorHome = () => {
       transition={{ duration: 0.4 }}
     >
       <div className="p-6 space-y-6">
-        <h1 className="text-2xl font-semibold">Сайн байна уу, Борлуулагч!</h1>
+        <div className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-md">
+          <div className="rounded-full bg-indigo-500 p-3 shadow-lg">
+            <UserPen className="text-white size-6" />
+          </div>
+          <span className="text-lg font-semibold text-gray-800">
+            Сайн байна уу, <span className="text-indigo-600">Борлуулагч!</span>
+          </span>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Card title="Түгээсэн бараа" value="12ш" icon={<PackageCheck />} />

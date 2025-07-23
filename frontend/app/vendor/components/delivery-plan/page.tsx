@@ -29,7 +29,7 @@ const Delivery = () => {
           <DialogHeader className="flex justify-between">
             <DialogTitle className="text-xl">✨ Сүүлийн борлуулалт</DialogTitle>
             <DialogTrigger asChild>
-              <Button className="bg-blue-600 text-white hover:bg-blue-700 ">
+              <Button className="bg-[#103651] text-white hover:bg-[#303651]">
                 + Борлуулалт үүсгэх
               </Button>
             </DialogTrigger>

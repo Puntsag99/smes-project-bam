@@ -13,7 +13,7 @@ import { SignaturePadModal } from "../../returns/SignaturePadModel";
 import Image from "next/image";
 
 const productDeliverySchema = z.object({
-  productId: z.string().min(1, "Бүтээгдэхүүний нэрээ сонгоно уу."),
+  productId: z.string().min(1, "Бүтээгдэхүүнээ сонгоно уу."),
   productType: z.string().min(1, "Бүтээгдэхүүний төрлөө сонгоно уу."),
   deliveryPersonId: z.string().min(1, "Хүргэлтийн хүнээ сонгоно уу."),
   shopId: z.string().min(1, "Дэлгүүрээ сонгоно уу."),
@@ -24,7 +24,7 @@ const productDeliverySchema = z.object({
   quantity: z.number().min(1, "Бүтээгдэхүүний тоог оруулна уу."),
   signature: z.string().min(1, "Гарын үсгээ зурна уу."),
 
-  totalPrice: z.number().optional(),
+  totalPrice: z.number().min(1, "Хүргэх тоог оруулна уу"),
 });
 
 type ProductDeliveryFormType = z.infer<typeof productDeliverySchema>;
@@ -248,8 +248,10 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
             readOnly
             className="w-full border rounded-md px-3 py-2 text-sm bg-gray-100 text-gray-600"
           />
+          {errors.productId && (
+            <p className="text-red-500 text-sm mt-1">{errors.productId}</p>
+          )}
         </div>
-
         <div className="flex flex-col">
           <label className="text-sm font-medium">Нэгж үнэ</label>
           <input
@@ -263,11 +265,10 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
             readOnly
             className="w-full border rounded-md px-3 py-2 text-sm bg-gray-100 text-gray-600"
           />
+          {errors.productId && (
+            <p className="text-red-500 text-sm mt-1">{errors.productId}</p>
+          )}
         </div>
-
-        {errors.productType && (
-          <p className="text-red-500 text-sm mt-1">{errors.productType}</p>
-        )}
       </div>
 
       <div className="flex justify-between">
@@ -354,7 +355,6 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
       </div>
 
       <div>
-        <label>✍️ Гарын үсгээ зурна уу:</label>
         <SignaturePadModal onSave={handleSignatureSave} />
         {formData.signature && (
           <div className="relative w-full h-32 border mt-2">
@@ -370,7 +370,7 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
 
       <Button
         type="submit"
-        className="bg-blue-600 text-white w-full hover:bg-blue-700"
+        className="bg-[#103651] text-white hover:bg-[#303651] w-full"
       >
         Үүсгэх
       </Button>
