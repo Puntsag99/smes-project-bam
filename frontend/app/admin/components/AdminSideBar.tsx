@@ -1,4 +1,5 @@
 "use client";
+
 import {
   MessageCircle,
   Home,
@@ -8,10 +9,9 @@ import {
   Truck,
   DollarSign,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export const AdminSideBar = () => {
-  const router = useRouter();
   const navItems = [
     {
       label: "Нүүр",
@@ -40,7 +40,7 @@ export const AdminSideBar = () => {
     },
     {
       label: "Түгээгч",
-      href: "/admin/delivery-person ",
+      href: "/admin/delivery-person",
       icon: <Truck className="h-5 w-5" />,
     },
   ];
@@ -53,14 +53,14 @@ export const AdminSideBar = () => {
       </p>
 
       {navItems.map((item, index) => (
-        <div
+        <Link
           key={index}
-          onClick={() => router.push(item.href)}
+          href={item.href}
           className="flex items-center gap-x-2 py-2 px-3 rounded-md hover:bg-[#2d4a6a] transition-colors cursor-pointer"
         >
           {item.icon}
           <span>{item.label}</span>
-        </div>
+        </Link>
       ))}
     </div>
   );
