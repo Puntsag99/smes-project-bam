@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { useProductDeliveryQuery } from "@/app/generated";
 
-const Sales = () => {
+const DeliveryReport = () => {
   const { data } = useProductDeliveryQuery();
   const totalUnitPrice =
     data?.productDelivery?.reduce((sum, p) => sum + (p.totalPrice || 0), 0) ??
@@ -31,21 +31,6 @@ const Sales = () => {
             <option>Last 90 days</option>
             <option>All-time</option>
           </select>
-        </div>
-
-        <div className="grid grid-cols-3 gap-4">
-          <div className="bg-blue-100 p-4 rounded-md">
-            <p className="text-sm text-gray-600">Нийт Борлуулалт (₮)</p>
-            <h2 className="text-xl font-semibold">{formattedTotal}₮</h2>
-          </div>
-          <div className="bg-green-100 p-4 rounded-md">
-            <p className="text-sm text-gray-600">Нийт ширхэг</p>
-            <h2 className="text-xl font-semibold">{formattedTotalPieces}</h2>
-          </div>
-          <div className="bg-red-100 p-4 rounded-md">
-            <p className="text-sm text-gray-600">Буцаалт</p>
-            <h2 className="text-xl font-semibold">1,200,000₮</h2>
-          </div>
         </div>
 
         <div className="flex gap-4">
@@ -106,4 +91,4 @@ const Sales = () => {
   );
 };
 
-export default Sales;
+export default DeliveryReport;

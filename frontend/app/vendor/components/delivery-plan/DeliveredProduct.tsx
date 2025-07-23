@@ -30,7 +30,7 @@ const initialForm: ProductDeliveryFormType = {
   productType: "",
   deliveryPersonId: "",
   shopId: "",
-  transactionType: TransactionEnum.Cash,
+  transactionType: TransactionEnum.NotPayment,
   unitPrice: 0,
   quantity: 0,
   totalPrice: 0,
@@ -180,6 +180,26 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4 mt-4">
       <div>
+        <div>
+          <label className="text-sm font-medium">Дэлгүүр</label>
+          <select
+            name="shopId"
+            value={formData.shopId}
+            onChange={handleChangeShop}
+            className="w-full border rounded-md px-3 py-2 text-sm"
+          >
+            <option value=""></option>
+            {shopdata?.shop.map((shop) => (
+              <option key={shop.id} value={shop.id ?? ""}>
+                {shop.name}
+              </option>
+            ))}
+          </select>
+          {errors.shopId && (
+            <p className="text-red-500 text-sm mt-1">{errors.shopId}</p>
+          )}
+        </div>
+
         <label className="text-sm font-medium">
           Хүргэх бүтээгдэхүүнээ сонгоно уу.
         </label>
@@ -189,7 +209,7 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
           onChange={handleChangeProduct}
           className="w-full border rounded-md px-3 py-2 text-sm"
         >
-          <option value="">--Сонгоно уу--</option>
+          <option value=""></option>
           {data?.product.map((product) => (
             <option key={product.id} value={product.id}>
               {product.title}
@@ -233,6 +253,40 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
         )}
       </div>
 
+      <div className="flex justify-between">
+        <div>
+          <label className="text-sm font-medium">Хүргэлтийн тоо</label>
+          <Input
+            type="number"
+            name="quantity"
+            value={formData.quantity}
+            onChange={handleQuantityChange}
+            min={0}
+          />
+          {errors.quantity && (
+            <p className="text-red-500 text-sm mt-1">{errors.quantity}</p>
+          )}
+        </div>
+
+        <div>
+          <label className="text-sm font-medium">Нийт үнэ</label>
+          <Input
+            type="text"
+            name="totalPrice"
+            value={
+              formData.totalPrice
+                ? `${formData.totalPrice.toLocaleString("mn-MN")} ₮`
+                : ""
+            }
+            readOnly
+            className="w-full border rounded-md px-3 py-2 text-sm bg-gray-100 text-gray-600"
+          />
+          {errors.totalPrice && (
+            <p className="text-red-500 text-sm mt-1">{errors.totalPrice}</p>
+          )}
+        </div>
+      </div>
+
       <div>
         <label className="text-sm font-medium">
           Хүргэлтийн хүнээ сонгоно уу.
@@ -243,7 +297,7 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
           onChange={handleChange}
           className="w-full border rounded-md px-3 py-2 text-sm"
         >
-          <option value="">--Сонгоно уу--</option>
+          <option value=""></option>
           {deliveryPersonData?.deliveryPerson.map((person) => (
             <option key={person.id} value={person.id ?? ""}>
               {person.name}
@@ -256,68 +310,22 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
       </div>
 
       <div>
-        <label className="text-sm font-medium">Дэлгүүр</label>
-        <select
-          name="shopId"
-          value={formData.shopId}
-          onChange={handleChangeShop}
-          className="w-full border rounded-md px-3 py-2 text-sm"
-        >
-          <option value="">--Сонгоно уу--</option>
-          {shopdata?.shop.map((shop) => (
-            <option key={shop.id} value={shop.id ?? ""}>
-              {shop.name}
-            </option>
-          ))}
-        </select>
-        {errors.shopId && (
-          <p className="text-red-500 text-sm mt-1">{errors.shopId}</p>
-        )}
-      </div>
-
-      <div>
-        <label className="text-sm font-medium">Хүргэлтийн тоо</label>
-        <Input
-          type="number"
-          name="quantity"
-          value={formData.quantity}
-          onChange={handleQuantityChange}
-          min={0}
-        />
-        <input
-          type="text"
-          name="totalPrice"
-          value={
-            formData.totalPrice
-              ? `${formData.totalPrice.toLocaleString("mn-MN")} ₮`
-              : ""
-          }
-          readOnly
-          className="w-full border rounded-md px-3 py-2 text-sm bg-gray-100 text-gray-600"
-        />
-        {errors.quantity && (
-          <p className="text-red-500 text-sm mt-1">{errors.quantity}</p>
-        )}
-      </div>
-
-      <div>
         <select
           name="transactionType"
           value={formData.transactionType}
           onChange={handleChange}
           className="w-full border rounded-md px-3 py-2 text-sm"
         >
-          <option value="">--Сонгоно уу--</option>
           {Object.values(TransactionEnum).map((type) => (
             <option key={type} value={type}>
-              {type === "CASH"
-                ? "Бэлэн"
+              {type === "NOT_PAYMENT"
+                ? ""
                 : type === "BANK_TRANSFER"
                 ? "Дансаар"
                 : type === "CREDIT"
                 ? "Зээл"
-                : type === "NOT_PAYMENT"
-                ? "Төлөөгүй"
+                : type === "CASH"
+                ? "Бэлэн"
                 : type}
             </option>
           ))}
