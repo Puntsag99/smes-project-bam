@@ -7,6 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+
 import { Form } from "./Form";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
@@ -14,15 +15,8 @@ import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
 
 const Orders = () => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [product, setProduct] = useState("");
-
-  const handleOrderSubmit = () => {
-    if (!product) {
-      toast.error("Бүтээгдэхүүн сонгоно уу!");
-      return;
-    }
-    toast.success(`Захиалга илгээгдлээ: ${product}`);
-  };
 
   return (
     <motion.div
@@ -31,27 +25,25 @@ const Orders = () => {
       exit={{ opacity: 0, x: -100 }}
       transition={{ duration: 0.4 }}
     >
-      <div className="mx-auto max-w-2xl px-4 py-10">
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="bg-blue-600 text-white hover:bg-blue-700 w-full">
-              Захиалах бараагаа сонгоно уу
-            </Button>
-          </DialogTrigger>
+      <div className="flex flex-col gap-4">
+        <div className="flex justify-between items-center">
+          <h2 className="text-xl font-semibold">✨ Сүүлийн Захиалга</h2>
 
-          <DialogContent className="bg-white">
-            <DialogHeader>
-              <DialogTitle className="text-xl">Бараа захиалах</DialogTitle>
-            </DialogHeader>
-            <Form setProduct={setProduct} />
-            <Button
-              onClick={handleOrderSubmit}
-              className="bg-blue-600 text-white hover:bg-blue-700 mt-5 "
-            >
-              Захиалах
-            </Button>
-          </DialogContent>
-        </Dialog>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-blue-600 text-white hover:bg-blue-700">
+                + Захиалга үүсгэх
+              </Button>
+            </DialogTrigger>
+
+            <DialogContent className="bg-white">
+              <DialogHeader>
+                <DialogTitle className="text-xl">✨ Захиалга</DialogTitle>
+              </DialogHeader>
+              <Form setProduct={setProduct} />
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
     </motion.div>
   );
