@@ -15,14 +15,15 @@ export const ReturnQuery = () => {
             <tr>
               <th className="border px-8 py-4 text-center font-semibold">#</th>
               <th className="border px-8 py-4 text-left font-semibold">
+                Дэлгүүр
+              </th>
+              <th className="border px-8 py-4 text-left font-semibold">
                 Бараа нэр
               </th>
               <th className="border px-8 py-4 text-center font-semibold">
                 Тоо ширхэг
               </th>
-              <th className="border px-8 py-4 text-left font-semibold">
-                Дэлгүүр
-              </th>
+
               <th className="border px-8 py-4 text-left font-semibold">
                 Хүлээн авагч
               </th>
@@ -44,12 +45,10 @@ export const ReturnQuery = () => {
               >
                 <td className="border px-8 py-4">{index + 1}</td>
                 <td className="border px-8 py-4 text-left">
-                  {item.product?.title}
-                </td>
-                <td className="border px-8 py-4">{item.pieces}</td>
-                <td className="border px-8 py-4 text-left">
                   {item.shop?.name}
                 </td>
+                <td className="border px-8 py-4">{item.product?.title}</td>
+                <td className="border px-8 py-4 text-left">{item.pieces}</td>
                 <td className="border px-8 py-4 text-left">
                   {item.deliveryPerson?.name}
                 </td>
