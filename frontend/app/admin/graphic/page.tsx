@@ -11,6 +11,11 @@ import {
   CartesianGrid,
 } from "recharts";
 
+type ChartEntry = {
+  date: string;
+  totalIncome: number;
+};
+
 const GraphicPage = () => {
   const { data, loading, error } = useProductDeliveryQuery();
 
@@ -22,8 +27,8 @@ const GraphicPage = () => {
   const sevenDaysAgo = new Date();
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-  const chartData = deliveries
-    .reduce((acc: any[], item) => {
+  const chartData: ChartEntry[] = deliveries
+    .reduce((acc: ChartEntry[], item) => {
       const dateStr = item.createdAt?.slice(0, 10);
       if (!dateStr) return acc;
 
