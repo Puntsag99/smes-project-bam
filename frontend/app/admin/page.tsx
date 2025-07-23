@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { CardContent } from "@/components/ui/card";
 import { Users, Package, DollarSign, ShoppingCart } from "lucide-react";
-import { Header } from "./components/Header";
 
 const summaryCards = [
   {

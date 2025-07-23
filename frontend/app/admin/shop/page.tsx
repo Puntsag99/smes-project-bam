@@ -50,7 +50,7 @@ const Shop = () => {
   const [errors, setErrors] = useState(initialErrors);
   const [formData, setFormData] = useState(initialForm);
 
-  const [createshop, { error }] = useCreateShopMutation({
+  const [createshop] = useCreateShopMutation({
     onCompleted: () => {
       toast.success("Хүргэлт амжилттай бүртгэгдлээ!");
     },

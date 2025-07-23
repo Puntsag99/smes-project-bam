@@ -9,8 +9,8 @@ export const QueryDelivery = () => {
   const [deleteDeliveryPerson] = useDeleteDeliveryPersonMutation();
 
   if (loading) return <p className="text-center py-4">Түр хүлээнэ үү...</p>;
-  if (error)
-    return <p className="text-red-500 text-center py-4">Алдаа гарлаа</p>;
+  if (error) console.error(error);
+  return <p className="text-red-500 text-center py-4">Алдаа гарлаа</p>;
 
   const handleDelete = async (id: string) => {
     if (!confirm("Та энэ түгээгчийг устгахдаа итгэлтэй байна уу?")) return;

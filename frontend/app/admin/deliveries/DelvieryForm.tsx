@@ -33,7 +33,7 @@ export const DeliveryForm = ({ onSuccess }: Props) => {
   const [formData, setFormData] = useState(initialForm);
   const [isUploading, setIsUploading] = useState(false);
 
-  const [CreateDeliveryPerson, { error }] = useCreateDeliveryPersonMutation();
+  const [CreateDeliveryPerson] = useCreateDeliveryPersonMutation();
 
   const handleImageChange = async (
     event: React.ChangeEvent<HTMLInputElement>

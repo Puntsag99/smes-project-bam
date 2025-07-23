@@ -15,7 +15,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  DateTime: { input: any; output: any; }
+  DateTime: { input: string; output: string; }
 };
 
 export type CreateShopInput = {
@@ -258,7 +258,7 @@ export type CreateCustomerMutation = { __typename?: 'Mutation', createCustomer: 
 export type QueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type QueryQuery = { __typename?: 'Query', customer: Array<{ __typename?: 'Customer', companyName: string, companyNumber: string, companyLocation: string, id: string, createdAt?: any | null }> };
+export type QueryQuery = { __typename?: 'Query', customer: Array<{ __typename?: 'Customer', companyName: string, companyNumber: string, companyLocation: string, id: string, createdAt?: string | null }> };
 
 export type CreateProductDeliveryMutationVariables = Exact<{
   input: ProductDeliveryInput;
@@ -270,7 +270,7 @@ export type CreateProductDeliveryMutation = { __typename?: 'Mutation', createPro
 export type ProductDeliveryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProductDeliveryQuery = { __typename?: 'Query', productDelivery: Array<{ __typename?: 'ProductDelivery', id: string, productId: string, shopId: string, deliveryPersonId: string, quantity: number, unitPrice?: number | null, totalPrice?: number | null, transactionType: TransactionEnum, createdAt?: any | null, signature?: string | null, product: { __typename?: 'Product', id: string, title: string, description?: string | null, type: string, stock: number, ingredient?: string | null, barcode?: string | null, price?: number | null, imageURL?: string | null, expiredAt?: any | null, createdAt?: any | null, updatedAt?: any | null }, shop?: { __typename?: 'Shop', id: string, name: string, address: string, is_active: boolean, email: string, phone_number: string } | null, deliveryPerson: { __typename?: 'DeliveryPerson', id?: string | null, name?: string | null, phoneNumber?: string | null, image?: string | null, createdAt?: any | null, updatedAt?: any | null } }> };
+export type ProductDeliveryQuery = { __typename?: 'Query', productDelivery: Array<{ __typename?: 'ProductDelivery', id: string, productId: string, shopId: string, deliveryPersonId: string, quantity: number, unitPrice?: number | null, totalPrice?: number | null, transactionType: TransactionEnum, createdAt?: string | null, signature?: string | null, product: { __typename?: 'Product', id: string, title: string, description?: string | null, type: string, stock: number, ingredient?: string | null, barcode?: string | null, price?: number | null, imageURL?: string | null, expiredAt?: string | null, createdAt?: string | null, updatedAt?: string | null }, shop?: { __typename?: 'Shop', id: string, name: string, address: string, is_active: boolean, email: string, phone_number: string } | null, deliveryPerson: { __typename?: 'DeliveryPerson', id?: string | null, name?: string | null, phoneNumber?: string | null, image?: string | null, createdAt?: string | null, updatedAt?: string | null } }> };
 
 export type CreateDeliveryPersonMutationVariables = Exact<{
   input: DeliveryPersonInput;
@@ -282,7 +282,7 @@ export type CreateDeliveryPersonMutation = { __typename?: 'Mutation', createDeli
 export type DeliveryPersonQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type DeliveryPersonQuery = { __typename?: 'Query', deliveryPerson: Array<{ __typename?: 'DeliveryPerson', id?: string | null, name?: string | null, phoneNumber?: string | null, image?: string | null, createdAt?: any | null, updatedAt?: any | null }> };
+export type DeliveryPersonQuery = { __typename?: 'Query', deliveryPerson: Array<{ __typename?: 'DeliveryPerson', id?: string | null, name?: string | null, phoneNumber?: string | null, image?: string | null, createdAt?: string | null, updatedAt?: string | null }> };
 
 export type CreateProductMutationVariables = Exact<{
   input: ProductInput;
@@ -306,7 +306,7 @@ export type CreateProductReturnMutation = { __typename?: 'Mutation', createProdu
 export type ReturnQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ReturnQuery = { __typename?: 'Query', Return: Array<{ __typename?: 'ProductReturn', id: string, productId: string, deliveryPersonId?: string | null, shopId: string, pieces: number, unitPrice: number, totalPrice: number, signature: string, created_at: any }> };
+export type ReturnQuery = { __typename?: 'Query', Return: Array<{ __typename?: 'ProductReturn', id: string, productId: string, deliveryPersonId?: string | null, shopId: string, pieces: number, unitPrice: number, totalPrice: number, signature: string, created_at: string }> };
 
 export type CreateShopMutationVariables = Exact<{
   input: CreateShopInput;

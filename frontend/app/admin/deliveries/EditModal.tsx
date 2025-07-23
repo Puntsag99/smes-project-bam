@@ -43,6 +43,7 @@ export const EditModal = ({ delivery }: EditModalProps) => {
       toast.success("Амжилттай хадгалагдлаа ✅");
       setOpen(false);
     } catch (error) {
+      console.error(error);
       toast.error("Хадгалах үед алдаа гарлаа ❌");
     }
   };

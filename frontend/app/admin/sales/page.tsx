@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { useProductDeliveryQuery } from "@/app/generated";
 
 const Sales = () => {
-  const { data, loading, error } = useProductDeliveryQuery();
+  const { data } = useProductDeliveryQuery();
   console.log({ data }, "data");
   const totalUnitPrice =
     data?.productDelivery?.reduce((sum, p) => sum + (p.totalPrice || 0), 0) ??

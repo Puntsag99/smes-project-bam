@@ -5,7 +5,6 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogPortal,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
@@ -46,7 +45,7 @@ const Product = () => {
   const [formData, setFormData] = useState(initialForm);
   const [isUploading, setIsUploading] = useState(false);
 
-  const [CreateProduct, { error }] = useCreateProductMutation();
+  const [CreateProduct] = useCreateProductMutation();
 
   const imageURLRef = useRef<string | null>(null);
 

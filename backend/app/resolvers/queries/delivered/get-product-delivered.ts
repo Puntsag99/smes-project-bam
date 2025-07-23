@@ -15,14 +15,13 @@ export const productDelivery: QueryResolvers["productDelivery"] = async () => {
     productId: delivery.productId,
     shopId: delivery.shopId,
     deliveryPersonId: delivery.deliveryPersonId,
-    createdAt: delivery.created_at, // ✅ rename хийв
-    unitPrice: delivery.unit_price, // ✅ rename хийв
-    totalPrice: delivery.total_price, // ✅ rename хийв
+    createdAt: delivery.created_at,
+    unitPrice: delivery.unit_price,
+    totalPrice: delivery.total_price,
     transactionType: delivery.transaction_type as TransactionEnum,
     quantity: delivery.quantity,
     signature: delivery.signature,
 
-    // Хамааралтай обьектууд
     product: delivery.product,
     shop: delivery.shop,
     deliveryPerson: delivery.deliveryPerson,

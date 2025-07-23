@@ -10,6 +10,10 @@ generates:
     config:
       reactApolloVersion: 3
       withHooks: true
+      scalars:
+        DateTime: string
+        JSON: Record<string, unknown>
+        Upload: File
     plugins:
       - "typescript"
       - "typescript-operations"

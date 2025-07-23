@@ -10,17 +10,6 @@ import {
 } from "@/app/generated";
 import { useProductQuery, useDeliveryPersonQuery } from "@/app/generated";
 
-const initialForm: Record<keyof ProductDeliveryFormType, any> = {
-  productId: "",
-  productType: "",
-  deliveryPersonId: "",
-  shopId: "",
-  transactionType: "",
-  unitPrice: "",
-  quantity: "",
-  totalPrice: "",
-};
-type ProductDeliveryFormType = z.infer<typeof productDeliverySchema>;
 const productDeliverySchema = z.object({
   productId: z.string().min(1, "Бүтээгдэхүүний нэрээ сонгоно уу."),
   productType: z.string().min(1, "Бүтээгдэхүүний төрлөө сонгоно уу."),
@@ -29,29 +18,34 @@ const productDeliverySchema = z.object({
   transactionType: z.nativeEnum(TransactionEnum, {
     errorMap: () => ({ message: "Төлбөрийн нөхцөл сонгоно уу." }),
   }),
-  unitPrice: z
-    .string()
-    .min(1, "Бүтээгдэхүүний үнээ оруулна уу.")
-    .transform((val) => parseInt(val, 10)),
-
-  quantity: z
-    .string()
-    .min(1, "Бүтээгдэхүүний үнээ оруулна уу.")
-    .transform((val) => parseInt(val, 10)),
-  totalPrice: z
-    .string()
-    .optional()
-    .transform((val) => parseInt(val ?? "", 10)),
+  unitPrice: z.number().min(1, "Бүтээгдэхүүний үнээ оруулна уу."),
+  quantity: z.number().min(1, "Бүтээгдэхүүний тоог оруулна уу."),
+  totalPrice: z.number().optional(),
 });
 
-type DeliveredProductProps = {
-  closeDialog: () => void;
+type ProductDeliveryFormType = z.infer<typeof productDeliverySchema>;
+
+const initialForm: ProductDeliveryFormType = {
+  productId: "",
+  productType: "",
+  deliveryPersonId: "",
+  shopId: "",
+  transactionType: TransactionEnum.Cash,
+  unitPrice: 0,
+  quantity: 0,
+  totalPrice: 0,
 };
+
+type DeliveredProductProps = {
+  closeDialog?: () => void;
+};
+
 export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
-  const [formData, setFormData] = useState(initialForm);
-  const [errors, setErrors] = useState(initialForm);
-  const [selectedProductId, setSelectedProductId] = useState("");
-  const [selectedShopId, setSelectedShopId] = useState("");
+  const [formData, setFormData] =
+    useState<ProductDeliveryFormType>(initialForm);
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof ProductDeliveryFormType, string>>
+  >({});
 
   const { data, error, loading } = useProductQuery();
   const {
@@ -59,32 +53,43 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
     error: deliveryPersonError,
     loading: deliveryPersonLoading,
   } = useDeliveryPersonQuery();
-  // console.log(deliveryPersonData, "datat");
+
   const {
     data: shopdata,
     error: shopError,
     loading: shopLoading,
   } = useShopQuery();
 
-  const [CreateProductDelivery, { data: productDelivery }] =
-    useCreateProductDeliveryMutation({
-      onCompleted: () => {
-        toast.success("Хүргэлт амжилттай бүртгэгдлээ!");
-      },
-      onError: (error) => {
-        toast.error("Алдаа гарлаа: " + error.message);
-      },
-    });
+  const [CreateProductDelivery] = useCreateProductDeliveryMutation({
+    onCompleted: () => {
+      toast.success("Хүргэлт амжилттай бүртгэгдлээ!");
+      if (closeDialog) closeDialog();
+    },
+    onError: (error) => {
+      toast.error("Алдаа гарлаа: " + error.message);
+    },
+  });
 
-  if (loading || deliveryPersonLoading) return <p>Уншиж байна...</p>;
-  if (error || deliveryPersonError) return <p>Алдаа гарлаа...</p>;
-
-  const selectedProduct = data?.product.find((p) => p.id === selectedProductId);
+  if (loading || deliveryPersonLoading || shopLoading)
+    return <p>Уншиж байна...</p>;
+  if (error || deliveryPersonError || shopError) return <p>Алдаа гарлаа...</p>;
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = event.target;
+
+    if (name === "transactionType") {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value as TransactionEnum,
+      }));
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+      return;
+    }
 
     setFormData((prev) => ({
       ...prev,
@@ -101,13 +106,11 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
     const value = event.target.value;
     const selected = data?.product.find((p) => p.id === value);
 
-    setSelectedProductId(value);
-
     setFormData((prev) => ({
       ...prev,
       productId: value,
       productType: selected?.type ?? "",
-      unitPrice: selected?.price?.toString() ?? "",
+      unitPrice: selected?.price ?? 0,
     }));
 
     setErrors((prev) => ({
@@ -120,8 +123,6 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
 
   const handleChangeShop = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
-    const selected = shopdata?.shop.find((p) => p.id === value);
-    setSelectedShopId(value);
 
     setFormData((prev) => ({
       ...prev,
@@ -132,15 +133,21 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
       shopId: "",
     }));
   };
+
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const quantity = parseInt(e.target.value, 10) || 0;
-    const unitPrice = parseInt(formData.unitPrice || "0", 10);
-    const totalPrice = quantity * unitPrice;
+    const totalPrice = quantity * formData.unitPrice;
 
     setFormData((prev) => ({
       ...prev,
-      quantity: e.target.value,
-      totalPrice: totalPrice.toString(), // Хэрвээ string хэлбэрээр хадгалж байвал
+      quantity,
+      totalPrice,
+    }));
+
+    setErrors((prev) => ({
+      ...prev,
+      quantity: "",
+      totalPrice: "",
     }));
   };
 
@@ -148,12 +155,13 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
     e.preventDefault();
 
     const result = productDeliverySchema.safeParse(formData);
-    console.log(result, "result");
     if (!result.success) {
-      const fieldErrors = { ...initialForm };
+      const fieldErrors: Partial<
+        Record<keyof ProductDeliveryFormType, string>
+      > = {};
 
       result.error.errors.forEach((err) => {
-        const fieldName = err.path[0] as keyof typeof fieldErrors;
+        const fieldName = err.path[0] as keyof ProductDeliveryFormType;
         fieldErrors[fieldName] = err.message;
       });
 
@@ -161,9 +169,6 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
       toast.error("Та бүх талбарыг зөв бөглөнө үү!");
       return;
     }
-
-    console.log("Амжилттай:", result.data);
-    toast.success("Хүргэлт амжилттай бүртгэгдлээ!");
 
     CreateProductDelivery({
       variables: {
@@ -180,7 +185,7 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
         </label>
         <select
           name="productId"
-          value={selectedProductId}
+          value={formData.productId}
           onChange={handleChangeProduct}
           className="w-full border rounded-md px-3 py-2 text-sm"
         >
@@ -207,6 +212,7 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
             className="w-full border rounded-md px-3 py-2 text-sm bg-gray-100 text-gray-600"
           />
         </div>
+
         <div className="flex flex-col">
           <label className="text-sm font-medium">Нэгж үнэ</label>
           <input
@@ -214,7 +220,7 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
             name="unitPrice"
             value={
               formData.unitPrice
-                ? `${Number(formData.unitPrice).toLocaleString("mn-MN")} ₮`
+                ? `${formData.unitPrice.toLocaleString("mn-MN")} ₮`
                 : ""
             }
             readOnly
@@ -252,15 +258,15 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
       <div>
         <label className="text-sm font-medium">Дэлгүүр</label>
         <select
-          name="deliveryPersonId"
+          name="shopId"
           value={formData.shopId}
           onChange={handleChangeShop}
           className="w-full border rounded-md px-3 py-2 text-sm"
         >
           <option value="">--Сонгоно уу--</option>
-          {shopdata?.shop.map((person) => (
-            <option key={person.id} value={person.id ?? ""}>
-              {person.name}
+          {shopdata?.shop.map((shop) => (
+            <option key={shop.id} value={shop.id ?? ""}>
+              {shop.name}
             </option>
           ))}
         </select>
@@ -276,13 +282,14 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
           name="quantity"
           value={formData.quantity}
           onChange={handleQuantityChange}
+          min={0}
         />
         <input
           type="text"
           name="totalPrice"
           value={
             formData.totalPrice
-              ? `${Number(formData.totalPrice).toLocaleString("mn-MN")} ₮`
+              ? `${formData.totalPrice.toLocaleString("mn-MN")} ₮`
               : ""
           }
           readOnly
@@ -297,12 +304,7 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
         <select
           name="transactionType"
           value={formData.transactionType}
-          onChange={(e) =>
-            setFormData((f) => ({
-              ...f,
-              transactionType: e.target.value as TransactionEnum,
-            }))
-          }
+          onChange={handleChange}
           className="w-full border rounded-md px-3 py-2 text-sm"
         >
           <option value="">--Сонгоно уу--</option>
@@ -320,7 +322,6 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
             </option>
           ))}
         </select>
-
         {errors.transactionType && (
           <p className="text-red-500 text-sm mt-1">{errors.transactionType}</p>
         )}
