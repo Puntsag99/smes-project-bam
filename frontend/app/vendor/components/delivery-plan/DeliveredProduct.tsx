@@ -9,6 +9,8 @@ import {
   useShopQuery,
 } from "@/app/generated";
 import { useProductQuery, useDeliveryPersonQuery } from "@/app/generated";
+import { SignaturePadModal } from "../../returns/SignaturePadModel";
+import Image from "next/image";
 
 const productDeliverySchema = z.object({
   productId: z.string().min(1, "Бүтээгдэхүүний нэрээ сонгоно уу."),
@@ -20,6 +22,8 @@ const productDeliverySchema = z.object({
   }),
   unitPrice: z.number().min(1, "Бүтээгдэхүүний үнээ оруулна уу."),
   quantity: z.number().min(1, "Бүтээгдэхүүний тоог оруулна уу."),
+  signature: z.string().min(1, "Гарын үсгээ зурна уу."),
+
   totalPrice: z.number().optional(),
 });
 
@@ -30,6 +34,7 @@ const initialForm: ProductDeliveryFormType = {
   productType: "",
   deliveryPersonId: "",
   shopId: "",
+  signature: "",
   transactionType: TransactionEnum.NotPayment,
   unitPrice: 0,
   quantity: 0,
@@ -46,6 +51,8 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
   const [errors, setErrors] = useState<
     Partial<Record<keyof ProductDeliveryFormType, string>>
   >({});
+
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const { data, error, loading } = useProductQuery();
   const {
@@ -118,6 +125,18 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
       productId: "",
       productType: "",
       unitPrice: "",
+    }));
+  };
+
+  const handleSignatureSave = (signatureDataUrl: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      signature: signatureDataUrl,
+    }));
+
+    setErrors((prev) => ({
+      ...prev,
+      signature: "",
     }));
   };
 
@@ -201,7 +220,7 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
         </div>
 
         <label className="text-sm font-medium">
-          Хүргэх бүтээгдэхүүнээ сонгоно уу.
+          Борлуулалтын бүтээгдэхүүнээ сонгоно уу.
         </label>
         <select
           name="productId"
@@ -310,6 +329,7 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
       </div>
 
       <div>
+        <label className="text-sm font-medium">Төлбөрийн нөхцөл.</label>
         <select
           name="transactionType"
           value={formData.transactionType}
@@ -332,6 +352,21 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
         </select>
         {errors.transactionType && (
           <p className="text-red-500 text-sm mt-1">{errors.transactionType}</p>
+        )}
+      </div>
+
+      <div>
+        <label>✍️ Гарын үсгээ зурна уу:</label>
+        <SignaturePadModal onSave={handleSignatureSave} />
+        {formData.signature && (
+          <div className="relative w-full h-32 border mt-2">
+            <Image
+              src={formData.signature}
+              alt="Signature"
+              fill
+              className="object-contain"
+            />
+          </div>
         )}
       </div>
 

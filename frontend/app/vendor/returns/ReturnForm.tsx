@@ -6,7 +6,6 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-// import { useQueryQuery } from "@/app/generated";
 import { useShopQuery } from "@/app/generated";
 import { useProductQuery } from "@/app/generated";
 import { useDeliveryPersonQuery } from "@/app/generated";

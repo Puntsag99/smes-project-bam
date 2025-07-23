@@ -2,8 +2,8 @@
 
 import { motion } from "framer-motion";
 import { Card } from "./components/Card";
-import { PackageCheck, DollarSign, RotateCcw } from "lucide-react";
 import Delivery from "./components/delivery-plan/page";
+import { PackageCheck, DollarSign, RotateCcw } from "lucide-react";
 
 const VendorHome = () => {
   return (
