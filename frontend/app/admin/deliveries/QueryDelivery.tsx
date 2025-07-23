@@ -8,10 +8,6 @@ export const QueryDelivery = () => {
 
   const [deleteDeliveryPerson] = useDeleteDeliveryPersonMutation();
 
-  if (loading) return <p className="text-center py-4">Түр хүлээнэ үү...</p>;
-  if (error) console.error(error);
-  return <p className="text-red-500 text-center py-4">Алдаа гарлаа</p>;
-
   const handleDelete = async (id: string) => {
     if (!confirm("Та энэ түгээгчийг устгахдаа итгэлтэй байна уу?")) return;
 
@@ -22,6 +18,13 @@ export const QueryDelivery = () => {
       toast.error("Устгах үед алдаа гарлаа");
     }
   };
+
+  if (loading) return <p className="text-center py-4">Түр хүлээнэ үү...</p>;
+
+  if (error) {
+    console.error(error);
+    return <p className="text-red-500 text-center py-4">Алдаа гарлаа</p>;
+  }
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 mt-6 max-w-5xl mx-auto">
@@ -49,7 +52,6 @@ export const QueryDelivery = () => {
                 <td className="px-6 py-4">{delivery.phoneNumber}</td>
                 <td className="px-4 py-2 text-center">
                   <EditModal delivery={delivery} />
-
                   <button
                     onClick={() => handleDelete(delivery.id!)}
                     className="text-red-500 hover:underline"
