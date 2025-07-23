@@ -10,4 +10,5 @@ const server = new ApolloServer({
 
 const handler = startServerAndCreateNextHandler(server);
 
+export const dynamic = "force-dynamic";
 export { handler as GET, handler as POST };
