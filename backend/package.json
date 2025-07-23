@@ -5,7 +5,7 @@
   "scripts": {
     "predev": "graphql-codegen --config ./codegen.yml",
     "prebuild": "graphql-codegen --config ./codegen.yml",
-    "dev": " cross-env PORT=4000 next dev --turbopack",
+    "dev": " cross-env PORT=4000 next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
