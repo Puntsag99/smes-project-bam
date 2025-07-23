@@ -36,25 +36,14 @@ export const AdminSideBar = () => {
       icon: <BarChartHorizontal className="h-5 w-5" />,
     },
     {
-      label: "График Тайлан",
-      href: "/admin/graphic",
-      icon: <BarChart2 className="h-5 w-5" />,
-    },
-    {
       label: "Төлбөр Тооцоо",
       href: "/admin/payments",
       icon: <DollarSign className="h-5 w-5" />,
     },
     {
       label: "Түгээгч",
-      href: "/admin/deliveries",
+      href: "/admin/delivery-person ",
       icon: <Truck className="h-5 w-5" />,
-    },
-
-    {
-      label: "Түгээлтийн төлөвлөгөө",
-      href: "/admin/delivery-plan",
-      icon: <ClipboardList className="h-5 w-5" />,
     },
   ];
 

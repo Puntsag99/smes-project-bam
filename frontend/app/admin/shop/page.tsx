@@ -122,12 +122,15 @@ const Shop = () => {
       exit={{ opacity: 0, x: -100 }}
       transition={{ duration: 0.4 }}
     >
-      <div className="mx-auto max-w-2xl px-4 py-10">
+      <div className="w-full px-4 py-10">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-blue-600 text-white hover:bg-blue-700 w-full">
-              + Дэлгүүр үүсгэх
-            </Button>
+            <DialogHeader>
+              <DialogTitle className="text-xl">✨ Дэлгүүрүүд</DialogTitle>
+              <Button className=" text-white bg-[#203651] hover:bg-[#213677] ml-auto ">
+                + Дэлгүүр үүсгэх
+              </Button>
+            </DialogHeader>
           </DialogTrigger>
 
           <DialogContent className="bg-white">
@@ -212,7 +215,7 @@ const Shop = () => {
 
               <Button
                 type="submit"
-                className="bg-blue-600 text-white w-full hover:bg-blue-700"
+                className=" text-white w-full bg-[#203651] hover:bg-[#213677]"
               >
                 Үүсгэх
               </Button>
@@ -221,7 +224,7 @@ const Shop = () => {
         </Dialog>
 
         {loading ? (
-          <p>Түр хүлээнэ үү.</p>
+          <p className="w-full flex justify-center">Түр хүлээнэ үү.</p>
         ) : (
           <div className="bg-white shadow-md rounded-lg p-4 mt-4">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
@@ -233,10 +236,10 @@ const Shop = () => {
                 <thead>
                   <tr className="bg-gray-100 text-left text-sm font-semibold text-gray-700">
                     <th className="px-4 py-2 border-b">🏢Дэлгүүр</th>
-                    <th className="px-4 py-2 border-b">🏢Email</th>
-                    <th className="px-4 py-2 border-b">📞 Утасны дугаар</th>
+                    <th className="px-4 py-2 border-b">📧Email</th>
                     <th className="px-4 py-2 border-b">🗺️ Байршил</th>
-                    <th className="px-4 py-2 border-b">🗺️ Төлөв</th>
+                    <th className="px-4 py-2 border-b">📞 Утасны дугаар</th>
+                    <th className="px-4 py-2 border-b">🟢 Төлөв</th>
                   </tr>
                 </thead>
                 <tbody className="text-sm text-gray-800">

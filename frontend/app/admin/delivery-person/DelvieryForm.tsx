@@ -228,7 +228,7 @@ export const DeliveryForm = ({ onSuccess }: Props) => {
       <Button
         disabled={isUploading}
         type="submit"
-        className="bg-blue-600 text-white w-full hover:bg-blue-700"
+        className=" text-white w-full bg-[#203651] hover:bg-[#213677] "
       >
         {isUploading ? "Зураг байршиж байна..." : "Үүсгэх"}
       </Button>

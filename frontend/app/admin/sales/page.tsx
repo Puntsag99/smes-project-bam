@@ -1,10 +1,21 @@
 "use client";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
-import { useProductDeliveryQuery } from "@/app/generated";
-
+import { useProductDeliveryQuery, useReturnQuery } from "@/app/generated";
+const transactionTypeMap = {
+  NOT_PAYMENT: "",
+  BANK_TRANSFER: "Дансаар",
+  CREDIT: "Зээл",
+  CASH: "Бэлэн",
+};
 const Sales = () => {
   const { data } = useProductDeliveryQuery();
+  const { data: returndata } = useReturnQuery();
+
+  const totalReturn =
+    returndata?.Return.reduce((sum, p) => sum + p.pieces || 0, 0) ?? 0;
+
+  const formattedTotalReturn = totalReturn.toString();
   const totalUnitPrice =
     data?.productDelivery?.reduce((sum, p) => sum + (p.totalPrice || 0), 0) ??
     0;
@@ -44,7 +55,7 @@ const Sales = () => {
           </div>
           <div className="bg-red-100 p-4 rounded-md">
             <p className="text-sm text-gray-600">Буцаалт</p>
-            <h2 className="text-xl font-semibold">1,200,000₮</h2>
+            <h2 className="text-xl font-semibold">{formattedTotalReturn}</h2>
           </div>
         </div>
 
@@ -65,15 +76,15 @@ const Sales = () => {
           <table className="min-w-full table-auto border border-gray-200 text-sm">
             <thead className="bg-gray-100 text-gray-700">
               <tr>
-                <th className="p-2 border">Огноо</th>
-                <th className="p-2 border">Бүтээгдэхүүн</th>
                 <th className="p-2 border">Дэлгүүр</th>
+                <th className="p-2 border">Бүтээгдэхүүн</th>
                 <th className="p-2 border">Төрөл</th>
                 <th className="p-2 border">Ширхэг</th>
                 <th className="p-2 border">Нийт үнэ</th>
                 <th className="p-2 border">Борлуулагч</th>
                 <th className="p-2 border">Төлбөр</th>
-                <th className="p-2 border">Буцаалт</th>
+                {/* <th className="p-2 border">Буцаалт</th> */}
+                <th className="p-2 border">Огноо</th>
               </tr>
             </thead>
             <tbody>
@@ -86,15 +97,20 @@ const Sales = () => {
               ) : (
                 data.productDelivery.map((p, index) => (
                   <tr key={index}>
-                    <td className="p-2 border">{p.createdAt?.slice(0, 10)}</td>
-                    <td className="p-2 border">{p.product.title}</td>
                     <td className="p-2 border">{p.shop?.name}</td>
+                    <td className="p-2 border">{p.product.title}</td>
                     <td className="p-2 border">{p.product.type}</td>
                     <td className="p-2 border">{p.quantity}</td>
                     <td className="p-2 border">{p.totalPrice}</td>
                     <td className="p-2 border">{p.deliveryPerson.name}</td>
-                    <td className="p-2 border">{p.transactionType}</td>
-                    <td className="p-2 border text-red-500">3 ширхэг</td>
+                    <td className="p-2 border">
+                      {p.transactionType
+                        ? transactionTypeMap[p.transactionType] ??
+                          p.transactionType
+                        : "—"}
+                    </td>
+                    {/* <td className="p-2 border text-red-500"></td> */}
+                    <td className="p-2 border">{p.createdAt?.slice(0, 10)}</td>
                   </tr>
                 ))
               )}

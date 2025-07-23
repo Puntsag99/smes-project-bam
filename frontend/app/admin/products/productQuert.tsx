@@ -11,23 +11,27 @@ import Image from "next/image";
 export const ProductQuery = () => {
   const { data, loading, error } = useProductQuery();
 
-  if (loading) return <p>Түр хүлээнэ үү...</p>;
+  if (loading)
+    return (
+      <p className="w-full flex justify-center pt-30">Түр хүлээнэ үү...</p>
+    );
   if (error) return <p>Алдаа гарлаа: {error.message}</p>;
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 mt-6 max-w-5xl mx-auto">
+    <div className="bg-white shadow-lg rounded-lg p-6 mt-6 w-full">
       <h2 className="text-2xl font-bold text-gray-900 mb-6 border-b pb-2">
         Нэмсэн Бүтээгдэхүүн
       </h2>
 
       <div className="overflow-x-auto">
-        <table className="min-w-full table-auto border border-gray-300 rounded-lg">
+        <table className="min-w-full  border border-gray-300 rounded-lg">
           <thead className="bg-gray-100">
             <tr>
               <th className="px-6 py-3 text-left">№</th>
               <th className="px-6 py-3 text-left">Нэр</th>
               <th className="px-6 py-3 text-left">Төрөл</th>
-              <th className="px-6 py-3 text-left">Код</th>
+              <th className="px-6 py-3 text-left">Орц</th>
+              <th className="px-6 py-3 text-left">Үнэ</th>
               <th className="px-6 py-3 text-center">Дэлгэрэнгүй</th>
             </tr>
           </thead>
@@ -41,7 +45,9 @@ export const ProductQuery = () => {
                 <td className="px-6 py-4">{index + 1}</td>
                 <td className="px-6 py-4">{product.title}</td>
                 <td className="px-6 py-4">{product.type}</td>
-                <td className="px-6 py-4">{product.barcode}</td>
+                <td className="px-6 py-4">{product.ingredient}</td>
+                <td className="px-6 py-4">{product.price}</td>
+
                 <td className="px-6 py-4 text-center">
                   <Dialog>
                     <DialogTrigger asChild>
