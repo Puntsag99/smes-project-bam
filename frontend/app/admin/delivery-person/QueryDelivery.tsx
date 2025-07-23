@@ -2,6 +2,7 @@ import { toast } from "sonner";
 import { EditModal } from "./EditModal";
 import { useDeliveryPersonQuery } from "@/app/generated";
 import { useDeleteDeliveryPersonMutation } from "@/app/generated";
+import Image from "next/image";
 
 export const QueryDelivery = () => {
   const { loading, error, data } = useDeliveryPersonQuery();
@@ -28,30 +29,32 @@ export const QueryDelivery = () => {
   }
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 mt-6 max-w-5xl mx-auto">
+    <div className="bg-white shadow-lg rounded-lg p-6 mt-6 w-full ">
       <h2 className="text-2xl font-bold text-gray-900 mb-6 border-b pb-2">
         Нэмсэн Түгээгч
       </h2>
       <div className="overflow-x-auto">
         <table className="min-w-full table-auto border border-gray-300 rounded-lg">
           <thead className="bg-gray-100">
-            <tr>
+            <tr className="">
               <th className="px-6 py-3 text-left">№</th>
               <th className="px-6 py-3 text-left">Нэр</th>
               <th className="px-6 py-3 text-left">Утасны дугаар</th>
-              <th className="px-6 py-3 text-center">🔧 Үйлдэл</th>
+              <th className="px-6 py-3 text-left">Email</th>
+              <th className="px-6 py-3 text-left">🔧 Үйлдэл</th>
             </tr>
           </thead>
           <tbody className="text-gray-800">
             {data?.deliveryPerson.map((delivery, index) => (
               <tr
                 key={delivery.id}
-                className="hover:bg-blue-50 transition-colors duration-200"
+                className="hover:bg-blue-50 transition-colors duration-200  "
               >
                 <td className="px-6 py-4">{index + 1}</td>
                 <td className="px-6 py-4">{delivery.name}</td>
                 <td className="px-6 py-4">{delivery.phoneNumber}</td>
-                <td className="px-4 py-2 text-center">
+                <td className="px-6 py-4">{delivery.id}</td>
+                <td className="px-4 py-2">
                   <EditModal delivery={delivery} />
                   <button
                     onClick={() => handleDelete(delivery.id!)}

@@ -183,12 +183,15 @@ const Product = () => {
       exit={{ opacity: 0, x: -100 }}
       transition={{ duration: 0.4 }}
     >
-      <div className="mx-auto max-w-2xl px-4 py-10">
+      <div className="w-full px-8 py-10">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-blue-600 text-white hover:bg-blue-700 w-full">
-              + Бүтээгдэхүүн нэмэх
-            </Button>
+            <DialogHeader>
+              <DialogTitle className="text-xl">✨ Бүтээгдэхүүнүүд</DialogTitle>
+              <Button className="bg-[#203651] hover:bg-[#213677]  text-white ml-auto">
+                + Бүтээгдэхүүн нэмэх
+              </Button>
+            </DialogHeader>
           </DialogTrigger>
 
           <DialogContent className="bg-white">
@@ -338,7 +341,7 @@ const Product = () => {
 
               <Button
                 type="submit"
-                className="bg-blue-600 text-white w-full hover:bg-blue-700"
+                className=" text-white w-full bg-[#203651] hover:bg-[#213677]"
               >
                 Үүсгэх
               </Button>
