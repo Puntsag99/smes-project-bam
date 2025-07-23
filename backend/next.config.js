@@ -1,3 +1,5 @@
+/** @type {import('next').NextConfig} */
+
 const nextConfig = {
   env: {
     env: process.env.NODE_ENV || "development",
