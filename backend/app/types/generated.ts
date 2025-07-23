@@ -181,14 +181,15 @@ export type ProductInput = {
 export type ProductReturn = {
   __typename?: 'ProductReturn';
   created_at: Scalars['DateTime']['output'];
+  deliveryPerson?: Maybe<DeliveryPerson>;
   deliveryPersonId?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
   pieces: Scalars['Int']['output'];
+  product?: Maybe<Product>;
   productId: Scalars['String']['output'];
+  shop?: Maybe<Shop>;
   shopId: Scalars['String']['output'];
   signature: Scalars['String']['output'];
-  totalPrice: Scalars['Int']['output'];
-  unitPrice: Scalars['Int']['output'];
 };
 
 export type ProductReturnInput = {
@@ -197,8 +198,6 @@ export type ProductReturnInput = {
   productId: Scalars['String']['input'];
   shopId: Scalars['String']['input'];
   signature: Scalars['String']['input'];
-  totalPrice: Scalars['Int']['input'];
-  unitPrice: Scalars['Int']['input'];
 };
 
 export type Query = {
@@ -437,14 +436,15 @@ export type ProductDeliveryResolvers<ContextType = Context, ParentType extends R
 
 export type ProductReturnResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProductReturn'] = ResolversParentTypes['ProductReturn']> = {
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  deliveryPerson?: Resolver<Maybe<ResolversTypes['DeliveryPerson']>, ParentType, ContextType>;
   deliveryPersonId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   pieces?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  product?: Resolver<Maybe<ResolversTypes['Product']>, ParentType, ContextType>;
   productId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  shop?: Resolver<Maybe<ResolversTypes['Shop']>, ParentType, ContextType>;
   shopId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   signature?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  totalPrice?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  unitPrice?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

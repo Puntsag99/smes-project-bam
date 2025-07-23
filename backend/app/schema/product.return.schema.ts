@@ -3,12 +3,13 @@ import { gql } from "graphql-tag";
 export const productReturnHistoryTypeDefs = gql`
   type ProductReturn {
     id: String!
+    product: Product
     productId: String!
     deliveryPersonId: String
+    deliveryPerson: DeliveryPerson
     shopId: String!
+    shop: Shop
     pieces: Int!
-    unitPrice: Int!
-    totalPrice: Int!
     signature: String!
     created_at: DateTime!
   }
@@ -17,9 +18,7 @@ export const productReturnHistoryTypeDefs = gql`
     deliveryPersonId: String!
     productId: String!
     shopId: String!
-    unitPrice: Int!
     pieces: Int!
-    totalPrice: Int!
     signature: String!
   }
 

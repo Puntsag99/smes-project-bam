@@ -20,9 +20,7 @@ export const createProductReturn: MutationResolvers["createProductReturn"] =
           deliveryPerson: {
             connect: { id: input.deliveryPersonId },
           },
-          unitPrice: input.unitPrice,
           pieces: input.pieces,
-          totalPrice: input.totalPrice,
           signature: input.signature,
         },
       });

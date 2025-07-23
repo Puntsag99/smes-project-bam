@@ -149,8 +149,8 @@ model ProductReturnHistory {
   product          Product @relation(fields: [productId], references: [id])
 
   pieces           Int
-  unitPrice        Int
-  totalPrice       Int
+  unitPrice        Int?
+  totalPrice       Int?
   shopId           String
   shop             Shop @relation(fields: [shopId], references: [id])
 

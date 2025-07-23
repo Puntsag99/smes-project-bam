@@ -1,7 +1,6 @@
 mutation CreateProductReturn($input: ProductReturnInput!) {
   createProductReturn(input: $input)
 }
-
 query Return {
   Return {
     id
@@ -9,9 +8,37 @@ query Return {
     deliveryPersonId
     shopId
     pieces
-    unitPrice
-    totalPrice
     signature
     created_at
+    shop {
+      id
+      name
+      address
+      is_active
+      email
+      phone_number
+    }
+    deliveryPerson {
+      id
+      name
+      phoneNumber
+      image
+      createdAt
+      updatedAt
+    }
+    product {
+      id
+      title
+      description
+      type
+      stock
+      ingredient
+      barcode
+      price
+      imageURL
+      expiredAt
+      createdAt
+      updatedAt
+    }
   }
 }

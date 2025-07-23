@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ReturnForm } from "./ReturnForm";
+import { ReturnQuery } from "./ReturnQuery";
 
 import {
   Dialog,
@@ -35,6 +36,9 @@ const Return = () => {
             <ReturnForm />
           </DialogContent>
         </Dialog>
+        <div className="flex justify-center">
+          <ReturnQuery />
+        </div>
       </div>
     </motion.div>
   );

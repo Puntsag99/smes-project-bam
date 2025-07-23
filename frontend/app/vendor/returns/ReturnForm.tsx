@@ -6,7 +6,8 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { useQueryQuery } from "@/app/generated";
+// import { useQueryQuery } from "@/app/generated";
+import { useShopQuery } from "@/app/generated";
 import { useProductQuery } from "@/app/generated";
 import { useDeliveryPersonQuery } from "@/app/generated";
 import { useCreateProductReturnMutation } from "@/app/generated";
@@ -17,8 +18,6 @@ const initialForm = {
   productName: "",
   shopName: "",
   returnQuantity: "",
-  unitPrice: "",
-  totalPrice: "",
   signature: "",
 };
 
@@ -28,18 +27,13 @@ export const ReturnForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { data, loading, error } = useProductQuery();
-  const { data: ShopNameData } = useQueryQuery();
+  const { data: ShopNameData } = useShopQuery();
   const { data: DeliveryPersonName } = useDeliveryPersonQuery();
 
   const [CreateProductReturn] = useCreateProductReturnMutation();
 
   if (loading) return <p>Уншиж байна...</p>;
   if (error) return <p>Алдаа гарлаа: {error.message}</p>;
-
-  const total =
-    Number(formData.unitPrice) > 0 && Number(formData.returnQuantity) > 0
-      ? Number(formData.unitPrice) * Number(formData.returnQuantity)
-      : null;
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -61,13 +55,11 @@ export const ReturnForm = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // validation
     if (
       !formData.deliveryPersonName ||
       !formData.productName ||
       !formData.shopName ||
-      !formData.returnQuantity ||
-      !formData.unitPrice
+      !formData.returnQuantity
     ) {
       toast.error("Бүх талбарыг бөглөнө үү.");
       return;
@@ -87,7 +79,7 @@ export const ReturnForm = () => {
             value={formData.deliveryPersonName}
             className="w-full border p-2 rounded"
           >
-            <option value="">Сонгоно уу</option>
+            <option value=""></option>
             {DeliveryPersonName?.deliveryPerson.map((person) => (
               <option key={person.id} value={person.id ?? ""}>
                 {person.name}
@@ -104,7 +96,7 @@ export const ReturnForm = () => {
             value={formData.productName}
             className="w-full border p-2 rounded"
           >
-            <option value="">Бараа сонгоно уу</option>
+            <option value=""></option>
             {data?.product.map((product) => (
               <option key={product.id} value={product.id}>
                 {product.title}
@@ -121,10 +113,10 @@ export const ReturnForm = () => {
             name="shopName"
             className="w-full border p-2 rounded"
           >
-            <option value="">Дэлгүүр сонгох</option>
-            {ShopNameData?.customer.map((shop) => (
+            <option value=""></option>
+            {ShopNameData?.shop.map((shop) => (
               <option key={shop.id} value={shop.id}>
-                {shop.companyName}
+                {shop.name}
               </option>
             ))}
           </select>
@@ -141,21 +133,6 @@ export const ReturnForm = () => {
           />
         </div>
 
-        <div>
-          <Label>💵 Нэгж үнэ</Label>
-          <Input
-            value={formData.unitPrice}
-            onChange={handleChange}
-            type="number"
-            name="unitPrice"
-            min={1}
-          />
-        </div>
-
-        <div className="p-2 border rounded bg-gray-100">
-          {total !== null ? `${total}₮` : "Нийт үнийг харуулах"}
-        </div>
-
         <Button
           type="submit"
           className="bg-blue-600 text-white w-full hover:bg-blue-700"
@@ -164,7 +141,6 @@ export const ReturnForm = () => {
         </Button>
       </form>
 
-      {/* Confirm Modal */}
       {showConfirmModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded shadow-lg w-full max-w-md space-y-4">
@@ -189,13 +165,11 @@ export const ReturnForm = () => {
               <p>
                 🏪 Дэлгүүр:{" "}
                 {
-                  ShopNameData?.customer.find((p) => p.id === formData.shopName)
-                    ?.companyName
+                  ShopNameData?.shop.find((p) => p.id === formData.shopName)
+                    ?.name
                 }
               </p>
               <p>🔢 Тоо ширхэг: {formData.returnQuantity}</p>
-              <p>💵 Нэгж үнэ: {formData.unitPrice}</p>
-              <p>💰 Нийт үнэ: {total}₮</p>
             </div>
 
             <div>
@@ -236,8 +210,6 @@ export const ReturnForm = () => {
                           productId: formData.productName,
                           shopId: formData.shopName,
                           pieces: Number(formData.returnQuantity),
-                          unitPrice: Number(formData.unitPrice),
-                          totalPrice: total ?? 0,
                           signature: formData.signature,
                         },
                       },
