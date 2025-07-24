@@ -1,10 +1,15 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import Popup from "reactjs-popup";
-import "reactjs-popup/dist/index.css";
 import type SignatureCanvas from "react-signature-canvas";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const SignatureCanvasNoSSR = dynamic(
   () =>
@@ -25,12 +30,13 @@ interface Props {
 
 export const SignaturePadModal: React.FC<Props> = ({ onSave }) => {
   const sigCanvas = useRef<SignatureCanvas | null>(null);
+  const [open, setOpen] = useState(false);
 
   const clear = () => {
     sigCanvas.current?.clear();
   };
 
-  const save = (close: () => void) => {
+  const save = () => {
     if (!sigCanvas.current) {
       alert("Canvas бэлэн биш байна.");
       return;
@@ -50,54 +56,55 @@ export const SignaturePadModal: React.FC<Props> = ({ onSave }) => {
     const dataUrl = trimmedCanvas.toDataURL("image/png");
     if (dataUrl) {
       onSave(dataUrl);
-      close();
+      setOpen(false);
     } else {
       alert("Гарын үсгийн зураг үүсгэж чадсангүй.");
     }
   };
 
   return (
-    <Popup
-      modal
-      trigger={
-        <button className="bg-[#103651] text-white hover:bg-[#303651] w-full px-4 py-2 rounded">
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <button
+          type="button"
+          className="bg-[#103651] text-white hover:bg-[#303651] w-full px-4 py-2 rounded"
+        >
           ✍️ Энд дарж гарын үсгээ зурна уу.
         </button>
-      }
-      closeOnDocumentClick={false}
-    >
-      {(close) => (
-        <div className="p-4 space-y-4 flex flex-col justify-between items-center">
-          <SignatureCanvasNoSSR
-            ref={sigCanvas}
-            canvasProps={{
-              className: "signatureCanvas border border-gray-400",
-              width: 500,
-              height: 200,
-            }}
-          />
-          <div className="space-x-2">
-            <button
-              onClick={() => save(close)}
-              className="bg-green-500 text-white px-3 py-1 rounded"
-            >
-              Хадгалах
-            </button>
-            <button
-              onClick={clear}
-              className="bg-yellow-500 text-white px-3 py-1 rounded"
-            >
-              Цэвэрлэх
-            </button>
-            <button
-              onClick={close}
-              className="bg-red-500 text-white px-3 py-1 rounded"
-            >
-              Хаах
-            </button>
-          </div>
+      </DialogTrigger>
+      <DialogContent className="space-y-4 bg-white">
+        <DialogHeader>
+          <DialogTitle>Гарын үсэг зурж хадгалах</DialogTitle>
+        </DialogHeader>
+        <SignatureCanvasNoSSR
+          ref={sigCanvas}
+          canvasProps={{
+            className: "border border-gray-400 rounded w-full",
+            width: 500,
+            height: 200,
+          }}
+        />
+        <div className="flex justify-end gap-2">
+          <button
+            onClick={save}
+            className="bg-green-500 text-white px-3 py-1 rounded"
+          >
+            Хадгалах
+          </button>
+          <button
+            onClick={clear}
+            className="bg-yellow-500 text-white px-3 py-1 rounded"
+          >
+            Цэвэрлэх
+          </button>
+          <button
+            onClick={() => setOpen(false)}
+            className="bg-red-500 text-white px-3 py-1 rounded"
+          >
+            Хаах
+          </button>
         </div>
-      )}
-    </Popup>
+      </DialogContent>
+    </Dialog>
   );
 };
