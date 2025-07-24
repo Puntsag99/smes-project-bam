@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 import { typeDefs } from "@/schema";
 import { resolvers } from "@/resolvers";
 import { ApolloServer } from "@apollo/server";
@@ -11,5 +9,7 @@ const server = new ApolloServer({
 });
 
 const handler = startServerAndCreateNextHandler(server);
+
+export const dynamic = "force-dynamic";
 
 export { handler as GET, handler as POST };
