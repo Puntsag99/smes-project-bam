@@ -1,29 +1,28 @@
 "use client";
 
-import React, { useRef, forwardRef, Ref } from "react";
+import React, { useRef } from "react";
 import dynamic from "next/dynamic";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
+import type SignatureCanvas from "react-signature-canvas";
 
 const SignatureCanvasNoSSR = dynamic(() => import("react-signature-canvas"), {
   ssr: false,
-});
-
-const SignatureCanvas = forwardRef((props: any, ref: Ref<any>) => {
-  return <SignatureCanvasNoSSR {...props} ref={ref} />;
-});
+}) as React.ComponentType<
+  React.ComponentProps<typeof import("react-signature-canvas").default> & {
+    ref?: React.Ref<SignatureCanvas | null>;
+  }
+>;
 
 interface Props {
   onSave: (dataUrl: string) => void;
 }
 
 export const SignaturePadModal: React.FC<Props> = ({ onSave }) => {
-  const sigCanvas = useRef<any>(null);
+  const sigCanvas = useRef<SignatureCanvas | null>(null);
 
   const clear = () => {
-    if (sigCanvas.current) {
-      sigCanvas.current.clear();
-    }
+    sigCanvas.current?.clear();
   };
 
   const save = (close: () => void) => {
@@ -32,16 +31,8 @@ export const SignaturePadModal: React.FC<Props> = ({ onSave }) => {
       return;
     }
 
-    if (sigCanvas.current.isEmpty && sigCanvas.current.isEmpty()) {
+    if (sigCanvas.current.isEmpty()) {
       alert("Гарын үсгээ зурна уу!");
-      return;
-    }
-
-    if (
-      typeof sigCanvas.current.getTrimmedCanvas !== "function" ||
-      !sigCanvas.current.getTrimmedCanvas
-    ) {
-      alert("getTrimmedCanvas функц олдсонгүй!");
       return;
     }
 
@@ -51,10 +42,9 @@ export const SignaturePadModal: React.FC<Props> = ({ onSave }) => {
       return;
     }
 
-    const trimmedDataURL = trimmedCanvas.toDataURL("image/png");
-
-    if (trimmedDataURL) {
-      onSave(trimmedDataURL);
+    const dataUrl = trimmedCanvas.toDataURL("image/png");
+    if (dataUrl) {
+      onSave(dataUrl);
       close();
     } else {
       alert("Гарын үсгийн зураг үүсгэж чадсангүй.");
@@ -73,7 +63,7 @@ export const SignaturePadModal: React.FC<Props> = ({ onSave }) => {
     >
       {(close) => (
         <div className="p-4 space-y-4 flex flex-col justify-between items-center">
-          <SignatureCanvas
+          <SignatureCanvasNoSSR
             ref={sigCanvas}
             canvasProps={{
               className: "signatureCanvas border border-gray-400",
