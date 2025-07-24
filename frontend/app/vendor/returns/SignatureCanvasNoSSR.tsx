@@ -1,5 +1,12 @@
-import React, { useEffect, useState, forwardRef } from "react";
-import type SignatureCanvasType from "react-signature-canvas";
+"use client";
+
+import React, {
+  forwardRef,
+  useEffect,
+  useState,
+  type ForwardedRef,
+} from "react";
+import type SignatureCanvas from "react-signature-canvas";
 
 type SignatureCanvasProps = {
   penColor?: string;
@@ -14,30 +21,31 @@ type SignatureCanvasProps = {
   canvasProps?: React.CanvasHTMLAttributes<HTMLCanvasElement>;
 };
 
-const SignatureCanvasNoSSR = forwardRef<
-  SignatureCanvasType,
-  SignatureCanvasProps
->((props, ref) => {
-  const [Component, setComponent] = useState<React.ForwardRefExoticComponent<
-    React.PropsWithoutRef<SignatureCanvasProps> &
-      React.RefAttributes<SignatureCanvasType>
-  > | null>(null);
+const SignatureCanvasNoSSR = forwardRef<SignatureCanvas, SignatureCanvasProps>(
+  (props, ref) => {
+    const [Component, setComponent] =
+      useState<
+        React.ComponentType<
+          SignatureCanvasProps & { ref: ForwardedRef<SignatureCanvas> }
+        >
+      >();
 
-  useEffect(() => {
-    import("react-signature-canvas").then((mod) => {
-      const Wrapped = React.forwardRef<
-        SignatureCanvasType,
-        SignatureCanvasProps
-      >((props, ref) => <mod.default {...props} ref={ref} />);
-      Wrapped.displayName = "SignatureCanvasForwarded";
-      setComponent(() => Wrapped);
-    });
-  }, []);
+    useEffect(() => {
+      import("react-signature-canvas").then((mod) => {
+        const SignaturePad = mod.default;
+        setComponent(() =>
+          forwardRef<SignatureCanvas, SignatureCanvasProps>((props, ref) => (
+            <SignaturePad {...props} ref={ref} />
+          ))
+        );
+      });
+    }, []);
 
-  if (!Component) return null;
+    if (!Component) return null;
 
-  return <Component {...props} ref={ref} canvasProps={props.canvasProps} />;
-});
+    return <Component {...props} ref={ref} />;
+  }
+);
 
 SignatureCanvasNoSSR.displayName = "SignatureCanvasNoSSR";
 
