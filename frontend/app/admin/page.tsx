@@ -7,7 +7,13 @@ import {
   useShopQuery,
   useDeliveryPersonQuery,
 } from "../generated";
-import { Users, Package, DollarSign, ShoppingCart } from "lucide-react";
+import {
+  Users,
+  Package,
+  DollarSign,
+  ShoppingCart,
+  ShoppingBag,
+} from "lucide-react";
 import { useState } from "react";
 import {
   LineChart,
@@ -18,6 +24,7 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
+import ProductStock from "./components/product-stock/page";
 
 const Admin = () => {
   const { data } = useShopQuery();
@@ -155,7 +162,17 @@ const Admin = () => {
             </div>
           </div>
         </div>
-
+        <div className="flex  gap-4 p-4 bg-white rounded-xl shadow-md flex-col">
+          <div className="flex items-center gap-4 bg-white ">
+            <div className="rounded-full bg-indigo-500 p-3 shadow-lg">
+              <ShoppingBag className="text-white size-6" />
+            </div>
+            <span className="text-lg font-semibold text-gray-800">
+              Өнөөдрийн борлуулах үүсгэх
+            </span>
+          </div>
+          <ProductStock />
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
           <div className="space-y-4 lg:col-span-1 flex flex-col h-full">
             <Card className="bg-white shadow-md border-none rounded-2xl flex-1">
