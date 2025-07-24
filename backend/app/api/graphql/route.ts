@@ -10,7 +10,4 @@ const server = new ApolloServer({
 
 const handler = startServerAndCreateNextHandler(server);
 
-export const dynamic = "force-dynamic";
-export const runtime = "nodejs";
-
 export { handler as GET, handler as POST };
