@@ -49,10 +49,13 @@ export const DeliveryForm = ({ onSuccess }: Props) => {
 
     setIsUploading(true);
     try {
-      const res = await fetch("http://localhost:4000/api/upload", {
-        method: "POST",
-        body: uploadForm,
-      });
+      const res = await fetch(
+        "https://smes-project-bam-px4y.vercel.app/api/upload",
+        {
+          method: "POST",
+          body: uploadForm,
+        }
+      );
 
       if (!res.ok) {
         toast.error("Зураг байршуулахад алдаа гарлаа.");
