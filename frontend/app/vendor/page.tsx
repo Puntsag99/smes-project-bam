@@ -10,7 +10,6 @@ import {
   UserPen,
   ShoppingBag,
 } from "lucide-react";
-import ProductStock from "../admin/components/product-stock/page";
 import VendorStock from "./components/stock/page";
 
 const VendorHome = () => {

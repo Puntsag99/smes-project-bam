@@ -6,7 +6,7 @@ import { PackageCheck } from "lucide-react";
 
 const VendorStock = () => {
   const { data: products } = useProductQuery();
-  const { data: stockData, refetch } = useStockQuery();
+  const { data: stockData } = useStockQuery();
   const getStockPieces = (productId: string) => {
     if (!stockData?.stock) return 0;
     return stockData.stock

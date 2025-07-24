@@ -168,7 +168,7 @@ const Admin = () => {
               <ShoppingBag className="text-white size-6" />
             </div>
             <span className="text-lg font-semibold text-gray-800">
-              Өнөөдрийн борлуулах үүсгэх
+              Өнөөдрийн борлуулах бүтээгдэхүүн
             </span>
           </div>
           <ProductStock />
