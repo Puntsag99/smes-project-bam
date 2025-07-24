@@ -1,8 +1,4 @@
-import {
-  CustomerInput,
-  MutationResolvers,
-  Response,
-} from "@/app/types/generated";
+import { CustomerInput, MutationResolvers, Response } from "@/types/generated";
 import prisma from "@/lib/prisma";
 import { GraphQLError } from "graphql";
 

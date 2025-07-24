@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { GraphQLError } from "graphql";
-import { MutationResolvers, Response } from "@/app/types/generated";
+import { MutationResolvers, Response } from "@/types/generated";
 
 export const deleteDeliveryPerson: MutationResolvers["deleteDeliveryPerson"] =
   async (_: unknown, { id }: { id: string }) => {

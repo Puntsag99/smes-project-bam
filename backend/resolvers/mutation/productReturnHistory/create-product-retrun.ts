@@ -2,7 +2,7 @@ import {
   ProductReturnInput,
   MutationResolvers,
   Response,
-} from "@/app/types/generated";
+} from "@/types/generated";
 import prisma from "@/lib/prisma";
 import { GraphQLError } from "graphql";
 

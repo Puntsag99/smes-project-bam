@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { QueryResolvers } from "@/app/types/generated";
+import { QueryResolvers } from "@/types/generated";
 
 export const product: QueryResolvers["product"] = async () => {
   const products = await prisma.product.findMany({

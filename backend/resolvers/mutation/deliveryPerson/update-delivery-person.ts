@@ -4,7 +4,7 @@ import {
   MutationResolvers,
   Response,
   UpdateDeliveryPersonInput,
-} from "@/app/types/generated";
+} from "@/types/generated";
 
 export const updateDeliveryPerson: MutationResolvers["updateDeliveryPerson"] =
   async (_: unknown, { input }: { input: UpdateDeliveryPersonInput }) => {

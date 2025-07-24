@@ -1,4 +1,4 @@
-import { QueryResolvers, TransactionEnum } from "@/app/types/generated";
+import { QueryResolvers, TransactionEnum } from "@/types/generated";
 import prisma from "@/lib/prisma";
 
 export const productDelivery: QueryResolvers["productDelivery"] = async () => {
