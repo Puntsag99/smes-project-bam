@@ -361,6 +361,7 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
             <Image
               src={formData.signature}
               alt="Signature"
+              unoptimized
               fill
               className="object-contain"
             />

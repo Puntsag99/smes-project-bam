@@ -180,6 +180,7 @@ export const ReturnForm = () => {
                     src={formData.signature}
                     alt="Signature"
                     fill
+                    unoptimized
                     className="object-contain"
                   />
                 </div>
