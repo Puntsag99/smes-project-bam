@@ -33,11 +33,16 @@ const SignatureCanvasNoSSR = forwardRef<SignatureCanvas, SignatureCanvasProps>(
     useEffect(() => {
       import("react-signature-canvas").then((mod) => {
         const SignaturePad = mod.default;
-        setComponent(() =>
-          forwardRef<SignatureCanvas, SignatureCanvasProps>((props, ref) => (
-            <SignaturePad {...props} ref={ref} />
-          ))
-        );
+
+        // Дотор forwardRef-тэй компонент үүсгээд displayName өгнө
+        const ForwardedSignaturePad = forwardRef<
+          SignatureCanvas,
+          SignatureCanvasProps
+        >((props, ref) => <SignaturePad {...props} ref={ref} />);
+
+        ForwardedSignaturePad.displayName = "SignaturePad";
+
+        setComponent(() => ForwardedSignaturePad);
       });
     }, []);
 
