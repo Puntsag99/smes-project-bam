@@ -3,8 +3,8 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { CardContent } from "@/components/ui/card";
-import { Users, Package, DollarSign, ShoppingCart } from "lucide-react";
 import { useProductDeliveryQuery, useShopQuery } from "../generated";
+import { Users, Package, DollarSign, ShoppingCart } from "lucide-react";
 
 const Admin = () => {
   const { data } = useShopQuery();
@@ -38,8 +38,6 @@ const Admin = () => {
       transition={{ duration: 0.4 }}
     >
       <div className="p-6 bg-[#f5f7fa] min-h-screen text-gray-800 font-sans space-y-6">
-        {/* <Header /> */}
-
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-white shadow-md rounded-2xl p-4 flex items-center gap-4">
             <div className="bg-gray-100 p-3 rounded-full">
