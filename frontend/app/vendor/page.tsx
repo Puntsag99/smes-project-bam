@@ -3,7 +3,15 @@
 import { motion } from "framer-motion";
 import { Card } from "./components/Card";
 import Delivery from "./components/delivery-plan/page";
-import { PackageCheck, DollarSign, RotateCcw, UserPen } from "lucide-react";
+import {
+  PackageCheck,
+  DollarSign,
+  RotateCcw,
+  UserPen,
+  ShoppingBag,
+} from "lucide-react";
+import ProductStock from "../admin/components/product-stock/page";
+import VendorStock from "./components/stock/page";
 
 const VendorHome = () => {
   return (
@@ -27,6 +35,18 @@ const VendorHome = () => {
           <Card title="Түгээсэн бараа" value="12ш" icon={<PackageCheck />} />
           <Card title="Борлуулалт" value="180,000₮" icon={<DollarSign />} />
           <Card title="Буцаалт" value="2ш" icon={<RotateCcw />} />
+        </div>
+
+        <div className="flex  gap-4 p-4 bg-white rounded-xl shadow-md flex-col">
+          <div className="flex items-center gap-4 bg-white ">
+            <div className="rounded-full bg-indigo-500 p-3 shadow-lg">
+              <ShoppingBag className="text-white size-6" />
+            </div>
+            <span className="text-lg font-semibold text-gray-800">
+              Өнөөдрийн борлуулах бүтээгдэхүүн
+            </span>
+          </div>
+          <VendorStock />
         </div>
 
         <div className="bg-white rounded-xl p-4 shadow-sm">

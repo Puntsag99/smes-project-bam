@@ -25,6 +25,12 @@ export type CreateShopInput = {
   phone_number: Scalars['String']['input'];
 };
 
+export type CreateStockInput = {
+  is_delivered?: InputMaybe<Scalars['Boolean']['input']>;
+  pieces: Scalars['Int']['input'];
+  product: Scalars['String']['input'];
+};
+
 export type Customer = {
   __typename?: 'Customer';
   companyLocation: Scalars['String']['output'];
@@ -65,10 +71,13 @@ export type Mutation = {
   createProductDelivery: Response;
   createProductReturn: Response;
   createShop: Response;
+  createStock: Response;
   deleteDeliveryPerson: Response;
   deleteShop: Scalars['Boolean']['output'];
+  deleteStock: Scalars['Boolean']['output'];
   updateDeliveryPerson: Response;
   updateShop: Shop;
+  updateStock: StockUpdateResponse;
 };
 
 
@@ -102,12 +111,22 @@ export type MutationCreateShopArgs = {
 };
 
 
+export type MutationCreateStockArgs = {
+  input: CreateStockInput;
+};
+
+
 export type MutationDeleteDeliveryPersonArgs = {
   id: Scalars['ID']['input'];
 };
 
 
 export type MutationDeleteShopArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteStockArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -119,6 +138,12 @@ export type MutationUpdateDeliveryPersonArgs = {
 
 export type MutationUpdateShopArgs = {
   data: UpdateShopInput;
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationUpdateStockArgs = {
+  data: UpdateStockInput;
   id: Scalars['ID']['input'];
 };
 
@@ -208,6 +233,7 @@ export type Query = {
   product: Array<Product>;
   productDelivery: Array<ProductDelivery>;
   shop: Array<Shop>;
+  stock: Array<Stock>;
 };
 
 export enum Response {
@@ -223,6 +249,22 @@ export type Shop = {
   is_active: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   phone_number: Scalars['String']['output'];
+};
+
+export type Stock = {
+  __typename?: 'Stock';
+  created_at: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  is_delivered: Scalars['Boolean']['output'];
+  pieces: Scalars['Int']['output'];
+  product: Product;
+  productId: Scalars['String']['output'];
+};
+
+export type StockUpdateResponse = {
+  __typename?: 'StockUpdateResponse';
+  stock: Stock;
+  updated: Scalars['Boolean']['output'];
 };
 
 export enum TransactionEnum {
@@ -244,6 +286,12 @@ export type UpdateShopInput = {
   is_active?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   phone_number?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateStockInput = {
+  is_delivered?: InputMaybe<Scalars['Boolean']['input']>;
+  pieces?: InputMaybe<Scalars['Int']['input']>;
+  product?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -315,6 +363,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CreateShopInput: CreateShopInput;
+  CreateStockInput: CreateStockInput;
   Customer: ResolverTypeWrapper<Customer>;
   CustomerInput: CustomerInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
@@ -332,16 +381,20 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   Response: Response;
   Shop: ResolverTypeWrapper<Shop>;
+  Stock: ResolverTypeWrapper<Stock>;
+  StockUpdateResponse: ResolverTypeWrapper<StockUpdateResponse>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   TransactionEnum: TransactionEnum;
   UpdateDeliveryPersonInput: UpdateDeliveryPersonInput;
   UpdateShopInput: UpdateShopInput;
+  UpdateStockInput: UpdateStockInput;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   CreateShopInput: CreateShopInput;
+  CreateStockInput: CreateStockInput;
   Customer: Customer;
   CustomerInput: CustomerInput;
   DateTime: Scalars['DateTime']['output'];
@@ -358,9 +411,12 @@ export type ResolversParentTypes = {
   ProductReturnInput: ProductReturnInput;
   Query: {};
   Shop: Shop;
+  Stock: Stock;
+  StockUpdateResponse: StockUpdateResponse;
   String: Scalars['String']['output'];
   UpdateDeliveryPersonInput: UpdateDeliveryPersonInput;
   UpdateShopInput: UpdateShopInput;
+  UpdateStockInput: UpdateStockInput;
 };
 
 export type CustomerResolvers<ContextType = any, ParentType extends ResolversParentTypes['Customer'] = ResolversParentTypes['Customer']> = {
@@ -394,10 +450,13 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createProductDelivery?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateProductDeliveryArgs, 'input'>>;
   createProductReturn?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateProductReturnArgs, 'input'>>;
   createShop?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateShopArgs, 'input'>>;
+  createStock?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateStockArgs, 'input'>>;
   deleteDeliveryPerson?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteDeliveryPersonArgs, 'id'>>;
   deleteShop?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteShopArgs, 'id'>>;
+  deleteStock?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteStockArgs, 'id'>>;
   updateDeliveryPerson?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationUpdateDeliveryPersonArgs, 'input'>>;
   updateShop?: Resolver<ResolversTypes['Shop'], ParentType, ContextType, RequireFields<MutationUpdateShopArgs, 'data' | 'id'>>;
+  updateStock?: Resolver<ResolversTypes['StockUpdateResponse'], ParentType, ContextType, RequireFields<MutationUpdateStockArgs, 'data' | 'id'>>;
 };
 
 export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = {
@@ -455,6 +514,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   product?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>;
   productDelivery?: Resolver<Array<ResolversTypes['ProductDelivery']>, ParentType, ContextType>;
   shop?: Resolver<Array<ResolversTypes['Shop']>, ParentType, ContextType>;
+  stock?: Resolver<Array<ResolversTypes['Stock']>, ParentType, ContextType>;
 };
 
 export type ShopResolvers<ContextType = any, ParentType extends ResolversParentTypes['Shop'] = ResolversParentTypes['Shop']> = {
@@ -464,6 +524,22 @@ export type ShopResolvers<ContextType = any, ParentType extends ResolversParentT
   is_active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   phone_number?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StockResolvers<ContextType = any, ParentType extends ResolversParentTypes['Stock'] = ResolversParentTypes['Stock']> = {
+  created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  is_delivered?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  pieces?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  product?: Resolver<ResolversTypes['Product'], ParentType, ContextType>;
+  productId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StockUpdateResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['StockUpdateResponse'] = ResolversParentTypes['StockUpdateResponse']> = {
+  stock?: Resolver<ResolversTypes['Stock'], ParentType, ContextType>;
+  updated?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -477,5 +553,7 @@ export type Resolvers<ContextType = any> = {
   ProductReturn?: ProductReturnResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Shop?: ShopResolvers<ContextType>;
+  Stock?: StockResolvers<ContextType>;
+  StockUpdateResponse?: StockUpdateResponseResolvers<ContextType>;
 };
 

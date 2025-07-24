@@ -1,0 +1,17 @@
+mutation CreateStock($input: CreateStockInput!) {
+  createStock(input: $input)
+}
+
+query Stock {
+  stock {
+    id
+    productId
+    product {
+      id
+      title
+    }
+    is_delivered
+    pieces
+    created_at
+  }
+}

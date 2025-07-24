@@ -1,3 +1,4 @@
+"use client";
 import { z } from "zod";
 import { toast } from "sonner";
 import React, { useState } from "react";
@@ -7,8 +8,10 @@ import {
   TransactionEnum,
   useCreateProductDeliveryMutation,
   useShopQuery,
+  useStockQuery,
+  useProductQuery,
+  useDeliveryPersonQuery,
 } from "@/app/generated";
-import { useProductQuery, useDeliveryPersonQuery } from "@/app/generated";
 import { SignaturePadModal } from "../../returns/SignaturePadModel";
 import Image from "next/image";
 
@@ -23,8 +26,7 @@ const productDeliverySchema = z.object({
   unitPrice: z.number().min(1, "Бүтээгдэхүүний үнээ оруулна уу."),
   quantity: z.number().min(1, "Бүтээгдэхүүний тоог оруулна уу."),
   signature: z.string().min(1, "Гарын үсгээ зурна уу."),
-
-  totalPrice: z.number().min(1, "Хүргэх тоог оруулна уу"),
+  totalPrice: z.number().min(1, "Нийт үнийг тооцно уу"),
 });
 
 type ProductDeliveryFormType = z.infer<typeof productDeliverySchema>;
@@ -51,28 +53,31 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
   const [errors, setErrors] = useState<
     Partial<Record<keyof ProductDeliveryFormType, string>>
   >({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { data, error, loading } = useProductQuery();
+  const { data, loading, error } = useProductQuery();
   const {
     data: deliveryPersonData,
-    error: deliveryPersonError,
     loading: deliveryPersonLoading,
+    error: deliveryPersonError,
   } = useDeliveryPersonQuery();
-
   const {
     data: shopdata,
-    error: shopError,
     loading: shopLoading,
+    error: shopError,
   } = useShopQuery();
+  const { refetch } = useStockQuery();
 
-  const [CreateProductDelivery] = useCreateProductDeliveryMutation({
-    refetchQueries: ["productDelivery"],
+  const [createProductDelivery] = useCreateProductDeliveryMutation({
     onCompleted: () => {
       toast.success("Хүргэлт амжилттай бүртгэгдлээ!");
+      refetch();
+      setIsSubmitting(false);
       if (closeDialog) closeDialog();
     },
     onError: (error) => {
       toast.error("Алдаа гарлаа: " + error.message);
+      setIsSubmitting(false);
     },
   });
 
@@ -84,18 +89,6 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = event.target;
-
-    if (name === "transactionType") {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value as TransactionEnum,
-      }));
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }));
-      return;
-    }
 
     setFormData((prev) => ({
       ...prev,
@@ -117,13 +110,13 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
       productId: value,
       productType: selected?.type ?? "",
       unitPrice: selected?.price ?? 0,
+      totalPrice: selected ? (selected.price ?? 0) * prev.quantity : 0,
     }));
 
     setErrors((prev) => ({
       ...prev,
       productId: "",
       productType: "",
-      unitPrice: "",
     }));
   };
 
@@ -132,24 +125,7 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
       ...prev,
       signature: signatureDataUrl,
     }));
-
-    setErrors((prev) => ({
-      ...prev,
-      signature: "",
-    }));
-  };
-
-  const handleChangeShop = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value;
-
-    setFormData((prev) => ({
-      ...prev,
-      shopId: value,
-    }));
-    setErrors((prev) => ({
-      ...prev,
-      shopId: "",
-    }));
+    setErrors((prev) => ({ ...prev, signature: "" }));
   };
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -161,34 +137,30 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
       quantity,
       totalPrice,
     }));
-
-    setErrors((prev) => ({
-      ...prev,
-      quantity: "",
-      totalPrice: "",
-    }));
+    setErrors((prev) => ({ ...prev, quantity: "", totalPrice: "" }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isSubmitting) return; // double submit хамгаалалт
+    setIsSubmitting(true);
 
     const result = productDeliverySchema.safeParse(formData);
     if (!result.success) {
       const fieldErrors: Partial<
         Record<keyof ProductDeliveryFormType, string>
       > = {};
-
       result.error.errors.forEach((err) => {
         const fieldName = err.path[0] as keyof ProductDeliveryFormType;
         fieldErrors[fieldName] = err.message;
       });
-
       setErrors(fieldErrors);
       toast.error("Та бүх талбарыг зөв бөглөнө үү!");
+      setIsSubmitting(false);
       return;
     }
 
-    CreateProductDelivery({
+    await createProductDelivery({
       variables: {
         input: result.data,
       },
@@ -197,30 +169,30 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+      {/* дэлгүүр сонгох */}
       <div>
-        <div>
-          <label className="text-sm font-medium">Дэлгүүр</label>
-          <select
-            name="shopId"
-            value={formData.shopId}
-            onChange={handleChangeShop}
-            className="w-full border rounded-md px-3 py-2 text-sm"
-          >
-            <option value=""></option>
-            {shopdata?.shop.map((shop) => (
-              <option key={shop.id} value={shop.id ?? ""}>
-                {shop.name}
-              </option>
-            ))}
-          </select>
-          {errors.shopId && (
-            <p className="text-red-500 text-sm mt-1">{errors.shopId}</p>
-          )}
-        </div>
+        <label className="text-sm font-medium">Дэлгүүр</label>
+        <select
+          name="shopId"
+          value={formData.shopId}
+          onChange={handleChange}
+          className="w-full border rounded-md px-3 py-2 text-sm"
+        >
+          <option value=""></option>
+          {shopdata?.shop.map((shop) => (
+            <option key={shop.id} value={shop.id ?? ""}>
+              {shop.name}
+            </option>
+          ))}
+        </select>
+        {errors.shopId && (
+          <p className="text-red-500 text-sm mt-1">{errors.shopId}</p>
+        )}
+      </div>
 
-        <label className="text-sm font-medium">
-          Борлуулалтын бүтээгдэхүүнээ сонгоно уу.
-        </label>
+      {/* бүтээгдэхүүн сонгох */}
+      <div>
+        <label className="text-sm font-medium">Борлуулалтын бүтээгдэхүүн</label>
         <select
           name="productId"
           value={formData.productId}
@@ -239,23 +211,20 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
         )}
       </div>
 
+      {/* төрөл ба үнэ */}
       <div className="flex justify-between">
-        <div className="flex flex-col">
+        <div>
           <label className="text-sm font-medium">Бүтээгдэхүүний төрөл</label>
-          <input
+          <Input
             type="text"
             name="productType"
             value={formData.productType}
             readOnly
-            className="w-full border rounded-md px-3 py-2 text-sm bg-gray-100 text-gray-600"
           />
-          {errors.productId && (
-            <p className="text-red-500 text-sm mt-1">{errors.productId}</p>
-          )}
         </div>
-        <div className="flex flex-col">
+        <div>
           <label className="text-sm font-medium">Нэгж үнэ</label>
-          <input
+          <Input
             type="text"
             name="unitPrice"
             value={
@@ -264,14 +233,11 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
                 : ""
             }
             readOnly
-            className="w-full border rounded-md px-3 py-2 text-sm bg-gray-100 text-gray-600"
           />
-          {errors.productId && (
-            <p className="text-red-500 text-sm mt-1">{errors.productId}</p>
-          )}
         </div>
       </div>
 
+      {/* тоо ширхэг ба нийт үнэ */}
       <div className="flex justify-between">
         <div>
           <label className="text-sm font-medium">Хүргэлтийн тоо</label>
@@ -282,11 +248,7 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
             onChange={handleQuantityChange}
             min={0}
           />
-          {errors.quantity && (
-            <p className="text-red-500 text-sm mt-1">{errors.quantity}</p>
-          )}
         </div>
-
         <div>
           <label className="text-sm font-medium">Нийт үнэ</label>
           <Input
@@ -298,18 +260,13 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
                 : ""
             }
             readOnly
-            className="w-full border rounded-md px-3 py-2 text-sm bg-gray-100 text-gray-600"
           />
-          {errors.totalPrice && (
-            <p className="text-red-500 text-sm mt-1">{errors.totalPrice}</p>
-          )}
         </div>
       </div>
 
+      {/* хүргэлтийн хүн */}
       <div>
-        <label className="text-sm font-medium">
-          Хүргэлтийн хүнээ сонгоно уу.
-        </label>
+        <label className="text-sm font-medium">Хүргэлтийн хүн</label>
         <select
           name="deliveryPersonId"
           value={formData.deliveryPersonId}
@@ -323,13 +280,11 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
             </option>
           ))}
         </select>
-        {errors.deliveryPersonId && (
-          <p className="text-red-500 text-sm mt-1">{errors.deliveryPersonId}</p>
-        )}
       </div>
 
+      {/* төлбөрийн нөхцөл */}
       <div>
-        <label className="text-sm font-medium">Төлбөрийн нөхцөл.</label>
+        <label className="text-sm font-medium">Төлбөрийн нөхцөл</label>
         <select
           name="transactionType"
           value={formData.transactionType}
@@ -350,11 +305,9 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
             </option>
           ))}
         </select>
-        {errors.transactionType && (
-          <p className="text-red-500 text-sm mt-1">{errors.transactionType}</p>
-        )}
       </div>
 
+      {/* гарын үсэг */}
       <div>
         <SignaturePadModal onSave={handleSignatureSave} />
         {formData.signature && (
@@ -372,9 +325,10 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
 
       <Button
         type="submit"
+        disabled={isSubmitting}
         className="bg-[#103651] text-white hover:bg-[#303651] w-full"
       >
-        Үүсгэх
+        {isSubmitting ? "Илгээж байна..." : "Үүсгэх"}
       </Button>
     </form>
   );
