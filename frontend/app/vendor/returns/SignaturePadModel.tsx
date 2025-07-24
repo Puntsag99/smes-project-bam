@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import dynamic from "next/dynamic";
 import type SignatureCanvas from "react-signature-canvas";
+import SignatureCanvasNoSSR from "./SignatureCanvasNoSSR";
 import {
   Dialog,
   DialogContent,
@@ -10,22 +10,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
-const SignatureCanvasNoSSR = dynamic(
-  () =>
-    import("react-signature-canvas").then((mod) => {
-      const SignatureCanvas = mod.default;
-
-      const Forwarded = React.forwardRef<
-        SignatureCanvas,
-        React.ComponentProps<typeof SignatureCanvas>
-      >((props, ref) => <SignatureCanvas ref={ref} {...props} />);
-
-      Forwarded.displayName = "SignatureCanvasWithRef";
-      return Forwarded;
-    }),
-  { ssr: false }
-);
 
 interface Props {
   onSave: (dataUrl: string) => void;
