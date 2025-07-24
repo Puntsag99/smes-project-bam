@@ -1,6 +1,4 @@
-"use client";
-
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import type SignatureCanvasType from "react-signature-canvas";
 
 type SignatureCanvasProps = {
@@ -13,37 +11,31 @@ type SignatureCanvasProps = {
   onBegin?: () => void;
   onEnd?: () => void;
   clearOnResize?: boolean;
-  canvasProps?: React.CanvasHTMLAttributes<HTMLCanvasElement>;
+  canvasProps?: React.CanvasHTMLAttributes<HTMLCanvasElement> & {
+    ref?: React.Ref<SignatureCanvasType>;
+  };
 };
 
-type SignatureCanvasNoSSRProps = SignatureCanvasProps & {
-  canvasProps?: React.CanvasHTMLAttributes<HTMLCanvasElement>;
-};
-
-const SignatureCanvasNoSSR = forwardRef<
-  SignatureCanvasType,
-  SignatureCanvasNoSSRProps
->((props, ref) => {
-  const [Component, setComponent] = useState<React.ForwardRefExoticComponent<
-    SignatureCanvasProps & React.RefAttributes<SignatureCanvasType>
-  > | null>(null);
+const SignatureCanvasNoSSR: React.FC<SignatureCanvasProps> = (props) => {
+  const [Component, setComponent] =
+    useState<React.ComponentType<SignatureCanvasProps> | null>(null);
 
   useEffect(() => {
     import("react-signature-canvas").then((mod) => {
-      const Forwarded = forwardRef<SignatureCanvasType, SignatureCanvasProps>(
-        (props, ref) => <mod.default {...props} ref={ref} />
-      );
-      Forwarded.displayName = "SignatureCanvasForwarded";
+      // Dynamic импорт хийсэн модуль дээр forwardRef ашиглан React компонент үүсгэнэ
+      const Wrapped = React.forwardRef<
+        SignatureCanvasType,
+        SignatureCanvasProps
+      >((props, ref) => <mod.default {...props} ref={ref} />);
+      Wrapped.displayName = "SignatureCanvasForwarded";
 
-      setComponent(() => Forwarded);
+      setComponent(() => Wrapped);
     });
   }, []);
 
   if (!Component) return null;
 
-  return <Component {...props} ref={ref} />;
-});
-
-SignatureCanvasNoSSR.displayName = "SignatureCanvasNoSSR";
+  return <Component {...props} canvasProps={{ ...props.canvasProps }} />;
+};
 
 export default SignatureCanvasNoSSR;

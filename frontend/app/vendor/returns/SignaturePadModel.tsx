@@ -1,3 +1,4 @@
+// SignaturePadModal.tsx
 "use client";
 
 import React, { useRef, useState } from "react";
@@ -64,12 +65,14 @@ export const SignaturePadModal: React.FC<Props> = ({ onSave }) => {
           <DialogTitle>Гарын үсэг зурж хадгалах</DialogTitle>
         </DialogHeader>
         <SignatureCanvasNoSSR
-          ref={sigCanvas}
           canvasProps={{
             className: "border border-gray-400 rounded w-full",
             width: 500,
             height: 200,
+            ref: sigCanvas,
           }}
+          penColor="black"
+          backgroundColor="white"
         />
         <div className="flex justify-end gap-2">
           <button
