@@ -33,6 +33,8 @@ const SignatureCanvasNoSSR = forwardRef<
       const Forwarded = forwardRef<SignatureCanvasType, SignatureCanvasProps>(
         (props, ref) => <mod.default {...props} ref={ref} />
       );
+      Forwarded.displayName = "SignatureCanvasForwarded";
+
       setComponent(() => Forwarded);
     });
   }, []);
