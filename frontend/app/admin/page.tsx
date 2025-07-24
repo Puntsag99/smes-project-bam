@@ -33,36 +33,33 @@ const Admin = () => {
   const [selectedPerson, setSelectedPerson] = useState("");
   const allDeliveries = productpdata?.productDelivery ?? [];
 
-const personFilteredDeliveries = selectedPerson
-  ? allDeliveries.filter((d) => d.deliveryPerson?.id === selectedPerson)
-  : allDeliveries;
+  const personFilteredDeliveries = selectedPerson
+    ? allDeliveries.filter((d) => d.deliveryPerson?.id === selectedPerson)
+    : allDeliveries;
 
-const productCount = personFilteredDeliveries.length;
+  const productCount = personFilteredDeliveries.length;
 
-const totalUnitPrice = personFilteredDeliveries.reduce(
-  (sum, p) => sum + (p.totalPrice || 0),
-  0
-);
-const formattedTotal = totalUnitPrice.toLocaleString();
+  const totalUnitPrice = personFilteredDeliveries.reduce(
+    (sum, p) => sum + (p.totalPrice || 0),
+    0
+  );
+  const formattedTotal = totalUnitPrice.toLocaleString();
 
-const payment = personFilteredDeliveries
-  .filter(
-    (p) =>
-      p.transactionType === "BANK_TRANSFER" ||
-      p.transactionType === "CASH" ||
-      p.transactionType === "CREDIT"
-  )
-  .reduce((sum, p) => sum + (p.totalPrice || 0), 0);
-const formartedPayment = payment.toLocaleString();
+  const payment = personFilteredDeliveries
+    .filter(
+      (p) =>
+        p.transactionType === "BANK_TRANSFER" ||
+        p.transactionType === "CASH" ||
+        p.transactionType === "CREDIT"
+    )
+    .reduce((sum, p) => sum + (p.totalPrice || 0), 0);
+  const formartedPayment = payment.toLocaleString();
 
-const shopCount = selectedPerson
-  ? new Set(
-      personFilteredDeliveries.map((d) => d.shop?.id).filter(Boolean)
-    ).size
-  : data?.shop.length ?? 0;
-
-
-
+  const shopCount = selectedPerson
+    ? new Set(
+        personFilteredDeliveries.map((d) => d.shop?.id).filter(Boolean)
+      ).size
+    : data?.shop.length ?? 0;
 
   const deliveries = productpdata?.productDelivery ?? [];
   const now = new Date();
@@ -88,27 +85,28 @@ const shopCount = selectedPerson
     .map(([date, total]) => ({ date, total }))
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-const sortedDeliveries = [...deliveries].sort(
-  (a, b) => new Date(b.createdAt ?? "").getTime() - new Date(a.createdAt ?? "").getTime()
-);
+  const sortedDeliveries = [...deliveries].sort(
+    (a, b) => new Date(b.createdAt ?? "").getTime() - new Date(a.createdAt ?? "").getTime()
+  );
 
-const lastFiveProductsByDeliveryPerson = sortedDeliveries
-  .filter((d) => {
-    if (!d.deliveryPerson?.id) return false;
-    if (selectedPerson) return d.deliveryPerson.id === selectedPerson;
-    return true;
-  })
-  .slice(0, selectedPerson ? 5 : 10);
+  const lastFiveProductsByDeliveryPerson = sortedDeliveries
+    .filter((d) => {
+      if (!d.deliveryPerson?.id) return false;
+      if (selectedPerson) return d.deliveryPerson.id === selectedPerson;
+      return true;
+    })
+    .slice(0, 3); 
 
-const lastFiveTransactions = sortedDeliveries
-  .filter((d) => {
-    const validTransaction = d.transactionType === "BANK_TRANSFER" || d.transactionType === "CASH" || d.transactionType === "CREDIT";
-    const matchesPerson = selectedPerson ? d.deliveryPerson?.id === selectedPerson : true;
-    return validTransaction && matchesPerson;
-  })
-  .slice(0, selectedPerson ? 5 : 10);
-
-
+  const lastFiveTransactions = sortedDeliveries
+    .filter((d) => {
+      const validTransaction =
+        d.transactionType === "BANK_TRANSFER" ||
+        d.transactionType === "CASH" ||
+        d.transactionType === "CREDIT";
+      const matchesPerson = selectedPerson ? d.deliveryPerson?.id === selectedPerson : true;
+      return validTransaction && matchesPerson;
+    })
+    .slice(0, 3); 
 
   return (
     <motion.div
@@ -160,115 +158,112 @@ const lastFiveTransactions = sortedDeliveries
           </div>
         </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">    
-        <div className="space-y-4 lg:col-span-1 flex flex-col h-full">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
+          <div className="space-y-4 lg:col-span-1 flex flex-col h-full">
+            <Card className="bg-white shadow-md border-none rounded-2xl flex-1">
+              <CardContent className="p-4 h-full border-none">
+                <h3 className="font-semibold mb-2">🕒 Борлуулагчийн хүргэсэн сүүлийн бүтээгдэхүүнүүд</h3>
+                <ul className="space-y-2 text-sm">
+                  {lastFiveProductsByDeliveryPerson.length > 0 ? (
+                    lastFiveProductsByDeliveryPerson.map((item, index) => (
+                      <li key={item.id} className="text-gray-700">
+                        <span className="font-medium">
+                          {index + 1}. {item.product?.title ?? "Бүтээгдэхүүний нэр алга"}
+                        </span>
+                        <br />
+                        <span className="text-gray-500">
+                          {item.deliveryPerson?.name ?? "Тодорхойгүй"} –{" "}
+                          {new Date(item.createdAt ?? "").toLocaleDateString("mn-MN")} –{" "}
+                          {(item.totalPrice ?? 0).toLocaleString()}₮
+                        </span>
+                      </li>
+                    ))
+                  ) : (
+                    <li className="text-gray-400">Мэдээлэл алга</li>
+                  )}
+                </ul>
+              </CardContent>
+            </Card>
 
-         <Card className="bg-white shadow-md border-none rounded-2xl flex-1">
-          <CardContent className="p-4 h-full border-none">
-          <h3 className="font-semibold mb-2">🕒 Борлуулагчийн хүргэсэн сүүлийн бүтээгдэхүүнүүд</h3>
-            <ul className="space-y-2 text-sm">
-      {lastFiveProductsByDeliveryPerson.length > 0 ? (
-        lastFiveProductsByDeliveryPerson.map((item, index) => (
-          <li key={item.id} className="text-gray-700">
-            <span className="font-medium">
-              {index + 1}. {item.product?.title ?? "Бүтээгдэхүүний нэр алга"}
-            </span>
-            <br />
-            <span className="text-gray-500">
-              {item.deliveryPerson?.name ?? "Тодорхойгүй"} –{" "}
-              {new Date(item.createdAt ?? "").toLocaleDateString("mn-MN")} –{" "}
-              {(item.totalPrice ?? 0).toLocaleString()}₮
-            </span>
-          </li>
-        ))
-      ) : (
-        <li className="text-gray-400">Мэдээлэл алга</li>
-      )}
-    </ul>
-  </CardContent>
-</Card>
+            <Card className="bg-white shadow-md border-none rounded-2xl flex-1">
+              <CardContent className="p-4 h-full border-none">
+                <h3 className="font-semibold mb-2">💰 Сүүлийн төлбөрүүд</h3>
+                <ul className="space-y-1 text-sm">
+                  {lastFiveTransactions.length > 0 ? (
+                    lastFiveTransactions.map((item, index) => (
+                      <li key={item.id}>
+                        {index + 1}. {item.deliveryPerson?.name ?? "Тодорхойгүй"} –{" "}
+                        {(item.totalPrice ?? 0).toLocaleString()}₮ –{" "}
+                        {new Date(item.createdAt ?? "").toLocaleDateString("mn-MN")}
+                      </li>
+                    ))
+                  ) : (
+                    <li className="text-gray-400">Мэдээлэл алга</li>
+                  )}
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
 
-<Card className="bg-white shadow-md border-none rounded-2xl flex-1">
-  <CardContent className="p-4 h-full border-none">
-    <h3 className="font-semibold mb-2">💰 Сүүлийн төлбөрүүд</h3>
-    <ul className="space-y-1 text-sm">
-      {lastFiveTransactions.length > 0 ? (
-        lastFiveTransactions.map((item, index) => (
-          <li key={item.id}>
-            {index + 1}. {item.deliveryPerson?.name ?? "Тодорхойгүй"} –{" "}
-            {(item.totalPrice ?? 0).toLocaleString()}₮ –{" "}
-            {new Date(item.createdAt ?? "").toLocaleDateString("mn-MN")}
-          </li>
-        ))
-      ) : (
-        <li className="text-gray-400">Мэдээлэл алга</li>
-      )}
-    </ul>
-  </CardContent>
-</Card>
-  </div>
+          <div className="bg-white rounded-3xl shadow-lg p-6 lg:col-span-2 flex flex-col justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+              <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                📊 Борлуулалтын график
+              </h3>
+              <div className="flex gap-3">
+                <select
+                  value={filterDays}
+                  onChange={(e) => setFilterDays(parseInt(e.target.value))}
+                  className="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 px-4 py-2 rounded-xl text-sm text-gray-700 transition duration-150 ease-in-out"
+                >
+                  <option value={7}>7 хоног</option>
+                  <option value={30}>30 хоног</option>
+                  <option value={90}>90 хоног</option>
+                </select>
+                <select
+                  value={selectedPerson}
+                  onChange={(e) => setSelectedPerson(e.target.value)}
+                  className="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 px-4 py-2 rounded-xl text-sm text-gray-700 transition duration-150 ease-in-out"
+                >
+                  <option value="">Бүх борлуулагч</option>
+                  {deliveryPersons?.deliveryPerson.map((p) => (
+                    <option key={p.id} value={p.id ?? ""}>
+                      {p.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
 
-  <div className="bg-white rounded-3xl shadow-lg p-6 lg:col-span-2 flex flex-col justify-between">
-  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
-    <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-      📊 Борлуулалтын график
-    </h3>
-    <div className="flex gap-3">
-      <select
-        value={filterDays}
-        onChange={(e) => setFilterDays(parseInt(e.target.value))}
-        className="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 px-4 py-2 rounded-xl text-sm text-gray-700 transition duration-150 ease-in-out"
-      >
-        <option value={7}>7 хоног</option>
-        <option value={30}>30 хоног</option>
-        <option value={90}>90 хоног</option>
-      </select>
-      <select
-        value={selectedPerson}
-        onChange={(e) => setSelectedPerson(e.target.value)}
-        className="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 px-4 py-2 rounded-xl text-sm text-gray-700 transition duration-150 ease-in-out"
-      >
-        <option value="">Бүх борлуулагч</option>
-        {deliveryPersons?.deliveryPerson.map((p) => (
-          <option key={p.id} value={p.id ?? ""}>
-            {p.name}
-          </option>
-        ))}
-      </select>
-    </div>
-  </div>
-
-  {graphData.length > 0 ? (
-    <ResponsiveContainer width="100%" height={320}>
-      <LineChart data={graphData}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-        <XAxis dataKey="date" tick={{ fontSize: 12 }} />
-        <YAxis tick={{ fontSize: 12 }} />
-        <Tooltip
-          contentStyle={{ borderRadius: '10px' }}
-          formatter={(value: number) => `${value.toLocaleString()}₮`}
-        />
-        <Line
-          type="monotone"
-          dataKey="total"
-          stroke="#3b82f6"
-          strokeWidth={3}
-          activeDot={{ r: 6 }}
-        />
-      </LineChart>
-    </ResponsiveContainer>
-  ) : (
-    <div className="h-64 flex items-center justify-center text-gray-400 text-sm">
-      Мэдээлэл байхгүй
-    </div>
-  )}
-</div>
-
-</div>
-
+            {graphData.length > 0 ? (
+              <ResponsiveContainer width="100%" height={320}>
+                <LineChart data={graphData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis dataKey="date" tick={{ fontSize: 12 }} />
+                  <YAxis tick={{ fontSize: 12 }} />
+                  <Tooltip
+                    contentStyle={{ borderRadius: '10px' }}
+                    formatter={(value: number) => `${value.toLocaleString()}₮`}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="total"
+                    stroke="#3b82f6"
+                    strokeWidth={3}
+                    activeDot={{ r: 6 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-64 flex items-center justify-center text-gray-400 text-sm">
+                Мэдээлэл байхгүй
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </motion.div>
   );
 };
 
-export default Admin; 
+export default Admin;
