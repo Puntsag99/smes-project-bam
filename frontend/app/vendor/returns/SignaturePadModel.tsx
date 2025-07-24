@@ -11,7 +11,6 @@ const SignatureCanvasNoSSR = dynamic(
     import("react-signature-canvas").then((mod) => {
       const SignatureCanvas = mod.default;
 
-      // ref-ийг дэмждэг компонент болгон forwardRef ашиглаж байна
       return React.forwardRef<
         SignatureCanvas,
         React.ComponentProps<typeof SignatureCanvas>

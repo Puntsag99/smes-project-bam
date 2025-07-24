@@ -45,7 +45,9 @@ const Product = () => {
   const [formData, setFormData] = useState(initialForm);
   const [isUploading, setIsUploading] = useState(false);
 
-  const [CreateProduct] = useCreateProductMutation();
+  const [CreateProduct] = useCreateProductMutation({
+    refetchQueries: ["product"],
+  });
 
   const imageURLRef = useRef<string | null>(null);
 
@@ -341,9 +343,10 @@ const Product = () => {
 
               <Button
                 type="submit"
-                className=" text-white w-full bg-[#203651] hover:bg-[#213677]"
+                className="text-white w-full bg-[#203651] hover:bg-[#213677]"
+                disabled={isUploading}
               >
-                Үүсгэх
+                {isUploading ? "Зураг байршиж байна..." : "Үүсгэх"}
               </Button>
             </form>
           </DialogContent>
