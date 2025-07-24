@@ -1,25 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-<<<<<<< HEAD
 import { Card, CardContent } from "@/components/ui/card";
 import {
   useProductDeliveryQuery,
   useShopQuery,
   useDeliveryPersonQuery,
 } from "../generated";
-=======
-import { Card } from "@/components/ui/card";
-import { CardContent } from "@/components/ui/card";
-import { useProductDeliveryQuery, useShopQuery } from "../generated";
->>>>>>> 545d329 (muugii)
-import {
-  Users,
-  Package,
-  DollarSign,
-  ShoppingCart,
-<<<<<<< HEAD
-} from "lucide-react";
+import { Users, Package, DollarSign, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import {
   LineChart,
@@ -30,11 +18,6 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
-=======
-  ShoppingBag,
-} from "lucide-react";
-import ProductStock from "./components/product-stock/page";
->>>>>>> 545d329 (muugii)
 
 const Admin = () => {
   const { data } = useShopQuery();
@@ -68,9 +51,8 @@ const Admin = () => {
   const formartedPayment = payment.toLocaleString();
 
   const shopCount = selectedPerson
-    ? new Set(
-        personFilteredDeliveries.map((d) => d.shop?.id).filter(Boolean)
-      ).size
+    ? new Set(personFilteredDeliveries.map((d) => d.shop?.id).filter(Boolean))
+        .size
     : data?.shop.length ?? 0;
 
   const deliveries = productpdata?.productDelivery ?? [];
@@ -98,7 +80,9 @@ const Admin = () => {
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   const sortedDeliveries = [...deliveries].sort(
-    (a, b) => new Date(b.createdAt ?? "").getTime() - new Date(a.createdAt ?? "").getTime()
+    (a, b) =>
+      new Date(b.createdAt ?? "").getTime() -
+      new Date(a.createdAt ?? "").getTime()
   );
 
   const lastFiveProductsByDeliveryPerson = sortedDeliveries
@@ -107,7 +91,7 @@ const Admin = () => {
       if (selectedPerson) return d.deliveryPerson.id === selectedPerson;
       return true;
     })
-    .slice(0, 3); 
+    .slice(0, 3);
 
   const lastFiveTransactions = sortedDeliveries
     .filter((d) => {
@@ -115,10 +99,12 @@ const Admin = () => {
         d.transactionType === "BANK_TRANSFER" ||
         d.transactionType === "CASH" ||
         d.transactionType === "CREDIT";
-      const matchesPerson = selectedPerson ? d.deliveryPerson?.id === selectedPerson : true;
+      const matchesPerson = selectedPerson
+        ? d.deliveryPerson?.id === selectedPerson
+        : true;
       return validTransaction && matchesPerson;
     })
-    .slice(0, 3); 
+    .slice(0, 3);
 
   return (
     <motion.div
@@ -170,55 +156,34 @@ const Admin = () => {
           </div>
         </div>
 
-<<<<<<< HEAD
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
           <div className="space-y-4 lg:col-span-1 flex flex-col h-full">
             <Card className="bg-white shadow-md border-none rounded-2xl flex-1">
               <CardContent className="p-4 h-full border-none">
-                <h3 className="font-semibold mb-2">🕒 Борлуулагчийн хүргэсэн сүүлийн бүтээгдэхүүнүүд</h3>
+                <h3 className="font-semibold mb-2">
+                  🕒 Борлуулагчийн хүргэсэн сүүлийн бүтээгдэхүүнүүд
+                </h3>
                 <ul className="space-y-2 text-sm">
                   {lastFiveProductsByDeliveryPerson.length > 0 ? (
                     lastFiveProductsByDeliveryPerson.map((item, index) => (
                       <li key={item.id} className="text-gray-700">
                         <span className="font-medium">
-                          {index + 1}. {item.product?.title ?? "Бүтээгдэхүүний нэр алга"}
+                          {index + 1}.{" "}
+                          {item.product?.title ?? "Бүтээгдэхүүний нэр алга"}
                         </span>
                         <br />
                         <span className="text-gray-500">
                           {item.deliveryPerson?.name ?? "Тодорхойгүй"} –{" "}
-                          {new Date(item.createdAt ?? "").toLocaleDateString("mn-MN")} –{" "}
-                          {(item.totalPrice ?? 0).toLocaleString()}₮
+                          {new Date(item.createdAt ?? "").toLocaleDateString(
+                            "mn-MN"
+                          )}{" "}
+                          – {(item.totalPrice ?? 0).toLocaleString()}₮
                         </span>
                       </li>
                     ))
                   ) : (
                     <li className="text-gray-400">Мэдээлэл алга</li>
                   )}
-=======
-        {/* өнөөдөр гарсан бүтээгдэхүүн */}
-        <div className="flex  gap-4 p-4 bg-white rounded-xl shadow-md flex-col">
-          <div className="flex items-center gap-4 bg-white ">
-            <div className="rounded-full bg-indigo-500 p-3 shadow-lg">
-              <ShoppingBag className="text-white size-6" />
-            </div>
-            <span className="text-lg font-semibold text-gray-800">
-              Өнөөдрийн борлуулах үүсгэх
-            </span>
-          </div>
-          <ProductStock />
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="space-y-4 lg:col-span-1">
-            <Card>
-              <CardContent className="p-4">
-                <h3 className="font-semibold mb-2">
-                  🕒 Сүүлд нэмэгдсэн бүтээгдэхүүн
-                </h3>
-                <ul className="space-y-1 text-sm">
-                  <li>1. Хэрэглэгчийн нэр – 2025.07.01 – 45,000₮</li>
-                  <li>2. Хэрэглэгчийн нэр – 2025.07.02 – 32,000₮</li>
->>>>>>> 545d329 (muugii)
                 </ul>
               </CardContent>
             </Card>
@@ -230,9 +195,12 @@ const Admin = () => {
                   {lastFiveTransactions.length > 0 ? (
                     lastFiveTransactions.map((item, index) => (
                       <li key={item.id}>
-                        {index + 1}. {item.deliveryPerson?.name ?? "Тодорхойгүй"} –{" "}
+                        {index + 1}.{" "}
+                        {item.deliveryPerson?.name ?? "Тодорхойгүй"} –{" "}
                         {(item.totalPrice ?? 0).toLocaleString()}₮ –{" "}
-                        {new Date(item.createdAt ?? "").toLocaleDateString("mn-MN")}
+                        {new Date(item.createdAt ?? "").toLocaleDateString(
+                          "mn-MN"
+                        )}
                       </li>
                     ))
                   ) : (
@@ -280,7 +248,7 @@ const Admin = () => {
                   <XAxis dataKey="date" tick={{ fontSize: 12 }} />
                   <YAxis tick={{ fontSize: 12 }} />
                   <Tooltip
-                    contentStyle={{ borderRadius: '10px' }}
+                    contentStyle={{ borderRadius: "10px" }}
                     formatter={(value: number) => `${value.toLocaleString()}₮`}
                   />
                   <Line
