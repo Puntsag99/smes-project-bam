@@ -58,7 +58,7 @@ const DeliveryReport = () => {
   const sortedDeliveries = [...filteredDeliveries].sort((a, b) => {
     const dateA = new Date(a.createdAt ?? "").getTime();
     const dateB = new Date(b.createdAt ?? "").getTime();
-    return dateB - dateA; // хамгийн сүүлд үүссэн эхэнд
+    return dateB - dateA;
   });
 
   return (

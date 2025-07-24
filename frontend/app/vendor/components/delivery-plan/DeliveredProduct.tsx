@@ -66,6 +66,7 @@ export const DeliveredProduct = ({ closeDialog }: DeliveredProductProps) => {
   } = useShopQuery();
 
   const [CreateProductDelivery] = useCreateProductDeliveryMutation({
+    refetchQueries: ["productDelivery"],
     onCompleted: () => {
       toast.success("Хүргэлт амжилттай бүртгэгдлээ!");
       if (closeDialog) closeDialog();

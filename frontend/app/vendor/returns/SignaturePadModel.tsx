@@ -1,32 +1,63 @@
 "use client";
 
+import React, { useRef, forwardRef, Ref } from "react";
+import dynamic from "next/dynamic";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
-import React, { useRef } from "react";
-import SignaturePad from "react-signature-canvas";
+
+const SignatureCanvasNoSSR = dynamic(() => import("react-signature-canvas"), {
+  ssr: false,
+});
+
+const SignatureCanvas = forwardRef((props: any, ref: Ref<any>) => {
+  return <SignatureCanvasNoSSR {...props} ref={ref} />;
+});
 
 interface Props {
   onSave: (dataUrl: string) => void;
 }
 
 export const SignaturePadModal: React.FC<Props> = ({ onSave }) => {
-  const sigCanvas = useRef<SignaturePad | null>(null);
+  const sigCanvas = useRef<any>(null);
 
-  const clear = () => sigCanvas.current?.clear();
+  const clear = () => {
+    if (sigCanvas.current) {
+      sigCanvas.current.clear();
+    }
+  };
 
   const save = (close: () => void) => {
-    if (sigCanvas.current?.isEmpty()) {
+    if (!sigCanvas.current) {
+      alert("Canvas бэлэн биш байна.");
+      return;
+    }
+
+    if (sigCanvas.current.isEmpty && sigCanvas.current.isEmpty()) {
       alert("Гарын үсгээ зурна уу!");
       return;
     }
 
-    const trimmedDataURL = sigCanvas.current
-      ?.getTrimmedCanvas()
-      .toDataURL("image/png");
+    if (
+      typeof sigCanvas.current.getTrimmedCanvas !== "function" ||
+      !sigCanvas.current.getTrimmedCanvas
+    ) {
+      alert("getTrimmedCanvas функц олдсонгүй!");
+      return;
+    }
+
+    const trimmedCanvas = sigCanvas.current.getTrimmedCanvas();
+    if (!trimmedCanvas) {
+      alert("Canvas зөв гарсангүй.");
+      return;
+    }
+
+    const trimmedDataURL = trimmedCanvas.toDataURL("image/png");
 
     if (trimmedDataURL) {
       onSave(trimmedDataURL);
       close();
+    } else {
+      alert("Гарын үсгийн зураг үүсгэж чадсангүй.");
     }
   };
 
@@ -34,7 +65,7 @@ export const SignaturePadModal: React.FC<Props> = ({ onSave }) => {
     <Popup
       modal
       trigger={
-        <button className="bg-[#103651] text-white hover:bg-[#303651] w-full  px-4 py-2 rounded">
+        <button className="bg-[#103651] text-white hover:bg-[#303651] w-full px-4 py-2 rounded">
           ✍️ Энд дарж гарын үсгээ зурна уу.
         </button>
       }
@@ -42,10 +73,12 @@ export const SignaturePadModal: React.FC<Props> = ({ onSave }) => {
     >
       {(close) => (
         <div className="p-4 space-y-4 flex flex-col justify-between items-center">
-          <SignaturePad
+          <SignatureCanvas
             ref={sigCanvas}
             canvasProps={{
               className: "signatureCanvas border border-gray-400",
+              width: 500,
+              height: 200,
             }}
           />
           <div className="space-x-2">

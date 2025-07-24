@@ -29,7 +29,9 @@ export const ReturnForm = () => {
   const { data: ShopNameData } = useShopQuery();
   const { data: DeliveryPersonName } = useDeliveryPersonQuery();
 
-  const [CreateProductReturn] = useCreateProductReturnMutation();
+  const [CreateProductReturn] = useCreateProductReturnMutation({
+    refetchQueries: ["Return"],
+  });
 
   if (loading) return <p>Уншиж байна...</p>;
   if (error) return <p>Алдаа гарлаа: {error.message}</p>;
