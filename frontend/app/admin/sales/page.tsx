@@ -1,16 +1,8 @@
 "use client";
 import { motion } from "framer-motion";
-import { Input } from "@/components/ui/input";
 import { useProductDeliveryQuery, useReturnQuery } from "@/app/generated";
 import { DollarSign, Package, RotateCcw } from "lucide-react";
 import DeliveryReport from "@/app/vendor/components/delivery-report/page";
-
-const transactionTypeMap = {
-  NOT_PAYMENT: "",
-  BANK_TRANSFER: "Дансаар",
-  CREDIT: "Зээл",
-  CASH: "Бэлэн",
-};
 
 const Sales = () => {
   const { data } = useProductDeliveryQuery();

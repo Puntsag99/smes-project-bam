@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Undo2, History, Star } from "lucide-react";
+import { ShoppingCart, Undo2, History } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const latestOrder = {
