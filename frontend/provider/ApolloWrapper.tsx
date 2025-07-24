@@ -12,7 +12,9 @@ import { useAuth } from "@clerk/nextjs";
 import { setContext } from "@apollo/client/link/context";
 
 const httpLink = createHttpLink({
-  uri: process.env.BACKEND_URL || "http://localhost:4000/api/graphql",
+  uri:
+    process.env.BACKEND_URL ||
+    "https://smes-project-bam-px4y.vercel.app/api/graphql",
 });
 
 export const ApolloWrapper = ({ children }: { children: ReactNode }) => {
