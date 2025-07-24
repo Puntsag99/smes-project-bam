@@ -10,4 +10,10 @@ const server = new ApolloServer({
 
 const handler = startServerAndCreateNextHandler(server);
 
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
 export { handler as GET, handler as POST };
