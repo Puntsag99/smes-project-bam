@@ -39,7 +39,7 @@ const Sales = () => {
       {/* Summary Cards */}
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <div className="bg-blue-50 p-4 rounded-xl shadow-sm flex items-center gap-3">
+        <div className="bg-white-50 p-4 rounded-xl shadow-sm flex items-center gap-3">
           <div className="bg-blue-100 p-2 rounded-full">
             <DollarSign className="text-blue-600 w-6 h-6" />
           </div>
