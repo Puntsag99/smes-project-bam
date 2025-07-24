@@ -31,24 +31,38 @@ const Admin = () => {
 
   const [filterDays, setFilterDays] = useState(7);
   const [selectedPerson, setSelectedPerson] = useState("");
+  const allDeliveries = productpdata?.productDelivery ?? [];
 
-  const payment =
-    productpdata?.productDelivery
-      ?.filter(
-        (p) =>
-          p.transactionType === "BANK_TRANSFER" || p.transactionType === "CASH" || p.transactionType === "CREDIT"
-      )
-      ?.reduce((sum, p) => sum + (p.totalPrice || 0), 0) ?? 0;
-  const formartedPayment = payment.toLocaleString();
+const personFilteredDeliveries = selectedPerson
+  ? allDeliveries.filter((d) => d.deliveryPerson?.id === selectedPerson)
+  : allDeliveries;
 
-  const productCount = productpdata?.productDelivery.length ?? 0;
-  const shopCount = data?.shop.length ?? 0;
-  const totalUnitPrice =
-    productpdata?.productDelivery?.reduce(
-      (sum, p) => sum + (p.totalPrice || 0),
-      0
-    ) ?? 0;
-  const formattedTotal = totalUnitPrice.toLocaleString();
+const productCount = personFilteredDeliveries.length;
+
+const totalUnitPrice = personFilteredDeliveries.reduce(
+  (sum, p) => sum + (p.totalPrice || 0),
+  0
+);
+const formattedTotal = totalUnitPrice.toLocaleString();
+
+const payment = personFilteredDeliveries
+  .filter(
+    (p) =>
+      p.transactionType === "BANK_TRANSFER" ||
+      p.transactionType === "CASH" ||
+      p.transactionType === "CREDIT"
+  )
+  .reduce((sum, p) => sum + (p.totalPrice || 0), 0);
+const formartedPayment = payment.toLocaleString();
+
+const shopCount = selectedPerson
+  ? new Set(
+      personFilteredDeliveries.map((d) => d.shop?.id).filter(Boolean)
+    ).size
+  : data?.shop.length ?? 0;
+
+
+
 
   const deliveries = productpdata?.productDelivery ?? [];
   const now = new Date();
