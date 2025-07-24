@@ -16,10 +16,13 @@ const SignatureCanvasNoSSR = dynamic(
     import("react-signature-canvas").then((mod) => {
       const SignatureCanvas = mod.default;
 
-      return React.forwardRef<
+      const Forwarded = React.forwardRef<
         SignatureCanvas,
         React.ComponentProps<typeof SignatureCanvas>
       >((props, ref) => <SignatureCanvas ref={ref} {...props} />);
+
+      Forwarded.displayName = "SignatureCanvasWithRef";
+      return Forwarded;
     }),
   { ssr: false }
 );
