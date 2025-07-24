@@ -65,11 +65,11 @@ export const SignaturePadModal: React.FC<Props> = ({ onSave }) => {
           <DialogTitle>Гарын үсэг зурж хадгалах</DialogTitle>
         </DialogHeader>
         <SignatureCanvasNoSSR
+          ref={sigCanvas} // ref-ийг энд шууд дамжуулж байна
           canvasProps={{
             className: "border border-gray-400 rounded w-full",
             width: 500,
             height: 200,
-            ref: sigCanvas,
           }}
           penColor="black"
           backgroundColor="white"

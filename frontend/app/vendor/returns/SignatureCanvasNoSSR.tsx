@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, forwardRef } from "react";
 import type SignatureCanvasType from "react-signature-canvas";
 
 type SignatureCanvasProps = {
@@ -11,31 +11,34 @@ type SignatureCanvasProps = {
   onBegin?: () => void;
   onEnd?: () => void;
   clearOnResize?: boolean;
-  canvasProps?: React.CanvasHTMLAttributes<HTMLCanvasElement> & {
-    ref?: React.Ref<SignatureCanvasType>;
-  };
+  canvasProps?: React.CanvasHTMLAttributes<HTMLCanvasElement>;
 };
 
-const SignatureCanvasNoSSR: React.FC<SignatureCanvasProps> = (props) => {
-  const [Component, setComponent] =
-    useState<React.ComponentType<SignatureCanvasProps> | null>(null);
+const SignatureCanvasNoSSR = forwardRef<
+  SignatureCanvasType,
+  SignatureCanvasProps
+>((props, ref) => {
+  const [Component, setComponent] = useState<React.ForwardRefExoticComponent<
+    React.PropsWithoutRef<SignatureCanvasProps> &
+      React.RefAttributes<SignatureCanvasType>
+  > | null>(null);
 
   useEffect(() => {
     import("react-signature-canvas").then((mod) => {
-      // Dynamic импорт хийсэн модуль дээр forwardRef ашиглан React компонент үүсгэнэ
       const Wrapped = React.forwardRef<
         SignatureCanvasType,
         SignatureCanvasProps
       >((props, ref) => <mod.default {...props} ref={ref} />);
       Wrapped.displayName = "SignatureCanvasForwarded";
-
       setComponent(() => Wrapped);
     });
   }, []);
 
   if (!Component) return null;
 
-  return <Component {...props} canvasProps={{ ...props.canvasProps }} />;
-};
+  return <Component {...props} ref={ref} canvasProps={props.canvasProps} />;
+});
+
+SignatureCanvasNoSSR.displayName = "SignatureCanvasNoSSR";
 
 export default SignatureCanvasNoSSR;
