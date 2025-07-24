@@ -1,8 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  swcMinify: false,
-
   images: {
     domains: [
       "pub-52aed96024654efbb4ebd3a54cbfd43f.r2.dev",

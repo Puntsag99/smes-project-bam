@@ -6,13 +6,19 @@ import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import type SignatureCanvas from "react-signature-canvas";
 
-const SignatureCanvasNoSSR = dynamic(() => import("react-signature-canvas"), {
-  ssr: false,
-}) as React.ComponentType<
-  React.ComponentProps<typeof import("react-signature-canvas").default> & {
-    ref?: React.Ref<SignatureCanvas | null>;
-  }
->;
+const SignatureCanvasNoSSR = dynamic(
+  () =>
+    import("react-signature-canvas").then((mod) => {
+      const SignatureCanvas = mod.default;
+
+      // ref-ийг дэмждэг компонент болгон forwardRef ашиглаж байна
+      return React.forwardRef<
+        SignatureCanvas,
+        React.ComponentProps<typeof SignatureCanvas>
+      >((props, ref) => <SignatureCanvas ref={ref} {...props} />);
+    }),
+  { ssr: false }
+);
 
 interface Props {
   onSave: (dataUrl: string) => void;
