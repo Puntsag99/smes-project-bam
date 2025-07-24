@@ -26,6 +26,12 @@ export type CreateShopInput = {
   phone_number: Scalars['String']['input'];
 };
 
+export type CreateStockInput = {
+  is_delivered?: InputMaybe<Scalars['Boolean']['input']>;
+  pieces: Scalars['Int']['input'];
+  product: Scalars['String']['input'];
+};
+
 export type Customer = {
   __typename?: 'Customer';
   companyLocation: Scalars['String']['output'];
@@ -66,10 +72,13 @@ export type Mutation = {
   createProductDelivery: Response;
   createProductReturn: Response;
   createShop: Response;
+  createStock: Response;
   deleteDeliveryPerson: Response;
   deleteShop: Scalars['Boolean']['output'];
+  deleteStock: Scalars['Boolean']['output'];
   updateDeliveryPerson: Response;
   updateShop: Shop;
+  updateStock: StockUpdateResponse;
 };
 
 
@@ -103,12 +112,22 @@ export type MutationCreateShopArgs = {
 };
 
 
+export type MutationCreateStockArgs = {
+  input: CreateStockInput;
+};
+
+
 export type MutationDeleteDeliveryPersonArgs = {
   id: Scalars['ID']['input'];
 };
 
 
 export type MutationDeleteShopArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteStockArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -120,6 +139,12 @@ export type MutationUpdateDeliveryPersonArgs = {
 
 export type MutationUpdateShopArgs = {
   data: UpdateShopInput;
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationUpdateStockArgs = {
+  data: UpdateStockInput;
   id: Scalars['ID']['input'];
 };
 
@@ -209,6 +234,7 @@ export type Query = {
   product: Array<Product>;
   productDelivery: Array<ProductDelivery>;
   shop: Array<Shop>;
+  stock: Array<Stock>;
 };
 
 export enum Response {
@@ -224,6 +250,22 @@ export type Shop = {
   is_active: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   phone_number: Scalars['String']['output'];
+};
+
+export type Stock = {
+  __typename?: 'Stock';
+  created_at: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  is_delivered: Scalars['Boolean']['output'];
+  pieces: Scalars['Int']['output'];
+  product: Product;
+  productId: Scalars['String']['output'];
+};
+
+export type StockUpdateResponse = {
+  __typename?: 'StockUpdateResponse';
+  stock: Stock;
+  updated: Scalars['Boolean']['output'];
 };
 
 export enum TransactionEnum {
@@ -245,6 +287,12 @@ export type UpdateShopInput = {
   is_active?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   phone_number?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateStockInput = {
+  is_delivered?: InputMaybe<Scalars['Boolean']['input']>;
+  pieces?: InputMaybe<Scalars['Int']['input']>;
+  product?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateCustomerMutationVariables = Exact<{
@@ -318,6 +366,18 @@ export type ShopQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ShopQuery = { __typename?: 'Query', shop: Array<{ __typename?: 'Shop', id: string, name: string, address: string, is_active: boolean, email: string, phone_number: string }> };
+
+export type CreateStockMutationVariables = Exact<{
+  input: CreateStockInput;
+}>;
+
+
+export type CreateStockMutation = { __typename?: 'Mutation', createStock: Response };
+
+export type StockQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StockQuery = { __typename?: 'Query', stock: Array<{ __typename?: 'Stock', id: string, productId: string, is_delivered: boolean, pieces: number, created_at: string, product: { __typename?: 'Product', id: string, title: string } }> };
 
 export type UpdateDeliveryPersonMutationVariables = Exact<{
   input: UpdateDeliveryPersonInput;
@@ -850,6 +910,84 @@ export type ShopQueryHookResult = ReturnType<typeof useShopQuery>;
 export type ShopLazyQueryHookResult = ReturnType<typeof useShopLazyQuery>;
 export type ShopSuspenseQueryHookResult = ReturnType<typeof useShopSuspenseQuery>;
 export type ShopQueryResult = Apollo.QueryResult<ShopQuery, ShopQueryVariables>;
+export const CreateStockDocument = gql`
+    mutation CreateStock($input: CreateStockInput!) {
+  createStock(input: $input)
+}
+    `;
+export type CreateStockMutationFn = Apollo.MutationFunction<CreateStockMutation, CreateStockMutationVariables>;
+
+/**
+ * __useCreateStockMutation__
+ *
+ * To run a mutation, you first call `useCreateStockMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateStockMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createStockMutation, { data, loading, error }] = useCreateStockMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateStockMutation(baseOptions?: Apollo.MutationHookOptions<CreateStockMutation, CreateStockMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateStockMutation, CreateStockMutationVariables>(CreateStockDocument, options);
+      }
+export type CreateStockMutationHookResult = ReturnType<typeof useCreateStockMutation>;
+export type CreateStockMutationResult = Apollo.MutationResult<CreateStockMutation>;
+export type CreateStockMutationOptions = Apollo.BaseMutationOptions<CreateStockMutation, CreateStockMutationVariables>;
+export const StockDocument = gql`
+    query Stock {
+  stock {
+    id
+    productId
+    product {
+      id
+      title
+    }
+    is_delivered
+    pieces
+    created_at
+  }
+}
+    `;
+
+/**
+ * __useStockQuery__
+ *
+ * To run a query within a React component, call `useStockQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStockQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStockQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useStockQuery(baseOptions?: Apollo.QueryHookOptions<StockQuery, StockQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StockQuery, StockQueryVariables>(StockDocument, options);
+      }
+export function useStockLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StockQuery, StockQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StockQuery, StockQueryVariables>(StockDocument, options);
+        }
+export function useStockSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<StockQuery, StockQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<StockQuery, StockQueryVariables>(StockDocument, options);
+        }
+export type StockQueryHookResult = ReturnType<typeof useStockQuery>;
+export type StockLazyQueryHookResult = ReturnType<typeof useStockLazyQuery>;
+export type StockSuspenseQueryHookResult = ReturnType<typeof useStockSuspenseQuery>;
+export type StockQueryResult = Apollo.QueryResult<StockQuery, StockQueryVariables>;
 export const UpdateDeliveryPersonDocument = gql`
     mutation UpdateDeliveryPerson($input: UpdateDeliveryPersonInput!) {
   updateDeliveryPerson(input: $input)

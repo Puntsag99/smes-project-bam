@@ -13,7 +13,7 @@ import { setContext } from "@apollo/client/link/context";
 
 const httpLink = createHttpLink({
   uri:
-    process.env.BACKEND_URL ||
+    process.env.NEXT_PUBLIC_BACKEND_URL ||
     "https://smes-project-bam-px4y.vercel.app/api/graphql",
 });
 

@@ -29,6 +29,7 @@ const nextConfig = {
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     DATABASE_URL: process.env.DATABASE_URL,
+    NEXT_PUBLIC_BACKEND_URL: process.env.BACKEND_URL,
   },
 };
 

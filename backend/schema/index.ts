@@ -6,6 +6,7 @@ import { productDeliveryTypeDefs } from "./product.delivery.schema";
 import { updateDeliverPersonTypeDefs } from "./update.delivery.person";
 import { ShopTypedefs } from "./shop.schema";
 import { productReturnHistoryTypeDefs } from "./product.return.schema";
+import { StockTypedefs } from "./product.stock";
 
 export const typeDefs = [
   commonTypeDefs,
@@ -16,4 +17,5 @@ export const typeDefs = [
   ShopTypedefs,
   updateDeliverPersonTypeDefs,
   productReturnHistoryTypeDefs,
+  StockTypedefs,
 ];
