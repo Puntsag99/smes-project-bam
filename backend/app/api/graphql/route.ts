@@ -1,4 +1,4 @@
-export const dynamic = "dynamic-force";
+export const dynamic = "force-dynamic";
 
 import { typeDefs } from "@/schema";
 import { resolvers } from "@/resolvers";
