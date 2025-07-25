@@ -39,7 +39,6 @@ export const QueryDelivery = () => {
               <th className="px-6 py-3 text-left">№</th>
               <th className="px-6 py-3 text-left">Нэр</th>
               <th className="px-6 py-3 text-left">Утасны дугаар</th>
-              <th className="px-6 py-3 text-left">Email</th>
               <th className="px-6 py-3 text-left">🔧 Үйлдэл</th>
             </tr>
           </thead>
@@ -52,7 +51,6 @@ export const QueryDelivery = () => {
                 <td className="px-6 py-4">{index + 1}</td>
                 <td className="px-6 py-4">{delivery.name}</td>
                 <td className="px-6 py-4">{delivery.phoneNumber}</td>
-                <td className="px-6 py-4">{delivery.id}</td>
                 <td className="px-4 py-2">
                   <EditModal delivery={delivery} />
                   <button
